@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liga do Bem - Resgate Animal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo::before {
+            content: "🐾";
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Page Content */
+        .page {
+            display: none;
+            margin-top: 100px;
+            padding: 2rem 0;
+            min-height: calc(100vh - 100px);
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-content {
+            background: white;
+            border-radius: 30px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #333;
+            text-align: center;
+        }
+
+        /* Home Page Styles */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 30px;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Pet Cards */
+        .pets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .pet-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .pet-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .pet-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(45deg, #ffeaa7, #fab1a0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .pet-info {
+            padding: 1.5rem;
+        }
+
+        .pet-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .pet-description {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .pet-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: #e74c3c;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .adopt-btn {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .adopt-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Donation Section */
+        .donation-section {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 4rem 2rem;
+            border-radius: 30px;
+            text-align: center;
+        }
+
+        .donation-options {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .donation-btn {
+            background: white;
+            border: 3px solid #667eea;
+            color: #667eea;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .donation-btn:hover, .donation-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .custom-amount {
+            margin: 1rem 0;
+        }
+
+        .custom-amount input {
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            width: 200px;
+            text-align: center;
+        }
+
+        /* About Section */
+        .about-content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .about-card {
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .about-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .page-content {
+                padding: 2rem 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo" onclick="showPage('home')">Liga do Bem</div>
+            <ul class="nav-links" id="nav-links">
+                <li><a onclick="showPage('home')" class="nav-link active">Início</a></li>
+                <li><a onclick="showPage('pets')" class="nav-link">Adoção</a></li>
+                <li><a onclick="showPage('donation')" class="nav-link">Doações</a></li>
+                <li><a onclick="showPage('about')" class="nav-link">Sobre Nós</a></li>
+                <li><a onclick="showPage('contact')" class="nav-link">Contato</a></li>
+            </ul>
+            <div class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- HOME PAGE -->
+    <div class="page active" id="home-page">
+        <div class="container">
+            <div class="hero">
+                <h1>Transforme uma vida hoje</h1>
+                <p>Cada animal merece uma segunda chance. Junte-se à Liga do Bem e faça a diferença.</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" onclick="showPage('pets')">Quero Adotar</button>
+                    <button class="btn btn-secondary" onclick="showPage('donation')">Fazer Doação</button>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <div class="stats">
+                    <div class="stat-card animate-in">
+                        <div class="stat-number" id="rescued-count">247</div>
+                        <div class="stat-label">Animais Resgatados</div>
+                    </div>
+                    <div class="stat-card animate-in">
+                        <div class="stat-number" id="adopted-count">189</div>
+                        <div class="stat-label">Adoções Realizadas</div>
+                    </div>
+                    <div class="stat-card animate-in">
+                        <div class="stat-number" id="volunteers-count">52</div>
+                        <div class="stat-label">Voluntários Ativos</div>
+                    </div>
+                    <div class="stat-card animate-in">
+                        <div class="stat-number" id="donations-count">R$ 15.3k</div>
+                        <div class="stat-label">Arrecadado este mês</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PETS PAGE -->
+    <div class="page" id="pets-page">
+        <div class="container">
+            <div class="page-content">
+                <h1 class="page-title">Nossos Amiguinhos</h1>
+                <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem; color: #666;">
+                    Conheça os pets que estão esperando por uma família amorosa. Cada um tem uma história única e muito amor para dar.
+                </p>
+                <div class="pets-grid" id="pets-grid">
+                    <!-- Pets will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DONATION PAGE -->
+    <div class="page" id="donation-page">
+        <div class="container">
+            <div class="page-content">
+                <div class="donation-section">
+                    <h1 class="page-title">Faça uma Doação</h1>
+                    <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+                        Sua contribuição salva vidas! Ajude-nos a continuar nosso trabalho de resgate e cuidado.
+                    </p>
+                    
+                    <div class="donation-options">
+                        <button class="donation-btn" data-amount="25">R$ 25</button>
+                        <button class="donation-btn" data-amount="50">R$ 50</button>
+                        <button class="donation-btn" data-amount="100">R$ 100</button>
+                        <button class="donation-btn" data-amount="200">R$ 200</button>
+                        <button class="donation-btn" data-amount="custom">Outro valor</button>
+                    </div>
+
+                    <div class="custom-amount" id="custom-amount" style="display: none;">
+                        <input type="number" placeholder="Digite o valor" id="custom-value">
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="processDonation()" id="donate-btn">
+                            Doar Agora ❤️
+                        </button>
+                    </div>
+
+                    <div style="margin-top: 3rem; text-align: left;">
+                        <h3>Como sua doação ajuda:</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                            <div style="background: white; padding: 1rem; border-radius: 10px;">
+                                <strong>R$ 25</strong> - Alimentação para 1 animal por 1 semana
+                            </div>
+                            <div style="background: white; padding: 1rem; border-radius: 10px;">
+                                <strong>R$ 50</strong> - Vacinas básicas para 1 animal
+                            </div>
+                            <div style="background: white; padding: 1rem; border-radius: 10px;">
+                                <strong>R$ 100</strong> - Castração de 1 animal
+                            </div>
+                            <div style="background: white; padding: 1rem; border-radius: 10px;">
+                                <strong>R$ 200</strong> - Tratamento médico completo
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ABOUT PAGE -->
+    <div class="page" id="about-page">
+        <div class="container">
+            <div class="page-content">
+                <h1 class="page-title">Sobre a Liga do Bem</h1>
+                
+                <div class="about-content">
+                    <p>A Liga do Bem nasceu em 2018 com o objetivo de resgatar, cuidar e encontrar lares amorosos para cães e gatos abandonados. Somos uma organização sem fins lucrativos que acredita que todo animal merece uma segunda chance.</p>
+                    
+                    <p>Nossa missão vai além do resgate. Trabalhamos para conscientizar a população sobre a importância da posse responsável, promovemos campanhas de castração e oferecemos suporte completo durante o processo de adoção.</p>
+                </div>
+
+                <div class="about-grid">
+                    <div class="about-card">
+                        <h3>🏥 Cuidados Médicos</h3>
+                        <p>Todos os animais recebem atendimento veterinário completo, incluindo vacinas, castração e tratamentos necessários.</p>
+                    </div>
+                    <div class="about-card">
+                        <h3>🏠 Lar Temporário</h3>
+                        <p>Contamos com uma rede de lares temporários que oferecem amor e cuidado enquanto buscamos a família definitiva.</p>
+                    </div>
+                    <div class="about-card">
+                        <h3>❤️ Acompanhamento</h3>
+                        <p>Fazemos acompanhamento pós-adoção para garantir que tanto o animal quanto a família estejam felizes.</p>
+                    </div>
+                    <div class="about-card">
+                        <h3>📚 Educação</h3>
+                        <p>Promovemos palestras e campanhas educativas sobre posse responsável e bem-estar animal.</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 3rem; text-align: center;">
+                    <h3>Nossa Equipe</h3>
+                    <p>Somos mais de 50 voluntários dedicados, incluindo veterinários, cuidadores, administradores e pessoas apaixonadas pela causa animal.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT PAGE -->
+    <div class="page" id="contact-page">
+        <div class="container">
+            <div class="page-content">
+                <h1 class="page-title">Entre em Contato</h1>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem;">
+                    <div>
+                        <h3>Informações de Contato</h3>
+                        <div style="margin: 2rem 0;">
+                            <p><strong>📞 Telefone:</strong> (14) 99999-9999</p>
+                            <p><strong>📧 Email:</strong> contato@ligadobem.org</p>
+                            <p><strong>📍 Endereço:</strong> Rua dos Animais, 123 - Botucatu/SP</p>
+                            <p><strong>🕒 Horário:</strong> Segunda a Sábado, 8h às 17h</p>
+                        </div>
+                        
+                        <h3>Redes Sociais</h3>
+                        <p>Siga-nos para acompanhar nossos resgates e histórias de sucesso:</p>
+                        <div style="margin: 1rem 0;">
+                            <p>📘 Facebook: /ligadobem</p>
+                            <p>📷 Instagram: @ligadobem</p>
+                            <p>🐦 Twitter: @ligadobem</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3>Envie uma Mensagem</h3>
+                        <form class="contact-form" onsubmit="sendMessage(event)">
+                            <div class="form-group">
+                                <label for="name">Nome Completo</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Telefone</label>
+                                <input type="tel" id="phone" name="phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Assunto</label>
+                                <input type="text" id="subject" name="subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Mensagem</label>
+                                <textarea id="message" name="message" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Pet Details -->
+    <div class="modal" id="pet-modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modal-content">
+                <!-- Pet details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample pet data
+        const pets = [
+            {
+                id: 1,
+                name: "Luna",
+                type: "Gata",
+                age: "2 anos",
+                description: "Luna é uma gatinha carinhosa que adora brincar e receber carinho. Foi resgatada das ruas e está procurando uma família amorosa.",
+                tags: ["Carinhosa", "Brincalhona", "Castrada"],
+                emoji: "🐱"
+            },
+            {
+                id: 2,
+                name: "Thor",
+                type: "Cão",
+                age: "3 anos",
+                description: "Thor é um cão muito leal e protetor. Ama crianças e é perfeito para famílias ativas. Foi abandonado, mas não perdeu a fé nos humanos.",
+                tags: ["Leal", "Protetor", "Ama crianças"],
+                emoji: "🐕"
+            },
+            {
+                id: 3,
+                name: "Mimi",
+                type: "Gata",
+                age: "1 ano",
+                description: "Mimi é uma gatinha jovem e cheia de energia. Adora explorar e é muito curiosa. Perfeita para quem busca um companheiro aventureiro.",
+                tags: ["Energética", "Curiosa", "Jovem"],
+                emoji: "🐈"
+            },
+            {
+                id: 4,
+                name: "Buddy",
+                type: "Cão",
+                age: "5 anos",
+                description: "Buddy é um cão maduro e calmo, perfeito para pessoas que buscam um companheiro tranquilo. Adora passeios e é muito obediente.",
+                tags: ["Calmo", "Obediente", "Companheiro"],
+                emoji: "🐶"
+            },
+            {
+                id: 5,
+                name: "Princesa",
+                type: "Gata",
+                age: "4 anos",
+                description: "Princesa faz jus ao nome! É elegante e carinhosa, adora ser mimada. Está procurando uma família que a trate como realeza.",
+                tags: ["Elegante", "Carinhosa", "Mimada"],
+                emoji: "👑"
+            },
+            {
+                id: 6,
+                name: "Max",
+                type: "Cão",
+                age: "2 anos",
+                description: "Max é um cão cheio de vida e energia! Adora correr, brincar com bola e fazer novos amigos. Ideal para famílias ativas.",
+                tags: ["Energético", "Brincalhão", "Sociável"],
+                emoji: "⚽"
+            }
+        ];
+
+        // Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId + '-page').classList.add('active');
+            
+            // Add active class to clicked nav link
+            event.target.classList.add('active');
+            
+            // Close mobile menu if open
+            document.getElementById('nav-links').classList.remove('active');
+            
+            // Load page specific content
+            if (pageId === 'pets') {
+                loadPets();
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        // Load pets when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPets();
+            animateStats();
+        });
+
+        function loadPets() {
+            const petsGrid = document.getElementById('pets-grid');
+            if (!petsGrid) return;
+            
+            petsGrid.innerHTML = '';
+
+            pets.forEach(pet => {
+                const petCard = createPetCard(pet);
+                petsGrid.appendChild(petCard);
+            });
+        }
+
+        function createPetCard(pet) {
+            const card = document.createElement('div');
+            card.className = 'pet-card animate-in';
+            card.onclick = () => showPetDetails(pet);
+
+            card.innerHTML = `
+                <div class="pet-image">${pet.emoji}</div>
+                <div class="pet-info">
+                    <div class="pet-name">${pet.name}</div>
+                    <div class="pet-description">${pet.description}</div>
+                    <div class="pet-tags">
+                        ${pet.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    <button class="adopt-btn" onclick="event.stopPropagation(); showAdoptionForm('${pet.name}')">
+                        Quero Adotar ${pet.name}!
+                    </button>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function showPetDetails(pet) {
+            const modal = document.getElementById('pet-modal');
+            const modalContent = document.getElementById('modal-content');
+            
+            modalContent.innerHTML = `
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div class="pet-image" style="text-align: center; margin-bottom: 2rem;">${pet.emoji}</div>
+                <h2>${pet.name}</h2>
+                <p style="margin-bottom: 1rem; line-height: 1.6;">${pet.description}</p>
+                <div class="pet-tags" style="margin-bottom: 2rem;">
+                    ${pet.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+                <button class="adopt-btn" onclick="showAdoptionForm('${pet.name}')">
+                    Quero Adotar ${pet.name}!
+                </button>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('pet-modal');
+            modal.style.display = 'none';
+        }
+
+        function showAdoptionForm(petName) {
+            alert(`Obrigado pelo interesse em adotar ${petName}! Entre em contato conosco através da página de contato para iniciar o processo de adoção.`);
+            closeModal();
+        }
+
+        function animateStats() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                const target = parseInt(stat.textContent);
+                let current = 0;
+                const increment = target / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    stat.textContent = Math.floor(current);
+                }, 50);
+            });
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('pet-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

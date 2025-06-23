@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liga do Bem - Resgate Animal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo::before {
+            content: "🐾";
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .admin-link {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white !important;
+            padding: 0.5rem 1rem !important;
+            border-radius: 20px !important;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .admin-link:hover {
+            transform: translateY(-2px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Page Content */
+        .page {
+            display: none;
+            margin-top: 100px;
+            padding: 2rem 0;
+            min-height: calc(100vh - 100px);
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-content {
+            background: white;
+            border-radius: 30px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #333;
+            text-align: center;
+        }
+
+        /* Home Page Styles */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 30px;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Pet Cards */
+        .pets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .pet-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .pet-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .pet-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(45deg, #ffeaa7, #fab1a0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            overflow: hidden;
+        }
+
+        .pet-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pet-emoji {
+            font-size: 4rem;
+        }
+
+        .pet-info {
+            padding: 1.5rem;
+        }
+
+        .pet-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .pet-description {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .pet-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: #e74c3c;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .adopt-btn {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .adopt-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Donation Section */
+        .donation-section {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 4rem 2rem;
+            border-radius: 30px;
+            text-align: center;
+        }
+
+        .donation-options {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .donation-btn {
+            background: white;
+            border: 3px solid #667eea;
+            color: #667eea;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .donation-btn:hover, .donation-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .custom-amount {
+            margin: 1rem 0;
+        }
+
+        .custom-amount input {
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            width: 200px;
+            text-align: center;
+        }
+
+        /* About Section */
+        .about-content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .about-card {
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .about-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .page-content {
+                padding: 2rem 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Alert */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            z-index: 9999;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .alert-success {
+            background: #28a745;
+        }
+
+        .alert-error {
+            background: #dc3545;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo" onclick="showPage('home')">Liga do Bem</div>
+            <ul class="nav-links" id="nav-links">
+                <li><a onclick="showPage('home')" class="nav-link active">Início</a></li>
+                <li><a onclick="showPage('pets')" class="nav-link">Adoção</a></li>
+                <li><a onclick="showPage('donate')" class="nav-link">Doação</a></li>
+                <li><a onclick="showPage('about')" class="nav-link">Sobre</a></li>
+                <li><a onclick="showPage('contact')" class="nav-link">Contato</a></li>
+                <li><a href="admin.html" class="admin-link">Admin</a></li>
+            </ul>
+            <div class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <div class="container">
+            <div class="hero animate-in">
+                <h1 id="hero-title">Salvando Vidas, Criando Famílias</h1>
+                <p id="hero-subtitle">Cada animal merece uma segunda chance. Junte-se a nós nessa missão de amor e esperança.</p>
+                <div class="cta-buttons">
+                    <a href="#" onclick="showPage('pets')" class="btn btn-primary">Ver Pets para Adoção</a>
+                    <a href="#" onclick="showPage('donate')" class="btn btn-secondary">Fazer Doação</a>
+                </div>
+            </div>
+
+            <div class="stats" id="stats-section">
+                <!-- Stats will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Pets Page -->
+    <div id="pets" class="page">
+        <div class="container">
+            <div class="page-content animate-in">
+                <h2 class="page-title">Pets para Adoção</h2>
+                <p style="text-align: center; margin-bottom: 2rem; font-size: 1.2rem;">
+                    Conheça nossos amiguinhos que estão esperando por uma família amorosa!
+                </p>
+                <div class="pets-grid" id="pets-grid">
+                    <!-- Pets will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Donation Page -->
+    <div id="donate" class="page">
+        <div class="container">
+            <div class="page-content animate-in">
+                <h2 class="page-title">Faça uma Doação</h2>
+                <div class="donation-section">
+                    <h3>Ajude-nos a Salvar Mais Vidas</h3>
+                    <p>Sua doação faz a diferença na vida de muitos animais. Contribua com qualquer valor!</p>
+                    
+                    <div class="donation-options">
+                        <button class="donation-btn" onclick="selectDonation(25)">R$ 25</button>
+                        <button class="donation-btn" onclick="selectDonation(50)">R$ 50</button>
+                        <button class="donation-btn" onclick="selectDonation(100)">R$ 100</button>
+                        <button class="donation-btn" onclick="selectDonation(200)">R$ 200</button>
+                    </div>
+                    
+                    <div class="custom-amount">
+                        <input type="number" id="custom-amount" placeholder="Valor personalizado" min="1">
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="processDonation()">Doar Agora</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="about" class="page">
+        <div class="container">
+            <div class="page-content animate-in">
+                <h2 class="page-title">Sobre a Liga do Bem</h2>
+                <div class="about-content">
+                    <p id="about-text">A Liga do Bem é uma organização dedicada ao resgate e cuidado de animais abandonados. Trabalhamos incansavelmente para encontrar lares amorosos para cada animal que chega até nós.</p>
+                    
+                    <div class="about-grid">
+                        <div class="about-card">
+                            <h3>Nossa Missão</h3>
+                            <p>Resgatar, cuidar e encontrar lares amorosos para animais abandonados, promovendo o bem-estar animal e a conscientização sobre posse responsável.</p>
+                        </div>
+                        <div class="about-card">
+                            <h3>Nossa Visão</h3>
+                            <p>Um mundo onde todos os animais tenham direito a uma vida digna, com amor, cuidado e respeito, livres do abandono e maus-tratos.</p>
+                        </div>
+                        <div class="about-card">
+                            <h3>Nossos Valores</h3>
+                            <p>Compaixão, dedicação, transparência e responsabilidade em todas as nossas ações em prol dos animais necessitados.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page">
+        <div class="container">
+            <div class="page-content animate-in">
+                <h2 class="page-title">Entre em Contato</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem;">
+                    <div>
+                        <h3>Informações de Contato</h3>
+                        <div style="margin: 2rem 0;">
+                            <p><strong>📞 Telefone:</strong> <span id="contact-phone">(11) 99999-9999</span></p>
+                            <p><strong>📧 Email:</strong> <span id="contact-email">contato@ligadobem.org</span></p>
+                            <p><strong>📍 Endereço:</strong> <span id="contact-address">Rua dos Animais, 123 - São Paulo, SP</span></p>
+                        </div>
+                        <div style="margin: 1rem 0;">
+                            <p>📘 Facebook: /ligadobem</p>
+                            <p>📷 Instagram: @ligadobem</p>
+                            <p>🐦 Twitter: @ligadobem</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3>Envie uma Mensagem</h3>
+                        <form class="contact-form" onsubmit="sendMessage(event)">
+                            <div class="form-group">
+                                <label for="name">Nome Completo</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Telefone</label>
+                                <input type="tel" id="phone" name="phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Assunto</label>
+                                <input type="text" id="subject" name="subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Mensagem</label>
+                                <textarea id="message" name="message" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Pet Details -->
+    <div class="modal" id="pet-modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modal-content">
+                <!-- Pet details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="admin-data.js"></script>
+    <script>
+        // Get data from admin system
+        let siteData = getPublicData();
+        let pets = siteData.pets;
+        let stats = siteData.stats;
+        let content = siteData.content;
+
+        // Navigation
+        function showPage(pageName) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageName).classList.add('active');
+            
+            // Add active class to clicked link
+            event.target.classList.add('active');
+            
+            // Load page content
+            if (pageName === 'pets') {
+                loadPets();
+            }
+        }
+
+        // Load pets when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadContent();
+            loadStats();
+            loadPets();
+            animateStats();
+        });
+
+        function loadContent() {
+            // Update hero section
+            if (content.heroTitle) {
+                document.getElementById('hero-title').textContent = content.heroTitle;
+            }
+            if (content.heroSubtitle) {
+                document.getElementById('hero-subtitle').textContent = content.heroSubtitle;
+            }
+            if (content.aboutText) {
+                document.getElementById('about-text').textContent = content.aboutText;
+            }
+            
+            // Update contact info
+            if (content.contactInfo) {
+                if (content.contactInfo.phone) {
+                    document.getElementById('contact-phone').textContent = content.contactInfo.phone;
+                }
+                if (content.contactInfo.email) {
+                    document.getElementById('contact-email').textContent = content.contactInfo.email;
+                }
+                if (content.contactInfo.address) {
+                    document.getElementById('contact-address').textContent = content.contactInfo.address;
+                }
+            }
+        }
+
+        function loadStats() {
+            const statsSection = document.getElementById('stats-section');
+            statsSection.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${stats.animalsRescued || 0}</div>
+                    <div class="stat-label">Animais Resgatados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.adoptionsCompleted || 0}</div>
+                    <div class="stat-label">Adoções Realizadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.volunteersActive || 0}</div>
+                    <div class="stat-label">Voluntários Ativos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.partnersCount || 0}</div>
+                    <div class="stat-label">Parceiros</div>
+                </div>
+            `;
+        }
+
+        function loadPets() {
+            const petsGrid = document.getElementById('pets-grid');
+            if (!petsGrid) return;
+            
+            // Refresh data
+            siteData = getPublicData();
+            pets = siteData.pets;
+            
+            petsGrid.innerHTML = '';
+
+            pets.forEach(pet => {
+                const petCard = createPetCard(pet);
+                petsGrid.appendChild(petCard);
+            });
+        }
+
+        function createPetCard(pet) {
+            const card = document.createElement('div');
+            card.className = 'pet-card animate-in';
+            card.onclick = () => showPetDetails(pet);
+
+            const imageContent = pet.photo 
+                ? `<img src="${pet.photo}" alt="${pet.name}" class="pet-photo">`
+                : `<div class="pet-emoji">${pet.emoji}</div>`;
+
+            card.innerHTML = `
+                <div class="pet-image">${imageContent}</div>
+                <div class="pet-info">
+                    <div class="pet-name">${pet.name}</div>
+                    <div class="pet-description">${pet.description}</div>
+                    <div class="pet-tags">
+                        ${pet.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    <button class="adopt-btn" onclick="event.stopPropagation(); showAdoptionForm('${pet.name}')">
+                        Quero Adotar ${pet.name}!
+                    </button>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function showPetDetails(pet) {
+            const modal = document.getElementById('pet-modal');
+            const modalContent = document.getElementById('modal-content');
+            
+            const modalImageContent = pet.photo 
+                ? `<img src="${pet.photo}" alt="${pet.name}" style="width: 100%; max-width: 400px; height: 300px; object-fit: cover; border-radius: 15px; margin: 1rem auto; display: block; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">`
+                : `<div style="font-size: 6rem; text-align: center; margin: 2rem 0;">${pet.emoji}</div>`;
+            
+            modalContent.innerHTML = `
+                <span class="close" onclick="closeModal()">&times;</span>
+                ${modalImageContent}
+                <h2>${pet.name}</h2>
+                <p style="margin-bottom: 1rem; line-height: 1.6;">${pet.description}</p>
+                <div class="pet-tags" style="margin-bottom: 2rem;">
+                    ${pet.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+                <button class="adopt-btn" onclick="showAdoptionForm('${pet.name}')">
+                    Quero Adotar ${pet.name}!
+                </button>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('pet-modal');
+            modal.style.display = 'none';
+        }
+
+        function showAdoptionForm(petName) {
+            showAlert(`Obrigado pelo interesse em adotar ${petName}! Entre em contato conosco através da página de contato para iniciar o processo de adoção.`, 'success');
+            closeModal();
+        }
+
+        function animateStats() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                const target = parseInt(stat.textContent);
+                let current = 0;
+                const increment = target / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    stat.textContent = Math.floor(current);
+                }, 50);
+            });
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        // Donation functions
+        let selectedAmount = 0;
+
+        function selectDonation(amount) {
+            selectedAmount = amount;
+            document.querySelectorAll('.donation-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            document.getElementById('custom-amount').value = '';
+        }
+
+        function processDonation() {
+            const customAmount = document.getElementById('custom-amount').value;
+            const amount = customAmount || selectedAmount;
+            
+            if (!amount || amount <= 0) {
+                showAlert('Por favor, selecione ou digite um valor para doação.', 'error');
+                return;
+            }
+            
+            showAlert(`Obrigado pela sua doação de R$ ${amount}! Você será redirecionado para o pagamento.`, 'success');
+            // Here you would integrate with a payment gateway
+        }
+
+        // Contact form
+        function sendMessage(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const messageData = Object.fromEntries(formData);
+            
+            // Save message to admin system
+            adminData.addMessage(messageData);
+            
+            showAlert('Mensagem enviada com sucesso! Entraremos em contato em breve.', 'success');
+            event.target.reset();
+        }
+
+        // Utility functions
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                document.body.removeChild(alertDiv);
+            }, 4000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('pet-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Refresh data periodically (optional)
+        setInterval(() => {
+            siteData = getPublicData();
+            pets = siteData.pets;
+            stats = siteData.stats;
+            content = siteData.content;
+            
+            // Only reload if we're on the pets page
+            if (document.getElementById('pets').classList.contains('active')) {
+                loadPets();
+            }
+        }, 30000); // Refresh every 30 seconds
+    </script>
+</body>
+</html>

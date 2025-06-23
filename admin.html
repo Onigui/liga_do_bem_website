@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administração - Liga do Bem</title>
+    <link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+    <!-- Tela de Login -->
+    <div id="login-screen" class="login-container">
+        <div class="login-box animate-in">
+            <h1>🐾 Liga do Bem</h1>
+            <h2>Área Administrativa</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Usuário:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="login-btn">Entrar</button>
+            </form>
+            <div id="login-error" class="alert alert-error" style="display: none; margin-top: 1rem;">
+                Usuário ou senha incorretos!
+            </div>
+        </div>
+    </div>
+
+    <!-- Interface Administrativa -->
+    <div id="admin-interface" class="admin-container">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="admin-logo">Liga do Bem - Admin</div>
+            <nav class="admin-nav">
+                <button class="nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
+                <button class="nav-btn" onclick="showSection('pets')">Pets</button>
+                <button class="nav-btn" onclick="showSection('stats')">Estatísticas</button>
+                <button class="nav-btn" onclick="showSection('content')">Conteúdo</button>
+                <button class="nav-btn" onclick="showSection('messages')">Mensagens</button>
+                <button class="nav-btn" onclick="showSection('backup')">Backup</button>
+            </nav>
+            <button class="logout-btn" onclick="logout()">Sair</button>
+        </header>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Dashboard -->
+            <section id="dashboard-section" class="admin-section active">
+                <h2 class="section-title">Dashboard</h2>
+                <div class="dashboard-stats" id="dashboard-stats">
+                    <!-- Stats will be loaded here -->
+                </div>
+                <div class="admin-form">
+                    <h3>Resumo Rápido</h3>
+                    <div class="card-grid">
+                        <div class="admin-card">
+                            <div class="card-header">
+                                <div class="card-title">Pets Disponíveis</div>
+                            </div>
+                            <p id="available-pets-count">0</p>
+                        </div>
+                        <div class="admin-card">
+                            <div class="card-header">
+                                <div class="card-title">Mensagens Não Lidas</div>
+                            </div>
+                            <p id="unread-messages-count">0</p>
+                        </div>
+                        <div class="admin-card">
+                            <div class="card-header">
+                                <div class="card-title">Últimas Atividades</div>
+                            </div>
+                            <div id="recent-activities">
+                                <!-- Recent activities will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gerenciamento de Pets -->
+            <section id="pets-section" class="admin-section">
+                <h2 class="section-title">Gerenciamento de Pets</h2>
+                
+                <div class="admin-form">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3>Adicionar Novo Pet</h3>
+                        <button class="btn btn-primary" onclick="togglePetForm()">+ Novo Pet</button>
+                    </div>
+                    
+                    <form id="pet-form" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="pet-name">Nome:</label>
+                                <input type="text" id="pet-name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="pet-type">Tipo:</label>
+                                <select id="pet-type" name="type" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Cão">Cão</option>
+                                    <option value="Gata">Gata</option>
+                                    <option value="Gato">Gato</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="pet-age">Idade:</label>
+                                <input type="text" id="pet-age" name="age" placeholder="Ex: 2 anos" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="pet-emoji">Emoji:</label>
+                                <input type="text" id="pet-emoji" name="emoji" placeholder="🐶" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pet-description">Descrição:</label>
+                            <textarea id="pet-description" name="description" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Foto do Pet:</label>
+                            <div class="photo-upload-container" id="pet-photo-upload" onclick="document.getElementById('pet-photo-input').click()">
+                                <input type="file" id="pet-photo-input" class="photo-upload-input" accept="image/*" onchange="handlePhotoUpload(event, 'pet')">
+                                <div class="photo-upload-icon">📷</div>
+                                <div class="photo-upload-text" id="pet-photo-text">
+                                    Clique aqui ou arraste uma foto do pet<br>
+                                    <small>Formatos aceitos: JPG, PNG, GIF (máx. 5MB)</small>
+                                </div>
+                                <div id="pet-photo-preview-container" style="display: none;">
+                                    <img id="pet-photo-preview" class="photo-preview" alt="Preview da foto">
+                                    <button type="button" class="remove-photo-btn" onclick="removePhoto('pet')">Remover Foto</button>
+                                </div>
+                            </div>
+                            <div id="pet-photo-error" class="file-size-warning" style="display: none;"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Tags:</label>
+                            <div class="tags-input" id="pet-tags">
+                                <input type="text" class="tag-input" placeholder="Digite uma tag e pressione Enter">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pet-status">Status:</label>
+                            <select id="pet-status" name="status" required>
+                                <option value="Disponível">Disponível</option>
+                                <option value="Em Processo">Em Processo</option>
+                                <option value="Adotado">Adotado</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="submit" class="btn btn-success">Salvar Pet</button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelPetForm()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="admin-form">
+                    <h3>Lista de Pets</h3>
+                    <table class="data-table" id="pets-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Tipo</th>
+                                <th>Idade</th>
+                                <th>Status</th>
+                                <th>Data</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pets-table-body">
+                            <!-- Pets will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Estatísticas -->
+            <section id="stats-section" class="admin-section">
+                <h2 class="section-title">Gerenciar Estatísticas</h2>
+                
+                <div class="admin-form">
+                    <h3>Atualizar Números</h3>
+                    <form id="stats-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="animals-rescued">Animais Resgatados:</label>
+                                <input type="number" id="animals-rescued" name="animalsRescued" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="adoptions-completed">Adoções Realizadas:</label>
+                                <input type="number" id="adoptions-completed" name="adoptionsCompleted" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="volunteers-active">Voluntários Ativos:</label>
+                                <input type="number" id="volunteers-active" name="volunteersActive" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="partners-count">Parceiros:</label>
+                                <input type="number" id="partners-count" name="partnersCount" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Atualizar Estatísticas</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Conteúdo -->
+            <section id="content-section" class="admin-section">
+                <h2 class="section-title">Gerenciar Conteúdo</h2>
+                
+                <div class="admin-form">
+                    <h3>Conteúdo da Página Principal</h3>
+                    <form id="content-form">
+                        <div class="form-group">
+                            <label for="hero-title">Título Principal:</label>
+                            <input type="text" id="hero-title" name="heroTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="hero-subtitle">Subtítulo:</label>
+                            <textarea id="hero-subtitle" name="heroSubtitle" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="about-text">Texto Sobre Nós:</label>
+                            <textarea id="about-text" name="aboutText" required></textarea>
+                        </div>
+                        <h4>Informações de Contato</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contact-phone">Telefone:</label>
+                                <input type="text" id="contact-phone" name="contactPhone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-email">Email:</label>
+                                <input type="email" id="contact-email" name="contactEmail" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-address">Endereço:</label>
+                            <input type="text" id="contact-address" name="contactAddress" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Salvar Conteúdo</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Mensagens -->
+            <section id="messages-section" class="admin-section">
+                <h2 class="section-title">Mensagens de Contato</h2>
+                
+                <div class="admin-form">
+                    <div id="messages-list">
+                        <!-- Messages will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Backup -->
+            <section id="backup-section" class="admin-section">
+                <h2 class="section-title">Backup e Restauração</h2>
+                
+                <div class="admin-form">
+                    <h3>Backup dos Dados</h3>
+                    <p>Faça backup de todos os dados do sistema (pets, estatísticas, conteúdo e mensagens).</p>
+                    <button class="btn btn-primary" onclick="exportData()">Baixar Backup</button>
+                </div>
+
+                <div class="admin-form">
+                    <h3>Restaurar Dados</h3>
+                    <p>Restaure dados de um arquivo de backup anterior.</p>
+                    <div class="form-group">
+                        <label for="backup-file">Arquivo de Backup:</label>
+                        <input type="file" id="backup-file" accept=".json">
+                    </div>
+                    <button class="btn btn-danger" onclick="importData()">Restaurar Backup</button>
+                </div>
+
+                <div class="admin-form">
+                    <h3>Resetar Sistema</h3>
+                    <p style="color: #dc3545; font-weight: bold;">⚠️ ATENÇÃO: Esta ação irá apagar todos os dados e restaurar os dados padrão!</p>
+                    <button class="btn btn-danger" onclick="resetSystem()">Resetar para Padrão</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal para Editar Pet -->
+    <div id="edit-pet-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Editar Pet</h3>
+                <span class="close" onclick="closeEditModal()">&times;</span>
+            </div>
+            <form id="edit-pet-form">
+                <input type="hidden" id="edit-pet-id">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-pet-name">Nome:</label>
+                        <input type="text" id="edit-pet-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-pet-type">Tipo:</label>
+                        <select id="edit-pet-type" name="type" required>
+                            <option value="Cão">Cão</option>
+                            <option value="Gata">Gata</option>
+                            <option value="Gato">Gato</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-pet-age">Idade:</label>
+                        <input type="text" id="edit-pet-age" name="age" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-pet-emoji">Emoji:</label>
+                        <input type="text" id="edit-pet-emoji" name="emoji" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit-pet-description">Descrição:</label>
+                    <textarea id="edit-pet-description" name="description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Foto do Pet:</label>
+                    <div class="photo-upload-container" id="edit-pet-photo-upload" onclick="document.getElementById('edit-pet-photo-input').click()">
+                        <input type="file" id="edit-pet-photo-input" class="photo-upload-input" accept="image/*" onchange="handlePhotoUpload(event, 'edit-pet')">
+                        <div class="photo-upload-icon">📷</div>
+                        <div class="photo-upload-text" id="edit-pet-photo-text">
+                            Clique aqui ou arraste uma foto do pet<br>
+                            <small>Formatos aceitos: JPG, PNG, GIF (máx. 5MB)</small>
+                        </div>
+                        <div id="edit-pet-photo-preview-container" style="display: none;">
+                            <img id="edit-pet-photo-preview" class="photo-preview" alt="Preview da foto">
+                            <button type="button" class="remove-photo-btn" onclick="removePhoto('edit-pet')">Remover Foto</button>
+                        </div>
+                    </div>
+                    <div id="edit-pet-photo-error" class="file-size-warning" style="display: none;"></div>
+                </div>
+                <div class="form-group">
+                    <label>Tags:</label>
+                    <div class="tags-input" id="edit-pet-tags">
+                        <input type="text" class="tag-input" placeholder="Digite uma tag e pressione Enter">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit-pet-status">Status:</label>
+                    <select id="edit-pet-status" name="status" required>
+                        <option value="Disponível">Disponível</option>
+                        <option value="Em Processo">Em Processo</option>
+                        <option value="Adotado">Adotado</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-success">Salvar Alterações</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="admin-data.js"></script>
+    <script>
+        // Variáveis globais
+        let currentEditingPet = null;
+        let petTags = [];
+        let editPetTags = [];
+        let currentPetPhoto = null;
+        let currentEditPetPhoto = null;
+
+        // Autenticação simples
+        const ADMIN_CREDENTIALS = {
+            username: 'admin',
+            password: 'ligadobem2024'
+        };
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            setupEventListeners();
+            setupDragAndDrop('pet-photo-upload', 'pet');
+            setupDragAndDrop('edit-pet-photo-upload', 'edit-pet');
+        });
+
+        function checkAuth() {
+            const isLoggedIn = sessionStorage.getItem('ligaDoBem_admin_logged');
+            if (isLoggedIn) {
+                showAdminInterface();
+            } else {
+                showLoginScreen();
+            }
+        }
+
+        function setupEventListeners() {
+            // Login form
+            document.getElementById('login-form').addEventListener('submit', handleLogin);
+            
+            // Pet form
+            document.getElementById('pet-form').addEventListener('submit', handlePetSubmit);
+            document.getElementById('edit-pet-form').addEventListener('submit', handleEditPetSubmit);
+            
+            // Stats form
+            document.getElementById('stats-form').addEventListener('submit', handleStatsSubmit);
+            
+            // Content form
+            document.getElementById('content-form').addEventListener('submit', handleContentSubmit);
+            
+            // Tags input
+            setupTagsInput('pet-tags', petTags);
+            setupTagsInput('edit-pet-tags', editPetTags);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                sessionStorage.setItem('ligaDoBem_admin_logged', 'true');
+                showAdminInterface();
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('ligaDoBem_admin_logged');
+            showLoginScreen();
+        }
+
+        function showLoginScreen() {
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('admin-interface').style.display = 'none';
+        }
+
+        function showAdminInterface() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('admin-interface').style.display = 'block';
+            loadDashboard();
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.admin-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Load section data
+            switch(sectionName) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
+                case 'pets':
+                    loadPets();
+                    break;
+                case 'stats':
+                    loadStats();
+                    break;
+                case 'content':
+                    loadContent();
+                    break;
+                case 'messages':
+                    loadMessages();
+                    break;
+            }
+        }
+
+        function loadDashboard() {
+            const stats = adminData.getStats();
+            const pets = adminData.getPets();
+            const messages = adminData.getMessages();
+            
+            // Load dashboard stats
+            const statsHtml = `
+                <div class="stat-card">
+                    <div class="stat-number">${stats.animalsRescued || 0}</div>
+                    <div class="stat-label">Animais Resgatados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.adoptionsCompleted || 0}</div>
+                    <div class="stat-label">Adoções Realizadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.volunteersActive || 0}</div>
+                    <div class="stat-label">Voluntários Ativos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.partnersCount || 0}</div>
+                    <div class="stat-label">Parceiros</div>
+                </div>
+            `;
+            document.getElementById('dashboard-stats').innerHTML = statsHtml;
+            
+            // Update quick stats
+            const availablePets = pets.filter(pet => pet.status === 'Disponível').length;
+            const unreadMessages = messages.filter(msg => !msg.read).length;
+            
+            document.getElementById('available-pets-count').textContent = availablePets;
+            document.getElementById('unread-messages-count').textContent = unreadMessages;
+            
+            // Recent activities (simplified)
+            const recentActivities = `
+                <p>• ${pets.length} pets cadastrados</p>
+                <p>• ${messages.length} mensagens recebidas</p>
+                <p>• Sistema funcionando normalmente</p>
+            `;
+            document.getElementById('recent-activities').innerHTML = recentActivities;
+        }
+
+        function loadPets() {
+            const pets = adminData.getPets();
+            const tbody = document.getElementById('pets-table-body');
+            
+            tbody.innerHTML = pets.map(pet => `
+                <tr>
+                    <td>${pet.emoji} ${pet.name}</td>
+                    <td>${pet.type}</td>
+                    <td>${pet.age}</td>
+                    <td><span class="status-badge status-${pet.status.toLowerCase().replace(' ', '-')}">${pet.status}</span></td>
+                    <td>${new Date(pet.dateAdded).toLocaleDateString('pt-BR')}</td>
+                    <td>
+                        <button class="btn btn-small btn-primary" onclick="editPet(${pet.id})">Editar</button>
+                        <button class="btn btn-small btn-danger" onclick="deletePet(${pet.id})">Excluir</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadStats() {
+            const stats = adminData.getStats();
+            document.getElementById('animals-rescued').value = stats.animalsRescued || 0;
+            document.getElementById('adoptions-completed').value = stats.adoptionsCompleted || 0;
+            document.getElementById('volunteers-active').value = stats.volunteersActive || 0;
+            document.getElementById('partners-count').value = stats.partnersCount || 0;
+        }
+
+        function loadContent() {
+            const content = adminData.getContent();
+            document.getElementById('hero-title').value = content.heroTitle || '';
+            document.getElementById('hero-subtitle').value = content.heroSubtitle || '';
+            document.getElementById('about-text').value = content.aboutText || '';
+            document.getElementById('contact-phone').value = content.contactInfo?.phone || '';
+            document.getElementById('contact-email').value = content.contactInfo?.email || '';
+            document.getElementById('contact-address').value = content.contactInfo?.address || '';
+        }
+
+        function loadMessages() {
+            const messages = adminData.getMessages();
+            const container = document.getElementById('messages-list');
+            
+            if (messages.length === 0) {
+                container.innerHTML = '<p>Nenhuma mensagem recebida ainda.</p>';
+                return;
+            }
+            
+            container.innerHTML = messages.map(msg => `
+                <div class="admin-card ${msg.read ? '' : 'unread'}" style="border-left: 4px solid ${msg.read ? '#28a745' : '#007bff'};">
+                    <div class="card-header">
+                        <div class="card-title">${msg.name}</div>
+                        <div class="card-actions">
+                            ${!msg.read ? `<button class="btn btn-small btn-primary" onclick="markAsRead(${msg.id})">Marcar como Lida</button>` : ''}
+                            <button class="btn btn-small btn-danger" onclick="deleteMessage(${msg.id})">Excluir</button>
+                        </div>
+                    </div>
+                    <p><strong>Email:</strong> ${msg.email}</p>
+                    <p><strong>Data:</strong> ${new Date(msg.date).toLocaleString('pt-BR')}</p>
+                    <p><strong>Mensagem:</strong></p>
+                    <p>${msg.message}</p>
+                </div>
+            `).join('');
+        }
+
+        // Pet management functions
+        function togglePetForm() {
+            const form = document.getElementById('pet-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            if (form.style.display === 'block') {
+                document.getElementById('pet-name').focus();
+            }
+        }
+
+        function cancelPetForm() {
+            document.getElementById('pet-form').style.display = 'none';
+            document.getElementById('pet-form').reset();
+            petTags = [];
+            currentPetPhoto = null;
+            updateTagsDisplay('pet-tags', petTags);
+            resetPhotoUpload('pet');
+        }
+
+        function handlePetSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const petData = Object.fromEntries(formData);
+            petData.tags = petTags;
+            petData.photo = currentPetPhoto;
+            
+            adminData.addPet(petData);
+            showAlert('Pet adicionado com sucesso!', 'success');
+            cancelPetForm();
+            loadPets();
+            loadDashboard();
+        }
+
+        function editPet(id) {
+            const pet = adminData.getPets().find(p => p.id === id);
+            if (!pet) return;
+            
+            currentEditingPet = pet;
+            editPetTags = [...pet.tags];
+            currentEditPetPhoto = pet.photo;
+            
+            document.getElementById('edit-pet-id').value = pet.id;
+            document.getElementById('edit-pet-name').value = pet.name;
+            document.getElementById('edit-pet-type').value = pet.type;
+            document.getElementById('edit-pet-age').value = pet.age;
+            document.getElementById('edit-pet-emoji').value = pet.emoji;
+            document.getElementById('edit-pet-description').value = pet.description;
+            document.getElementById('edit-pet-status').value = pet.status;
+            
+            // Load existing photo
+            if (pet.photo) {
+                showPhotoPreview('edit-pet', pet.photo);
+            } else {
+                resetPhotoUpload('edit-pet');
+            }
+            
+            updateTagsDisplay('edit-pet-tags', editPetTags);
+            document.getElementById('edit-pet-modal').style.display = 'block';
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-pet-modal').style.display = 'none';
+            currentEditingPet = null;
+            editPetTags = [];
+            currentEditPetPhoto = null;
+            resetPhotoUpload('edit-pet');
+        }
+
+        function handleEditPetSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const petData = Object.fromEntries(formData);
+            petData.tags = editPetTags;
+            petData.photo = currentEditPetPhoto;
+            
+            const id = parseInt(document.getElementById('edit-pet-id').value);
+            adminData.updatePet(id, petData);
+            showAlert('Pet atualizado com sucesso!', 'success');
+            closeEditModal();
+            loadPets();
+        }
+
+        function deletePet(id) {
+            if (confirm('Tem certeza que deseja excluir este pet?')) {
+                adminData.deletePet(id);
+                showAlert('Pet excluído com sucesso!', 'success');
+                loadPets();
+                loadDashboard();
+            }
+        }
+
+        // Stats management
+        function handleStatsSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const statsData = {};
+            for (let [key, value] of formData.entries()) {
+                statsData[key] = parseInt(value);
+            }
+            
+            adminData.updateStats(statsData);
+            showAlert('Estatísticas atualizadas com sucesso!', 'success');
+            loadDashboard();
+        }
+
+        // Content management
+        function handleContentSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const contentData = Object.fromEntries(formData);
+            
+            const updatedContent = {
+                heroTitle: contentData.heroTitle,
+                heroSubtitle: contentData.heroSubtitle,
+                aboutText: contentData.aboutText,
+                contactInfo: {
+                    phone: contentData.contactPhone,
+                    email: contentData.contactEmail,
+                    address: contentData.contactAddress
+                }
+            };
+            
+            adminData.updateContent(updatedContent);
+            showAlert('Conteúdo atualizado com sucesso!', 'success');
+        }
+
+        // Message management
+        function markAsRead(id) {
+            adminData.markMessageAsRead(id);
+            loadMessages();
+            loadDashboard();
+        }
+
+        function deleteMessage(id) {
+            if (confirm('Tem certeza que deseja excluir esta mensagem?')) {
+                adminData.deleteMessage(id);
+                showAlert('Mensagem excluída com sucesso!', 'success');
+                loadMessages();
+                loadDashboard();
+            }
+        }
+
+        // Backup functions
+        function exportData() {
+            const data = adminData.exportData();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `liga-do-bem-backup-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showAlert('Backup baixado com sucesso!', 'success');
+        }
+
+        function importData() {
+            const fileInput = document.getElementById('backup-file');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                showAlert('Por favor, selecione um arquivo de backup.', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    adminData.importData(data);
+                    showAlert('Backup restaurado com sucesso!', 'success');
+                    loadDashboard();
+                    loadPets();
+                    loadStats();
+                    loadContent();
+                    loadMessages();
+                } catch (error) {
+                    showAlert('Erro ao restaurar backup. Arquivo inválido.', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function resetSystem() {
+            if (confirm('ATENÇÃO: Esta ação irá apagar todos os dados! Tem certeza?')) {
+                if (confirm('Esta ação é irreversível! Confirma novamente?')) {
+                    adminData.resetToDefaultData();
+                    showAlert('Sistema resetado para os dados padrão!', 'success');
+                    loadDashboard();
+                    loadPets();
+                    loadStats();
+                    loadContent();
+                    loadMessages();
+                }
+            }
+        }
+
+        // Tags management
+        function setupTagsInput(containerId, tagsArray) {
+            const container = document.getElementById(containerId);
+            const input = container.querySelector('.tag-input');
+            
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const tag = this.value.trim();
+                    if (tag && !tagsArray.includes(tag)) {
+                        tagsArray.push(tag);
+                        updateTagsDisplay(containerId, tagsArray);
+                        this.value = '';
+                    }
+                }
+            });
+        }
+
+        function updateTagsDisplay(containerId, tagsArray) {
+            const container = document.getElementById(containerId);
+            const input = container.querySelector('.tag-input');
+            
+            // Remove existing tags
+            container.querySelectorAll('.tag-item').forEach(tag => tag.remove());
+            
+            // Add tags
+            tagsArray.forEach((tag, index) => {
+                const tagElement = document.createElement('div');
+                tagElement.className = 'tag-item';
+                tagElement.innerHTML = `
+                    ${tag}
+                    <button type="button" class="tag-remove" onclick="removeTag('${containerId}', ${index})">&times;</button>
+                `;
+                container.insertBefore(tagElement, input);
+            });
+        }
+
+        function removeTag(containerId, index) {
+            if (containerId === 'pet-tags') {
+                petTags.splice(index, 1);
+                updateTagsDisplay(containerId, petTags);
+            } else if (containerId === 'edit-pet-tags') {
+                editPetTags.splice(index, 1);
+                updateTagsDisplay(containerId, editPetTags);
+            }
+        }
+
+        // Utility functions
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            alertDiv.style.position = 'fixed';
+            alertDiv.style.top = '20px';
+            alertDiv.style.right = '20px';
+            alertDiv.style.zIndex = '9999';
+            
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                document.body.removeChild(alertDiv);
+            }, 3000);
+        }
+
+        // Photo upload functions
+        function handlePhotoUpload(event, prefix) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Check file size (5MB limit)
+            if (file.size > 5 * 1024 * 1024) {
+                showPhotoError(prefix, 'Arquivo muito grande! Máximo 5MB.');
+                return;
+            }
+            
+            // Check file type
+            if (!file.type.startsWith('image/')) {
+                showPhotoError(prefix, 'Por favor, selecione apenas arquivos de imagem.');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64 = e.target.result;
+                if (prefix === 'pet') {
+                    currentPetPhoto = base64;
+                } else if (prefix === 'edit-pet') {
+                    currentEditPetPhoto = base64;
+                }
+                showPhotoPreview(prefix, base64);
+                hidePhotoError(prefix);
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function showPhotoPreview(prefix, base64) {
+            const previewContainer = document.getElementById(`${prefix}-photo-preview-container`);
+            const preview = document.getElementById(`${prefix}-photo-preview`);
+            const text = document.getElementById(`${prefix}-photo-text`);
+            const icon = document.querySelector(`#${prefix}-photo-upload .photo-upload-icon`);
+            
+            preview.src = base64;
+            previewContainer.style.display = 'block';
+            text.innerHTML = '<span class="has-photo">✅ Foto carregada com sucesso!</span>';
+            icon.style.display = 'none';
+        }
+        
+        function removePhoto(prefix) {
+            if (prefix === 'pet') {
+                currentPetPhoto = null;
+            } else if (prefix === 'edit-pet') {
+                currentEditPetPhoto = null;
+            }
+            resetPhotoUpload(prefix);
+        }
+        
+        function resetPhotoUpload(prefix) {
+            const previewContainer = document.getElementById(`${prefix}-photo-preview-container`);
+            const text = document.getElementById(`${prefix}-photo-text`);
+            const icon = document.querySelector(`#${prefix}-photo-upload .photo-upload-icon`);
+            const input = document.getElementById(`${prefix}-photo-input`);
+            
+            previewContainer.style.display = 'none';
+            text.innerHTML = `
+                Clique aqui ou arraste uma foto do pet<br>
+                <small>Formatos aceitos: JPG, PNG, GIF (máx. 5MB)</small>
+            `;
+            text.className = 'photo-upload-text';
+            icon.style.display = 'block';
+            input.value = '';
+            hidePhotoError(prefix);
+        }
+        
+        function showPhotoError(prefix, message) {
+            const errorDiv = document.getElementById(`${prefix}-photo-error`);
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+        
+        function hidePhotoError(prefix) {
+            const errorDiv = document.getElementById(`${prefix}-photo-error`);
+            errorDiv.style.display = 'none';
+        }
+        
+        // Drag and drop functionality
+        
+        function setupDragAndDrop(containerId, prefix) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            container.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                container.classList.add('dragover');
+            });
+            
+            container.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                container.classList.remove('dragover');
+            });
+            
+            container.addEventListener('drop', function(e) {
+                e.preventDefault();
+                container.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    const input = document.getElementById(`${prefix}-photo-input`);
+                    input.files = files;
+                    handlePhotoUpload({ target: input }, prefix);
+                }
+            });
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('edit-pet-modal');
+            if (event.target === modal) {
+                closeEditModal();
+            }
+        }
+    </script>
+</body>
+</html>
