@@ -39,14 +39,25 @@
                 <span class="logo-subtitle">Administração</span>
             </div>
             
-            <!-- Menu Toggle for Mobile -->
-            <button class="menu-toggle" onclick="toggleMobileMenu()">
+            <!-- Menu Toggle -->
+            <button class="menu-toggle" onclick="toggleSidebar()">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
             
-            <nav class="admin-nav" id="admin-nav">
+            <div class="admin-user">
+                <span class="user-info">👤 Admin</span>
+                <button class="logout-btn" onclick="logout()">
+                    <span class="logout-icon">🚪</span>
+                    <span class="logout-text">Sair</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <nav class="admin-sidebar" id="admin-sidebar">
+            <div class="sidebar-content">
                 <!-- Dashboard -->
                 <div class="nav-section">
                     <button class="nav-btn primary active" onclick="showSection('dashboard')">
@@ -123,16 +134,11 @@
                         <span class="nav-text">Backup</span>
                     </button>
                 </div>
-            </nav>
-            
-            <div class="admin-user">
-                <span class="user-info">👤 Admin</span>
-                <button class="logout-btn" onclick="logout()">
-                    <span class="logout-icon">🚪</span>
-                    <span class="logout-text">Sair</span>
-                </button>
             </div>
-        </header>
+        </nav>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
         <!-- Main Content -->
         <main class="admin-main">
@@ -1126,9 +1132,8 @@
         }
 
         function showSection(sectionName) {
-            // Fechar menu mobile se estiver aberto
-            const nav = document.getElementById('admin-nav');
-            nav.classList.remove('mobile-open');
+            // Fechar sidebar se estiver aberto
+            closeSidebar();
             
             // Hide all sections
             document.querySelectorAll('.admin-section').forEach(section => {
@@ -2183,10 +2188,25 @@
                 pets.map(pet => `<option value="${pet.id}">${pet.emoji} ${pet.name}</option>`).join('');
         }
 
-        // Menu mobile toggle
-        function toggleMobileMenu() {
-            const nav = document.getElementById('admin-nav');
-            nav.classList.toggle('mobile-open');
+        // Sidebar toggle functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('admin-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const toggle = document.querySelector('.menu-toggle');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+            toggle.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('admin-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const toggle = document.querySelector('.menu-toggle');
+            
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            toggle.classList.remove('active');
         }
 
         // Atualizar badge de mensagens
