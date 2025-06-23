@@ -37,6 +37,13 @@
             <nav class="admin-nav">
                 <button class="nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
                 <button class="nav-btn" onclick="showSection('pets')">Pets</button>
+                <button class="nav-btn" onclick="showSection('volunteers')">Voluntários</button>
+                <button class="nav-btn" onclick="showSection('visits')">Visitas</button>
+                <button class="nav-btn" onclick="showSection('adoptions')">Adoções</button>
+                <button class="nav-btn" onclick="showSection('sponsors')">Padrinhos</button>
+                <button class="nav-btn" onclick="showSection('medical')">Veterinário</button>
+                <button class="nav-btn" onclick="showSection('events')">Eventos</button>
+                <button class="nav-btn" onclick="showSection('donations')">Doações</button>
                 <button class="nav-btn" onclick="showSection('stats')">Estatísticas</button>
                 <button class="nav-btn" onclick="showSection('content')">Conteúdo</button>
                 <button class="nav-btn" onclick="showSection('messages')">Mensagens</button>
@@ -173,6 +180,575 @@
                         </thead>
                         <tbody id="pets-table-body">
                             <!-- Pets will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Gerenciamento de Voluntários -->
+            <section id="volunteers-section" class="admin-section">
+                <h2 class="section-title">Gerenciamento de Voluntários</h2>
+                
+                <div class="admin-form">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3>Cadastrar Novo Voluntário</h3>
+                        <button class="btn btn-primary" onclick="toggleVolunteerForm()">+ Novo Voluntário</button>
+                    </div>
+                    
+                    <form id="volunteer-form" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="volunteer-name">Nome Completo:</label>
+                                <input type="text" id="volunteer-name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="volunteer-email">Email:</label>
+                                <input type="email" id="volunteer-email" name="email" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="volunteer-phone">Telefone:</label>
+                                <input type="text" id="volunteer-phone" name="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="volunteer-availability">Disponibilidade:</label>
+                                <select id="volunteer-availability" name="availability" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Manhã">Manhã</option>
+                                    <option value="Tarde">Tarde</option>
+                                    <option value="Noite">Noite</option>
+                                    <option value="Fins de semana">Fins de semana</option>
+                                    <option value="Flexível">Flexível</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="volunteer-skills">Habilidades/Experiência:</label>
+                            <textarea id="volunteer-skills" name="skills" placeholder="Ex: Veterinária, Fotografia, Marketing, etc."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="volunteer-motivation">Motivação:</label>
+                            <textarea id="volunteer-motivation" name="motivation" placeholder="Por que deseja ser voluntário?"></textarea>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="submit" class="btn btn-success">Cadastrar Voluntário</button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelVolunteerForm()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="admin-form">
+                    <h3>Lista de Voluntários</h3>
+                    <table class="data-table" id="volunteers-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Telefone</th>
+                                <th>Disponibilidade</th>
+                                <th>Status</th>
+                                <th>Pontos</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="volunteers-table-body">
+                            <!-- Volunteers will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Agendamento de Visitas -->
+            <section id="visits-section" class="admin-section">
+                <h2 class="section-title">Agendamento de Visitas</h2>
+                
+                <div class="admin-form">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3>Agendar Nova Visita</h3>
+                        <button class="btn btn-primary" onclick="toggleVisitForm()">+ Nova Visita</button>
+                    </div>
+                    
+                    <form id="visit-form" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="visit-visitor-name">Nome do Visitante:</label>
+                                <input type="text" id="visit-visitor-name" name="visitorName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="visit-visitor-email">Email:</label>
+                                <input type="email" id="visit-visitor-email" name="visitorEmail" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="visit-visitor-phone">Telefone:</label>
+                                <input type="text" id="visit-visitor-phone" name="visitorPhone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="visit-pet">Pet de Interesse:</label>
+                                <select id="visit-pet" name="petId" required>
+                                    <option value="">Selecione um pet...</option>
+                                    <!-- Options will be loaded dynamically -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="visit-date">Data da Visita:</label>
+                                <input type="datetime-local" id="visit-date" name="dateScheduled" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="visit-type">Tipo de Visita:</label>
+                                <select id="visit-type" name="type" required>
+                                    <option value="Conhecer o pet">Conhecer o pet</option>
+                                    <option value="Segunda visita">Segunda visita</option>
+                                    <option value="Entrega">Entrega</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="visit-notes">Observações:</label>
+                            <textarea id="visit-notes" name="notes" placeholder="Observações sobre a visita..."></textarea>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="submit" class="btn btn-success">Agendar Visita</button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelVisitForm()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="admin-form">
+                    <h3>Visitas Agendadas</h3>
+                    <table class="data-table" id="visits-table">
+                        <thead>
+                            <tr>
+                                <th>Visitante</th>
+                                <th>Pet</th>
+                                <th>Data/Hora</th>
+                                <th>Tipo</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="visits-table-body">
+                            <!-- Visits will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Processo de Adoção -->
+            <section id="adoptions-section" class="admin-section">
+                <h2 class="section-title">Processo de Adoção</h2>
+                
+                <div class="admin-form">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3>Iniciar Processo de Adoção</h3>
+                        <button class="btn btn-primary" onclick="toggleAdoptionForm()">+ Nova Adoção</button>
+                    </div>
+                    
+                    <form id="adoption-form" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="adoption-adopter-name">Nome do Adotante:</label>
+                                <input type="text" id="adoption-adopter-name" name="adopterName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="adoption-adopter-email">Email:</label>
+                                <input type="email" id="adoption-adopter-email" name="adopterEmail" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="adoption-adopter-phone">Telefone:</label>
+                                <input type="text" id="adoption-adopter-phone" name="adopterPhone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="adoption-pet">Pet:</label>
+                                <select id="adoption-pet" name="petId" required>
+                                    <option value="">Selecione um pet...</option>
+                                    <!-- Options will be loaded dynamically -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="adoption-address">Endereço Completo:</label>
+                            <textarea id="adoption-address" name="address" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="adoption-housing">Tipo de Moradia:</label>
+                                <select id="adoption-housing" name="housingType" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Casa com quintal">Casa com quintal</option>
+                                    <option value="Casa sem quintal">Casa sem quintal</option>
+                                    <option value="Apartamento">Apartamento</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="adoption-experience">Experiência com Pets:</label>
+                                <select id="adoption-experience" name="experience" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Primeira vez">Primeira vez</option>
+                                    <option value="Pouca experiência">Pouca experiência</option>
+                                    <option value="Experiência moderada">Experiência moderada</option>
+                                    <option value="Muita experiência">Muita experiência</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="adoption-motivation">Motivação para Adoção:</label>
+                            <textarea id="adoption-motivation" name="motivation" required></textarea>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="submit" class="btn btn-success">Iniciar Processo</button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelAdoptionForm()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="admin-form">
+                    <h3>Processos de Adoção</h3>
+                    <table class="data-table" id="adoptions-table">
+                        <thead>
+                            <tr>
+                                <th>Adotante</th>
+                                <th>Pet</th>
+                                <th>Data Início</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adoptions-table-body">
+                            <!-- Adoptions will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Sistema de Padrinhos -->
+            <section id="sponsors-section" class="admin-section">
+                <h2 class="section-title">Sistema de Padrinhos/Madrinhas</h2>
+                
+                <div class="admin-form">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3>Cadastrar Padrinho/Madrinha</h3>
+                        <button class="btn btn-primary" onclick="toggleSponsorForm()">+ Novo Padrinho</button>
+                    </div>
+                    
+                    <form id="sponsor-form" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="sponsor-name">Nome Completo:</label>
+                                <input type="text" id="sponsor-name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sponsor-email">Email:</label>
+                                <input type="email" id="sponsor-email" name="email" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="sponsor-phone">Telefone:</label>
+                                <input type="text" id="sponsor-phone" name="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sponsor-pet">Pet Apadrinhado:</label>
+                                <select id="sponsor-pet" name="petId" required>
+                                    <option value="">Selecione um pet...</option>
+                                    <!-- Options will be loaded dynamically -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="sponsor-amount">Valor Mensal (R$):</label>
+                                <input type="number" id="sponsor-amount" name="monthlyAmount" min="10" step="5" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sponsor-payment">Forma de Pagamento:</label>
+                                <select id="sponsor-payment" name="paymentMethod" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="PIX">PIX</option>
+                                    <option value="Transferência">Transferência</option>
+                                    <option value="Dinheiro">Dinheiro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="submit" class="btn btn-success">Cadastrar Padrinho</button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelSponsorForm()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="admin-form">
+                    <h3>Lista de Padrinhos/Madrinhas</h3>
+                    <table class="data-table" id="sponsors-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Pet Apadrinhado</th>
+                                <th>Valor Mensal</th>
+                                <th>Total Doado</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sponsors-table-body">
+                            <!-- Sponsors will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Gestão Veterinária -->
+            <section id="medical-section" class="admin-section">
+                <h2 class="section-title">Gestão Veterinária</h2>
+                
+                <div class="admin-form">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3>Adicionar Registro Médico</h3>
+                        <button class="btn btn-primary" onclick="toggleMedicalForm()">+ Novo Registro</button>
+                    </div>
+                    
+                    <form id="medical-form" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="medical-pet">Pet:</label>
+                                <select id="medical-pet" name="petId" required>
+                                    <option value="">Selecione um pet...</option>
+                                    <!-- Options will be loaded dynamically -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="medical-type">Tipo de Procedimento:</label>
+                                <select id="medical-type" name="type" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Consulta">Consulta</option>
+                                    <option value="Vacinação">Vacinação</option>
+                                    <option value="Castração">Castração</option>
+                                    <option value="Cirurgia">Cirurgia</option>
+                                    <option value="Exame">Exame</option>
+                                    <option value="Medicação">Medicação</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="medical-date">Data:</label>
+                                <input type="date" id="medical-date" name="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="medical-vet">Veterinário:</label>
+                                <input type="text" id="medical-vet" name="veterinarian" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="medical-description">Descrição/Observações:</label>
+                            <textarea id="medical-description" name="description" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="medical-cost">Custo (R$):</label>
+                                <input type="number" id="medical-cost" name="cost" min="0" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label for="medical-next">Próximo Procedimento:</label>
+                                <input type="date" id="medical-next" name="nextAppointment">
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="submit" class="btn btn-success">Salvar Registro</button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelMedicalForm()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="admin-form">
+                    <h3>Histórico Médico por Pet</h3>
+                    <div class="form-group">
+                        <label for="medical-filter-pet">Filtrar por Pet:</label>
+                        <select id="medical-filter-pet" onchange="filterMedicalRecords()">
+                            <option value="">Todos os pets</option>
+                            <!-- Options will be loaded dynamically -->
+                        </select>
+                    </div>
+                    <div id="medical-records-list">
+                        <!-- Medical records will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gerenciamento de Eventos -->
+            <section id="events-section" class="admin-section">
+                <h2 class="section-title">Gerenciamento de Eventos</h2>
+                
+                <div class="admin-form">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3>Criar Novo Evento</h3>
+                        <button class="btn btn-primary" onclick="toggleEventForm()">+ Novo Evento</button>
+                    </div>
+                    
+                    <form id="event-form" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="event-name">Nome do Evento:</label>
+                                <input type="text" id="event-name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="event-type">Tipo:</label>
+                                <select id="event-type" name="type" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Feira de Adoção">Feira de Adoção</option>
+                                    <option value="Campanha de Vacinação">Campanha de Vacinação</option>
+                                    <option value="Arrecadação">Arrecadação</option>
+                                    <option value="Palestra">Palestra</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="event-date">Data:</label>
+                                <input type="date" id="event-date" name="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="event-time">Horário:</label>
+                                <input type="time" id="event-time" name="time" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-location">Local:</label>
+                            <input type="text" id="event-location" name="location" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-description">Descrição:</label>
+                            <textarea id="event-description" name="description" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="event-capacity">Capacidade (pessoas):</label>
+                                <input type="number" id="event-capacity" name="capacity" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="event-registration">Requer Inscrição:</label>
+                                <select id="event-registration" name="requiresRegistration">
+                                    <option value="false">Não</option>
+                                    <option value="true">Sim</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="submit" class="btn btn-success">Criar Evento</button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelEventForm()">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="admin-form">
+                    <h3>Lista de Eventos</h3>
+                    <table class="data-table" id="events-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Tipo</th>
+                                <th>Data</th>
+                                <th>Local</th>
+                                <th>Participantes</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="events-table-body">
+                            <!-- Events will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Sistema de Doações -->
+            <section id="donations-section" class="admin-section">
+                <h2 class="section-title">Sistema de Doações</h2>
+                
+                <div class="admin-form">
+                    <h3>Registrar Doação</h3>
+                    <form id="donation-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="donation-donor-name">Nome do Doador:</label>
+                                <input type="text" id="donation-donor-name" name="donorName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="donation-donor-email">Email:</label>
+                                <input type="email" id="donation-donor-email" name="donorEmail">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="donation-amount">Valor (R$):</label>
+                                <input type="number" id="donation-amount" name="amount" min="1" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="donation-type">Tipo:</label>
+                                <select id="donation-type" name="type" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Dinheiro">Dinheiro</option>
+                                    <option value="PIX">PIX</option>
+                                    <option value="Transferência">Transferência</option>
+                                    <option value="Ração">Ração</option>
+                                    <option value="Medicamentos">Medicamentos</option>
+                                    <option value="Outros">Outros</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="donation-purpose">Finalidade:</label>
+                            <select id="donation-purpose" name="purpose">
+                                <option value="Geral">Geral</option>
+                                <option value="Veterinário">Veterinário</option>
+                                <option value="Ração">Ração</option>
+                                <option value="Medicamentos">Medicamentos</option>
+                                <option value="Castração">Castração</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="donation-notes">Observações:</label>
+                            <textarea id="donation-notes" name="notes"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">Registrar Doação</button>
+                    </form>
+                </div>
+
+                <div class="admin-form">
+                    <h3>Histórico de Doações</h3>
+                    <div class="donation-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="total-donations">R$ 0,00</div>
+                            <div class="stat-label">Total Arrecadado</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="monthly-donations">R$ 0,00</div>
+                            <div class="stat-label">Este Mês</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="donors-count">0</div>
+                            <div class="stat-label">Doadores</div>
+                        </div>
+                    </div>
+                    <table class="data-table" id="donations-table">
+                        <thead>
+                            <tr>
+                                <th>Doador</th>
+                                <th>Valor</th>
+                                <th>Tipo</th>
+                                <th>Finalidade</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody id="donations-table-body">
+                            <!-- Donations will be loaded here -->
                         </tbody>
                     </table>
                 </div>
@@ -406,6 +982,27 @@
             document.getElementById('pet-form').addEventListener('submit', handlePetSubmit);
             document.getElementById('edit-pet-form').addEventListener('submit', handleEditPetSubmit);
             
+            // Volunteer form
+            document.getElementById('volunteer-form').addEventListener('submit', handleVolunteerSubmit);
+            
+            // Visit form
+            document.getElementById('visit-form').addEventListener('submit', handleVisitSubmit);
+            
+            // Adoption form
+            document.getElementById('adoption-form').addEventListener('submit', handleAdoptionSubmit);
+            
+            // Sponsor form
+            document.getElementById('sponsor-form').addEventListener('submit', handleSponsorSubmit);
+            
+            // Medical form
+            document.getElementById('medical-form').addEventListener('submit', handleMedicalSubmit);
+            
+            // Event form
+            document.getElementById('event-form').addEventListener('submit', handleEventSubmit);
+            
+            // Donation form
+            document.getElementById('donation-form').addEventListener('submit', handleDonationSubmit);
+            
             // Stats form
             document.getElementById('stats-form').addEventListener('submit', handleStatsSubmit);
             
@@ -471,6 +1068,27 @@
                 case 'pets':
                     loadPets();
                     break;
+                case 'volunteers':
+                    loadVolunteers();
+                    break;
+                case 'visits':
+                    loadVisits();
+                    break;
+                case 'adoptions':
+                    loadAdoptions();
+                    break;
+                case 'sponsors':
+                    loadSponsors();
+                    break;
+                case 'medical':
+                    loadMedicalRecords();
+                    break;
+                case 'events':
+                    loadEvents();
+                    break;
+                case 'donations':
+                    loadDonations();
+                    break;
                 case 'stats':
                     loadStats();
                     break;
@@ -487,24 +1105,38 @@
             const stats = adminData.getStats();
             const pets = adminData.getPets();
             const messages = adminData.getMessages();
+            const volunteers = adminData.getVolunteers();
+            const visits = adminData.getVisits();
+            const adoptions = adminData.getAdoptions();
+            const sponsors = adminData.getSponsors();
+            const events = adminData.getEvents();
+            const donations = adminData.getDonations();
             
             // Load dashboard stats
             const statsHtml = `
                 <div class="stat-card">
-                    <div class="stat-number">${stats.animalsRescued || 0}</div>
-                    <div class="stat-label">Animais Resgatados</div>
+                    <div class="stat-number">${pets.length}</div>
+                    <div class="stat-label">Pets Cadastrados</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">${stats.adoptionsCompleted || 0}</div>
+                    <div class="stat-number">${adoptions.filter(a => a.status === 'Aprovada').length}</div>
                     <div class="stat-label">Adoções Realizadas</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">${stats.volunteersActive || 0}</div>
+                    <div class="stat-number">${volunteers.filter(v => v.status === 'Ativo').length}</div>
                     <div class="stat-label">Voluntários Ativos</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">${stats.partnersCount || 0}</div>
-                    <div class="stat-label">Parceiros</div>
+                    <div class="stat-number">${sponsors.filter(s => s.status === 'Ativo').length}</div>
+                    <div class="stat-label">Padrinhos Ativos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${visits.filter(v => v.status === 'Agendada').length}</div>
+                    <div class="stat-label">Visitas Agendadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${events.filter(e => e.status === 'Ativo').length}</div>
+                    <div class="stat-label">Eventos Ativos</div>
                 </div>
             `;
             document.getElementById('dashboard-stats').innerHTML = statsHtml;
@@ -516,11 +1148,14 @@
             document.getElementById('available-pets-count').textContent = availablePets;
             document.getElementById('unread-messages-count').textContent = unreadMessages;
             
-            // Recent activities (simplified)
+            // Recent activities with new data
+            const totalDonations = donations.reduce((sum, d) => sum + parseFloat(d.amount || 0), 0);
             const recentActivities = `
                 <p>• ${pets.length} pets cadastrados</p>
+                <p>• ${volunteers.length} voluntários registrados</p>
+                <p>• ${adoptions.length} processos de adoção</p>
+                <p>• R$ ${totalDonations.toFixed(2)} em doações</p>
                 <p>• ${messages.length} mensagens recebidas</p>
-                <p>• Sistema funcionando normalmente</p>
             `;
             document.getElementById('recent-activities').innerHTML = recentActivities;
         }
@@ -964,6 +1599,499 @@
             if (event.target === modal) {
                 closeEditModal();
             }
+        }
+
+        // ========== NOVAS FUNCIONALIDADES ==========
+
+        // Gerenciamento de Voluntários
+        function toggleVolunteerForm() {
+            const form = document.getElementById('volunteer-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            if (form.style.display === 'block') {
+                document.getElementById('volunteer-name').focus();
+            }
+        }
+
+        function cancelVolunteerForm() {
+            document.getElementById('volunteer-form').style.display = 'none';
+            document.getElementById('volunteer-form').reset();
+        }
+
+        function handleVolunteerSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const volunteerData = Object.fromEntries(formData);
+            
+            adminData.addVolunteer(volunteerData);
+            showAlert('Voluntário cadastrado com sucesso!', 'success');
+            cancelVolunteerForm();
+            loadVolunteers();
+            loadDashboard();
+        }
+
+        function loadVolunteers() {
+            const volunteers = adminData.getVolunteers();
+            const tbody = document.getElementById('volunteers-table-body');
+            
+            tbody.innerHTML = volunteers.map(volunteer => `
+                <tr>
+                    <td>${volunteer.name}</td>
+                    <td>${volunteer.email}</td>
+                    <td>${volunteer.phone}</td>
+                    <td>${volunteer.availability}</td>
+                    <td><span class="status-badge status-${volunteer.status.toLowerCase()}">${volunteer.status}</span></td>
+                    <td><span class="volunteer-points">${volunteer.points} pts</span></td>
+                    <td>
+                        <button class="btn btn-small btn-primary" onclick="editVolunteer(${volunteer.id})">Editar</button>
+                        <button class="btn btn-small btn-danger" onclick="deleteVolunteer(${volunteer.id})">Excluir</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteVolunteer(id) {
+            if (confirm('Tem certeza que deseja excluir este voluntário?')) {
+                adminData.deleteVolunteer(id);
+                showAlert('Voluntário excluído com sucesso!', 'success');
+                loadVolunteers();
+            }
+        }
+
+        // Gerenciamento de Visitas
+        function toggleVisitForm() {
+            const form = document.getElementById('visit-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            if (form.style.display === 'block') {
+                loadPetOptions('visit-pet');
+                document.getElementById('visit-visitor-name').focus();
+            }
+        }
+
+        function cancelVisitForm() {
+            document.getElementById('visit-form').style.display = 'none';
+            document.getElementById('visit-form').reset();
+        }
+
+        function handleVisitSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const visitData = Object.fromEntries(formData);
+            
+            adminData.addVisit(visitData);
+            showAlert('Visita agendada com sucesso!', 'success');
+            cancelVisitForm();
+            loadVisits();
+        }
+
+        function loadVisits() {
+            const visits = adminData.getVisits();
+            const pets = adminData.getPets();
+            const tbody = document.getElementById('visits-table-body');
+            
+            tbody.innerHTML = visits.map(visit => {
+                const pet = pets.find(p => p.id == visit.petId);
+                const petName = pet ? `${pet.emoji} ${pet.name}` : 'Pet não encontrado';
+                
+                return `
+                    <tr>
+                        <td>${visit.visitorName}</td>
+                        <td>${petName}</td>
+                        <td>${new Date(visit.dateScheduled).toLocaleString('pt-BR')}</td>
+                        <td>${visit.type}</td>
+                        <td><span class="status-badge status-${visit.status.toLowerCase()}">${visit.status}</span></td>
+                        <td>
+                            <button class="btn btn-small btn-success" onclick="markVisitCompleted(${visit.id})">Realizada</button>
+                            <button class="btn btn-small btn-danger" onclick="cancelVisit(${visit.id})">Cancelar</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function markVisitCompleted(id) {
+            adminData.updateVisit(id, { status: 'Realizada' });
+            showAlert('Visita marcada como realizada!', 'success');
+            loadVisits();
+        }
+
+        function cancelVisit(id) {
+            if (confirm('Tem certeza que deseja cancelar esta visita?')) {
+                adminData.updateVisit(id, { status: 'Cancelada' });
+                showAlert('Visita cancelada!', 'info');
+                loadVisits();
+            }
+        }
+
+        // Gerenciamento de Adoções
+        function toggleAdoptionForm() {
+            const form = document.getElementById('adoption-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            if (form.style.display === 'block') {
+                loadPetOptions('adoption-pet');
+                document.getElementById('adoption-adopter-name').focus();
+            }
+        }
+
+        function cancelAdoptionForm() {
+            document.getElementById('adoption-form').style.display = 'none';
+            document.getElementById('adoption-form').reset();
+        }
+
+        function handleAdoptionSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const adoptionData = Object.fromEntries(formData);
+            
+            adminData.addAdoption(adoptionData);
+            showAlert('Processo de adoção iniciado com sucesso!', 'success');
+            cancelAdoptionForm();
+            loadAdoptions();
+        }
+
+        function loadAdoptions() {
+            const adoptions = adminData.getAdoptions();
+            const pets = adminData.getPets();
+            const tbody = document.getElementById('adoptions-table-body');
+            
+            tbody.innerHTML = adoptions.map(adoption => {
+                const pet = pets.find(p => p.id == adoption.petId);
+                const petName = pet ? `${pet.emoji} ${pet.name}` : 'Pet não encontrado';
+                
+                return `
+                    <tr>
+                        <td>${adoption.adopterName}</td>
+                        <td>${petName}</td>
+                        <td>${new Date(adoption.dateStarted).toLocaleDateString('pt-BR')}</td>
+                        <td><span class="status-badge status-${adoption.status.toLowerCase().replace(' ', '-')}">${adoption.status}</span></td>
+                        <td>
+                            <button class="btn btn-small btn-success" onclick="approveAdoption(${adoption.id})">Aprovar</button>
+                            <button class="btn btn-small btn-danger" onclick="rejectAdoption(${adoption.id})">Reprovar</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function approveAdoption(id) {
+            const adoption = adminData.getAdoptions().find(a => a.id === id);
+            if (adoption) {
+                adminData.updateAdoption(id, { status: 'Aprovada' });
+                // Atualizar status do pet para "Adotado"
+                adminData.updatePet(adoption.petId, { status: 'Adotado' });
+                showAlert('Adoção aprovada com sucesso!', 'success');
+                loadAdoptions();
+                loadPets();
+                loadDashboard();
+            }
+        }
+
+        function rejectAdoption(id) {
+            if (confirm('Tem certeza que deseja reprovar esta adoção?')) {
+                adminData.updateAdoption(id, { status: 'Reprovada' });
+                showAlert('Adoção reprovada!', 'info');
+                loadAdoptions();
+            }
+        }
+
+        // Gerenciamento de Padrinhos
+        function toggleSponsorForm() {
+            const form = document.getElementById('sponsor-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            if (form.style.display === 'block') {
+                loadPetOptions('sponsor-pet');
+                document.getElementById('sponsor-name').focus();
+            }
+        }
+
+        function cancelSponsorForm() {
+            document.getElementById('sponsor-form').style.display = 'none';
+            document.getElementById('sponsor-form').reset();
+        }
+
+        function handleSponsorSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const sponsorData = Object.fromEntries(formData);
+            
+            adminData.addSponsor(sponsorData);
+            showAlert('Padrinho cadastrado com sucesso!', 'success');
+            cancelSponsorForm();
+            loadSponsors();
+        }
+
+        function loadSponsors() {
+            const sponsors = adminData.getSponsors();
+            const pets = adminData.getPets();
+            const tbody = document.getElementById('sponsors-table-body');
+            
+            tbody.innerHTML = sponsors.map(sponsor => {
+                const pet = pets.find(p => p.id == sponsor.petId);
+                const petName = pet ? `${pet.emoji} ${pet.name}` : 'Pet não encontrado';
+                
+                return `
+                    <tr>
+                        <td>${sponsor.name}</td>
+                        <td>${petName}</td>
+                        <td><span class="sponsor-amount">R$ ${sponsor.monthlyAmount}</span></td>
+                        <td>R$ ${sponsor.totalDonated.toFixed(2)}</td>
+                        <td><span class="status-badge status-${sponsor.status.toLowerCase()}">${sponsor.status}</span></td>
+                        <td>
+                            <button class="btn btn-small btn-primary" onclick="editSponsor(${sponsor.id})">Editar</button>
+                            <button class="btn btn-small btn-danger" onclick="deleteSponsor(${sponsor.id})">Excluir</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function deleteSponsor(id) {
+            if (confirm('Tem certeza que deseja excluir este padrinho?')) {
+                adminData.deleteSponsor(id);
+                showAlert('Padrinho excluído com sucesso!', 'success');
+                loadSponsors();
+            }
+        }
+
+        // Gerenciamento Médico
+        function toggleMedicalForm() {
+            const form = document.getElementById('medical-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            if (form.style.display === 'block') {
+                loadPetOptions('medical-pet');
+                document.getElementById('medical-pet').focus();
+            }
+        }
+
+        function cancelMedicalForm() {
+            document.getElementById('medical-form').style.display = 'none';
+            document.getElementById('medical-form').reset();
+        }
+
+        function handleMedicalSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const medicalData = Object.fromEntries(formData);
+            
+            adminData.addMedicalRecord(parseInt(medicalData.petId), medicalData);
+            showAlert('Registro médico adicionado com sucesso!', 'success');
+            cancelMedicalForm();
+            loadMedicalRecords();
+        }
+
+        function loadMedicalRecords() {
+            const pets = adminData.getPets();
+            const container = document.getElementById('medical-records-list');
+            
+            // Load pet options for filter
+            const filterSelect = document.getElementById('medical-filter-pet');
+            filterSelect.innerHTML = '<option value="">Todos os pets</option>' + 
+                pets.map(pet => `<option value="${pet.id}">${pet.emoji} ${pet.name}</option>`).join('');
+            
+            // Load all medical records
+            let allRecords = [];
+            pets.forEach(pet => {
+                if (pet.medicalHistory && pet.medicalHistory.length > 0) {
+                    pet.medicalHistory.forEach(record => {
+                        allRecords.push({
+                            ...record,
+                            petName: `${pet.emoji} ${pet.name}`,
+                            petId: pet.id
+                        });
+                    });
+                }
+            });
+            
+            // Sort by date (newest first)
+            allRecords.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (allRecords.length === 0) {
+                container.innerHTML = '<p>Nenhum registro médico encontrado.</p>';
+                return;
+            }
+            
+            container.innerHTML = allRecords.map(record => `
+                <div class="medical-record">
+                    <div class="medical-record-header">
+                        <div>
+                            <span class="medical-record-type">${record.type}</span>
+                            <strong>${record.petName}</strong>
+                        </div>
+                        <div class="medical-record-date">${new Date(record.date).toLocaleDateString('pt-BR')}</div>
+                    </div>
+                    <div class="medical-record-content">
+                        <div class="medical-record-vet">Dr(a). ${record.veterinarian}</div>
+                        <p>${record.description}</p>
+                        ${record.cost ? `<div class="medical-record-cost">Custo: R$ ${parseFloat(record.cost).toFixed(2)}</div>` : ''}
+                        ${record.nextAppointment ? `<p><strong>Próximo procedimento:</strong> ${new Date(record.nextAppointment).toLocaleDateString('pt-BR')}</p>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterMedicalRecords() {
+            const selectedPetId = document.getElementById('medical-filter-pet').value;
+            const pets = adminData.getPets();
+            const container = document.getElementById('medical-records-list');
+            
+            let filteredRecords = [];
+            
+            if (selectedPetId) {
+                const pet = pets.find(p => p.id == selectedPetId);
+                if (pet && pet.medicalHistory) {
+                    pet.medicalHistory.forEach(record => {
+                        filteredRecords.push({
+                            ...record,
+                            petName: `${pet.emoji} ${pet.name}`,
+                            petId: pet.id
+                        });
+                    });
+                }
+            } else {
+                pets.forEach(pet => {
+                    if (pet.medicalHistory && pet.medicalHistory.length > 0) {
+                        pet.medicalHistory.forEach(record => {
+                            filteredRecords.push({
+                                ...record,
+                                petName: `${pet.emoji} ${pet.name}`,
+                                petId: pet.id
+                            });
+                        });
+                    }
+                });
+            }
+            
+            filteredRecords.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (filteredRecords.length === 0) {
+                container.innerHTML = '<p>Nenhum registro médico encontrado.</p>';
+                return;
+            }
+            
+            container.innerHTML = filteredRecords.map(record => `
+                <div class="medical-record">
+                    <div class="medical-record-header">
+                        <div>
+                            <span class="medical-record-type">${record.type}</span>
+                            <strong>${record.petName}</strong>
+                        </div>
+                        <div class="medical-record-date">${new Date(record.date).toLocaleDateString('pt-BR')}</div>
+                    </div>
+                    <div class="medical-record-content">
+                        <div class="medical-record-vet">Dr(a). ${record.veterinarian}</div>
+                        <p>${record.description}</p>
+                        ${record.cost ? `<div class="medical-record-cost">Custo: R$ ${parseFloat(record.cost).toFixed(2)}</div>` : ''}
+                        ${record.nextAppointment ? `<p><strong>Próximo procedimento:</strong> ${new Date(record.nextAppointment).toLocaleDateString('pt-BR')}</p>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Gerenciamento de Eventos
+        function toggleEventForm() {
+            const form = document.getElementById('event-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            if (form.style.display === 'block') {
+                document.getElementById('event-name').focus();
+            }
+        }
+
+        function cancelEventForm() {
+            document.getElementById('event-form').style.display = 'none';
+            document.getElementById('event-form').reset();
+        }
+
+        function handleEventSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const eventData = Object.fromEntries(formData);
+            
+            adminData.addEvent(eventData);
+            showAlert('Evento criado com sucesso!', 'success');
+            cancelEventForm();
+            loadEvents();
+        }
+
+        function loadEvents() {
+            const events = adminData.getEvents();
+            const tbody = document.getElementById('events-table-body');
+            
+            tbody.innerHTML = events.map(event => `
+                <tr>
+                    <td>${event.name}</td>
+                    <td>${event.type}</td>
+                    <td>${new Date(event.date).toLocaleDateString('pt-BR')} ${event.time}</td>
+                    <td>${event.location}</td>
+                    <td>${event.participants ? event.participants.length : 0}</td>
+                    <td><span class="status-badge status-${event.status.toLowerCase()}">${event.status}</span></td>
+                    <td>
+                        <button class="btn btn-small btn-primary" onclick="editEvent(${event.id})">Editar</button>
+                        <button class="btn btn-small btn-danger" onclick="deleteEvent(${event.id})">Excluir</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteEvent(id) {
+            if (confirm('Tem certeza que deseja excluir este evento?')) {
+                adminData.deleteEvent(id);
+                showAlert('Evento excluído com sucesso!', 'success');
+                loadEvents();
+            }
+        }
+
+        // Gerenciamento de Doações
+        function handleDonationSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const donationData = Object.fromEntries(formData);
+            
+            adminData.addDonation(donationData);
+            showAlert('Doação registrada com sucesso!', 'success');
+            document.getElementById('donation-form').reset();
+            loadDonations();
+        }
+
+        function loadDonations() {
+            const donations = adminData.getDonations();
+            const tbody = document.getElementById('donations-table-body');
+            
+            // Calculate statistics
+            const totalDonations = donations.reduce((sum, d) => sum + parseFloat(d.amount || 0), 0);
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            const monthlyDonations = donations
+                .filter(d => {
+                    const donationDate = new Date(d.date);
+                    return donationDate.getMonth() === currentMonth && donationDate.getFullYear() === currentYear;
+                })
+                .reduce((sum, d) => sum + parseFloat(d.amount || 0), 0);
+            
+            const uniqueDonors = [...new Set(donations.map(d => d.donorName))].length;
+            
+            // Update statistics
+            document.getElementById('total-donations').textContent = `R$ ${totalDonations.toFixed(2)}`;
+            document.getElementById('monthly-donations').textContent = `R$ ${monthlyDonations.toFixed(2)}`;
+            document.getElementById('donors-count').textContent = uniqueDonors;
+            
+            // Load table
+            tbody.innerHTML = donations.map(donation => `
+                <tr>
+                    <td>${donation.donorName}</td>
+                    <td>R$ ${parseFloat(donation.amount).toFixed(2)}</td>
+                    <td>${donation.type}</td>
+                    <td>${donation.purpose}</td>
+                    <td>${new Date(donation.date).toLocaleDateString('pt-BR')}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Função auxiliar para carregar opções de pets
+        function loadPetOptions(selectId) {
+            const pets = adminData.getPets().filter(pet => pet.status === 'Disponível');
+            const select = document.getElementById(selectId);
+            
+            select.innerHTML = '<option value="">Selecione um pet...</option>' + 
+                pets.map(pet => `<option value="${pet.id}">${pet.emoji} ${pet.name}</option>`).join('');
         }
     </script>
 </body>

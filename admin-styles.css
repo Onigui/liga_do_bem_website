@@ -687,3 +687,327 @@ body {
 .animate-in {
     animation: fadeInUp 0.6s ease-out;
 }
+
+/* Estilos para as novas funcionalidades */
+
+/* Navigation responsiva */
+.admin-nav {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.nav-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+/* Status badges */
+.status-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-disponível {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-em-processo {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-adotado {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-ativo {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-agendada {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+.status-realizada {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-cancelada {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-em-análise {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-aprovada {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-reprovada {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Cards para estatísticas de doações */
+.donation-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.donation-stats .stat-card {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.donation-stats .stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.donation-stats .stat-label {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+/* Medical records styling */
+.medical-record {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.medical-record-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.medical-record-type {
+    background: #007bff;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.medical-record-date {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.medical-record-content {
+    line-height: 1.6;
+}
+
+.medical-record-vet {
+    font-weight: bold;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.medical-record-cost {
+    color: #28a745;
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+/* Event cards */
+.event-card {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.event-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.event-card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.event-card-type {
+    background: #6f42c1;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.event-card-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.event-info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6c757d;
+}
+
+.event-info-item strong {
+    color: #333;
+}
+
+/* Volunteer points system */
+.volunteer-points {
+    background: linear-gradient(45deg, #ffc107, #fd7e14);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* Sponsor cards */
+.sponsor-card {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.sponsor-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.sponsor-amount {
+    background: #28a745;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-weight: bold;
+}
+
+/* Notification styles */
+.notification {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.notification:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.notification.unread {
+    border-left: 4px solid #007bff;
+    background: #f8f9fa;
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.notification-title {
+    font-weight: bold;
+    color: #333;
+}
+
+.notification-date {
+    color: #6c757d;
+    font-size: 0.8rem;
+}
+
+.notification-message {
+    color: #495057;
+    line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .admin-nav {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+    
+    .nav-btn {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .form-row {
+        flex-direction: column;
+    }
+    
+    .donation-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .event-card-info {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Print styles */
+@media print {
+    .admin-header,
+    .btn,
+    .nav-btn {
+        display: none !important;
+    }
+    
+    .admin-section {
+        display: block !important;
+    }
+    
+    .admin-main {
+        margin-top: 0;
+    }
+}
