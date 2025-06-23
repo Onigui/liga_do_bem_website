@@ -33,23 +33,105 @@
     <div id="admin-interface" class="admin-container">
         <!-- Header -->
         <header class="admin-header">
-            <div class="admin-logo">Liga do Bem - Admin</div>
-            <nav class="admin-nav">
-                <button class="nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
-                <button class="nav-btn" onclick="showSection('pets')">Pets</button>
-                <button class="nav-btn" onclick="showSection('volunteers')">Voluntários</button>
-                <button class="nav-btn" onclick="showSection('visits')">Visitas</button>
-                <button class="nav-btn" onclick="showSection('adoptions')">Adoções</button>
-                <button class="nav-btn" onclick="showSection('sponsors')">Padrinhos</button>
-                <button class="nav-btn" onclick="showSection('medical')">Veterinário</button>
-                <button class="nav-btn" onclick="showSection('events')">Eventos</button>
-                <button class="nav-btn" onclick="showSection('donations')">Doações</button>
-                <button class="nav-btn" onclick="showSection('stats')">Estatísticas</button>
-                <button class="nav-btn" onclick="showSection('content')">Conteúdo</button>
-                <button class="nav-btn" onclick="showSection('messages')">Mensagens</button>
-                <button class="nav-btn" onclick="showSection('backup')">Backup</button>
+            <div class="admin-logo">
+                <span class="logo-icon">🐾</span>
+                <span class="logo-text">Liga do Bem</span>
+                <span class="logo-subtitle">Administração</span>
+            </div>
+            
+            <!-- Menu Toggle for Mobile -->
+            <button class="menu-toggle" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <nav class="admin-nav" id="admin-nav">
+                <!-- Dashboard -->
+                <div class="nav-section">
+                    <button class="nav-btn primary active" onclick="showSection('dashboard')">
+                        <span class="nav-icon">📊</span>
+                        <span class="nav-text">Dashboard</span>
+                    </button>
+                </div>
+                
+                <!-- Gestão de Animais -->
+                <div class="nav-section">
+                    <div class="nav-category">🐕 Animais</div>
+                    <button class="nav-btn" onclick="showSection('pets')">
+                        <span class="nav-icon">🐾</span>
+                        <span class="nav-text">Pets</span>
+                    </button>
+                    <button class="nav-btn" onclick="showSection('medical')">
+                        <span class="nav-icon">🏥</span>
+                        <span class="nav-text">Veterinário</span>
+                    </button>
+                </div>
+                
+                <!-- Gestão de Pessoas -->
+                <div class="nav-section">
+                    <div class="nav-category">👥 Pessoas</div>
+                    <button class="nav-btn" onclick="showSection('volunteers')">
+                        <span class="nav-icon">🙋‍♀️</span>
+                        <span class="nav-text">Voluntários</span>
+                    </button>
+                    <button class="nav-btn" onclick="showSection('visits')">
+                        <span class="nav-icon">👁️</span>
+                        <span class="nav-text">Visitas</span>
+                    </button>
+                    <button class="nav-btn" onclick="showSection('adoptions')">
+                        <span class="nav-icon">❤️</span>
+                        <span class="nav-text">Adoções</span>
+                    </button>
+                    <button class="nav-btn" onclick="showSection('sponsors')">
+                        <span class="nav-icon">🤝</span>
+                        <span class="nav-text">Padrinhos</span>
+                    </button>
+                </div>
+                
+                <!-- Atividades -->
+                <div class="nav-section">
+                    <div class="nav-category">🎯 Atividades</div>
+                    <button class="nav-btn" onclick="showSection('events')">
+                        <span class="nav-icon">🎉</span>
+                        <span class="nav-text">Eventos</span>
+                    </button>
+                    <button class="nav-btn" onclick="showSection('donations')">
+                        <span class="nav-icon">💰</span>
+                        <span class="nav-text">Doações</span>
+                    </button>
+                </div>
+                
+                <!-- Sistema -->
+                <div class="nav-section">
+                    <div class="nav-category">⚙️ Sistema</div>
+                    <button class="nav-btn" onclick="showSection('messages')">
+                        <span class="nav-icon">💬</span>
+                        <span class="nav-text">Mensagens</span>
+                        <span class="nav-badge" id="messages-badge">0</span>
+                    </button>
+                    <button class="nav-btn" onclick="showSection('stats')">
+                        <span class="nav-icon">📈</span>
+                        <span class="nav-text">Relatórios</span>
+                    </button>
+                    <button class="nav-btn" onclick="showSection('content')">
+                        <span class="nav-icon">📝</span>
+                        <span class="nav-text">Conteúdo</span>
+                    </button>
+                    <button class="nav-btn" onclick="showSection('backup')">
+                        <span class="nav-icon">💾</span>
+                        <span class="nav-text">Backup</span>
+                    </button>
+                </div>
             </nav>
-            <button class="logout-btn" onclick="logout()">Sair</button>
+            
+            <div class="admin-user">
+                <span class="user-info">👤 Admin</span>
+                <button class="logout-btn" onclick="logout()">
+                    <span class="logout-icon">🚪</span>
+                    <span class="logout-text">Sair</span>
+                </button>
+            </div>
         </header>
 
         <!-- Main Content -->
@@ -1044,6 +1126,10 @@
         }
 
         function showSection(sectionName) {
+            // Fechar menu mobile se estiver aberto
+            const nav = document.getElementById('admin-nav');
+            nav.classList.remove('mobile-open');
+            
             // Hide all sections
             document.querySelectorAll('.admin-section').forEach(section => {
                 section.classList.remove('active');
@@ -1058,7 +1144,9 @@
             document.getElementById(sectionName + '-section').classList.add('active');
             
             // Add active class to clicked button
-            event.target.classList.add('active');
+            if (event && event.target) {
+                event.target.closest('.nav-btn').classList.add('active');
+            }
             
             // Load section data
             switch(sectionName) {
@@ -1097,6 +1185,7 @@
                     break;
                 case 'messages':
                     loadMessages();
+                    updateMessagesBadge();
                     break;
             }
         }
@@ -2093,6 +2182,29 @@
             select.innerHTML = '<option value="">Selecione um pet...</option>' + 
                 pets.map(pet => `<option value="${pet.id}">${pet.emoji} ${pet.name}</option>`).join('');
         }
+
+        // Menu mobile toggle
+        function toggleMobileMenu() {
+            const nav = document.getElementById('admin-nav');
+            nav.classList.toggle('mobile-open');
+        }
+
+        // Atualizar badge de mensagens
+        function updateMessagesBadge() {
+            const messages = adminData.getMessages();
+            const unreadCount = messages.filter(msg => !msg.read).length;
+            const badge = document.getElementById('messages-badge');
+            
+            if (badge) {
+                badge.textContent = unreadCount;
+                badge.style.display = unreadCount > 0 ? 'block' : 'none';
+            }
+        }
+
+        // Inicializar badge de mensagens no carregamento
+        document.addEventListener('DOMContentLoaded', function() {
+            updateMessagesBadge();
+        });
     </script>
 </body>
 </html>
