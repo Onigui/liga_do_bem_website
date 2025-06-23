@@ -1260,12 +1260,12 @@
             
             tbody.innerHTML = pets.map(pet => `
                 <tr>
-                    <td>${pet.emoji} ${pet.name}</td>
-                    <td>${pet.type}</td>
-                    <td>${pet.age}</td>
-                    <td><span class="status-badge status-${pet.status.toLowerCase().replace(' ', '-')}">${pet.status}</span></td>
-                    <td>${new Date(pet.dateAdded).toLocaleDateString('pt-BR')}</td>
-                    <td>
+                    <td data-label="Nome">${pet.emoji} ${pet.name}</td>
+                    <td data-label="Tipo">${pet.type}</td>
+                    <td data-label="Idade">${pet.age}</td>
+                    <td data-label="Status"><span class="status-badge status-${pet.status.toLowerCase().replace(' ', '-')}">${pet.status}</span></td>
+                    <td data-label="Data">${new Date(pet.dateAdded).toLocaleDateString('pt-BR')}</td>
+                    <td data-label="Ações">
                         <button class="btn btn-small btn-primary" onclick="editPet(${pet.id})">Editar</button>
                         <button class="btn btn-small btn-danger" onclick="deletePet(${pet.id})">Excluir</button>
                     </td>
@@ -1729,13 +1729,13 @@
             
             tbody.innerHTML = volunteers.map(volunteer => `
                 <tr>
-                    <td>${volunteer.name}</td>
-                    <td>${volunteer.email}</td>
-                    <td>${volunteer.phone}</td>
-                    <td>${volunteer.availability}</td>
-                    <td><span class="status-badge status-${volunteer.status.toLowerCase()}">${volunteer.status}</span></td>
-                    <td><span class="volunteer-points">${volunteer.points} pts</span></td>
-                    <td>
+                    <td data-label="Nome">${volunteer.name}</td>
+                    <td data-label="Email">${volunteer.email}</td>
+                    <td data-label="Telefone">${volunteer.phone}</td>
+                    <td data-label="Disponibilidade">${volunteer.availability}</td>
+                    <td data-label="Status"><span class="status-badge status-${volunteer.status.toLowerCase()}">${volunteer.status}</span></td>
+                    <td data-label="Pontos"><span class="volunteer-points">${volunteer.points} pts</span></td>
+                    <td data-label="Ações">
                         <button class="btn btn-small btn-primary" onclick="editVolunteer(${volunteer.id})">Editar</button>
                         <button class="btn btn-small btn-danger" onclick="deleteVolunteer(${volunteer.id})">Excluir</button>
                     </td>
@@ -1788,12 +1788,12 @@
                 
                 return `
                     <tr>
-                        <td>${visit.visitorName}</td>
-                        <td>${petName}</td>
-                        <td>${new Date(visit.dateScheduled).toLocaleString('pt-BR')}</td>
-                        <td>${visit.type}</td>
-                        <td><span class="status-badge status-${visit.status.toLowerCase()}">${visit.status}</span></td>
-                        <td>
+                        <td data-label="Visitante">${visit.visitorName}</td>
+                        <td data-label="Pet">${petName}</td>
+                        <td data-label="Data/Hora">${new Date(visit.dateScheduled).toLocaleString('pt-BR')}</td>
+                        <td data-label="Tipo">${visit.type}</td>
+                        <td data-label="Status"><span class="status-badge status-${visit.status.toLowerCase()}">${visit.status}</span></td>
+                        <td data-label="Ações">
                             <button class="btn btn-small btn-success" onclick="markVisitCompleted(${visit.id})">Realizada</button>
                             <button class="btn btn-small btn-danger" onclick="cancelVisit(${visit.id})">Cancelar</button>
                         </td>
