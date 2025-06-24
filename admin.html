@@ -47,11 +47,37 @@
             </div>
             
             <div class="admin-user">
-                <span class="user-info">👤 Admin</span>
-                <button class="logout-btn" onclick="logout()">
-                    <span class="logout-icon">🚪</span>
-                    <span class="logout-text">Sair</span>
-                </button>
+                <div class="user-dropdown" onclick="toggleUserMenu()">
+                    <div class="user-avatar">
+                        <span class="user-icon">👤</span>
+                        <span class="user-name">Admin</span>
+                        <span class="dropdown-arrow">▼</span>
+                    </div>
+                    <div class="user-menu" id="user-menu">
+                        <div class="user-menu-header">
+                            <div class="user-details">
+                                <strong>Administrador</strong>
+                                <small>admin@ligadobem.org</small>
+                            </div>
+                        </div>
+                        <div class="user-menu-divider"></div>
+                        <div class="user-menu-items">
+                            <button class="user-menu-item" onclick="showUserProfile()">
+                                <span class="menu-item-icon">⚙️</span>
+                                <span class="menu-item-text">Configurações</span>
+                            </button>
+                            <button class="user-menu-item" onclick="showHelp()">
+                                <span class="menu-item-icon">❓</span>
+                                <span class="menu-item-text">Ajuda</span>
+                            </button>
+                            <div class="user-menu-divider"></div>
+                            <button class="user-menu-item logout-item" onclick="confirmLogout()">
+                                <span class="menu-item-icon">🚪</span>
+                                <span class="menu-item-text">Sair</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -2220,6 +2246,48 @@
                 badge.style.display = unreadCount > 0 ? 'block' : 'none';
             }
         }
+
+        // User menu functions
+        function toggleUserMenu() {
+            const dropdown = document.querySelector('.user-dropdown');
+            const menu = document.getElementById('user-menu');
+            
+            dropdown.classList.toggle('active');
+            menu.classList.toggle('active');
+        }
+
+        function closeUserMenu() {
+            const dropdown = document.querySelector('.user-dropdown');
+            const menu = document.getElementById('user-menu');
+            
+            dropdown.classList.remove('active');
+            menu.classList.remove('active');
+        }
+
+        function confirmLogout() {
+            if (confirm('Tem certeza que deseja sair do sistema?')) {
+                logout();
+            }
+            closeUserMenu();
+        }
+
+        function showUserProfile() {
+            alert('Funcionalidade de configurações em desenvolvimento!');
+            closeUserMenu();
+        }
+
+        function showHelp() {
+            alert('Funcionalidade de ajuda em desenvolvimento!');
+            closeUserMenu();
+        }
+
+        // Close user menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const userDropdown = document.querySelector('.user-dropdown');
+            if (!userDropdown.contains(event.target)) {
+                closeUserMenu();
+            }
+        });
 
         // Inicializar badge de mensagens no carregamento
         document.addEventListener('DOMContentLoaded', function() {
