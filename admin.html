@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administração - Liga do Bem</title>
     <link rel="stylesheet" href="admin-styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <!-- Tela de Login -->
@@ -1508,12 +1509,23 @@
                             <div class="form-group">
                                 <label for="campaign-end">Data de Término:</label>
                                 <input type="date" id="campaign-end">
+                            <div class="form-row">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>
-                                <input type="checkbox" id="campaign-active" checked> Campanha ativa
-                            </label>
+                                <label>
+                                    <input type="checkbox" id="campaign-active" checked> Campanha ativa
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="campaign-visibility">👁️ Visibilidade:</label>
+                                <select id="campaign-visibility" required>
+                                    <option value="true">🌐 Público - Visível no site</option>
+                                    <option value="false">🔒 Privado - Apenas administrativo</option>
+                                </select>
+                                <small>Campanhas públicas aparecem na página inicial e transparência</small>
+                            </div>
+                    </div>
                         </div>
                         <button type="submit" class="btn btn-success">Salvar Campanha</button>
                         <button type="button" class="btn btn-secondary" onclick="cancelCampaign()">Cancelar</button>
@@ -2198,6 +2210,12 @@
                 goalForm.addEventListener('submit', handleGoalSubmit);
             }
             
+            // Campaign form
+            const campaignForm = document.getElementById('campaign-form');
+            if (campaignForm) {
+                campaignForm.addEventListener('submit', handleCampaignSubmit);
+            }
+            
             // Event form
             document.getElementById('event-form').addEventListener('submit', handleEventSubmit);
             
@@ -2307,6 +2325,9 @@
                     loadTransactions();
                     updateFinancialSummary();
                     loadGoals();
+                    break;
+                case 'public-campaigns':
+                    loadCampaigns();
                     break;
                 case 'stats':
                     loadStats();
@@ -2451,10 +2472,211 @@
             document.getElementById('current-balance').textContent = formatCurrency(summary.currentBalance);
         }
         
+        // Variáveis globais para gráficos do dashboard
+        let dashboardAdoptionsChartInstance = null;
+        let dashboardPetsChartInstance = null;
+        
         function initializeCharts() {
-            // Simular gráficos com dados de exemplo
-            const adoptionsChart = document.getElementById('adoptions-chart');
-            const petsChart = document.getElementById('pets-chart');
+            console.log('📊 Inicializando gráficos do dashboard...');
+            
+            // Aguardar um pouco para garantir que o DOM está totalmente carregado
+            setTimeout(() => {
+                loadDashboardAdoptionsChart();
+                loadDashboardPetsChart();
+            }, 100);
+        }
+        
+        function loadDashboardAdoptionsChart() {
+            console.log('📈 Carregando gráfico de adoções do dashboard...');
+            
+            // Verificar se Chart.js está disponível
+            if (typeof Chart === 'undefined') {
+                console.error('❌ Chart.js não está carregado!');
+                return;
+            }
+            
+            const ctx = document.getElementById('adoptions-chart');
+            if (!ctx) {
+                console.error('❌ Canvas não encontrado: adoptions-chart');
+                return;
+            }
+            
+            console.log('✅ Canvas encontrado:', ctx);
+            
+            const adoptions = adminData.getAdoptions();
+            console.log('❤️ Adoções encontradas:', adoptions.length);
+            
+            // Agrupar adoções por mês
+            const monthlyAdoptions = {};
+            const approvedAdoptions = adoptions.filter(a => a.status === 'Aprovada');
+            
+            approvedAdoptions.forEach(adoption => {
+                const date = new Date(adoption.dateStarted);
+                const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                
+                if (!monthlyAdoptions[monthKey]) {
+                    monthlyAdoptions[monthKey] = 0;
+                }
+                monthlyAdoptions[monthKey]++;
+            });
+            
+            // Preparar dados dos últimos 6 meses
+            const months = Object.keys(monthlyAdoptions).sort().slice(-6);
+            const labels = months.map(month => 
+                new Date(month + '-01').toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' })
+            );
+            const data = months.map(month => monthlyAdoptions[month] || 0);
+            
+            // Se não há dados, mostrar dados de exemplo
+            if (data.every(val => val === 0)) {
+                console.log('📊 Nenhuma adoção encontrada, exibindo dados de exemplo...');
+                labels.splice(0, labels.length, 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun');
+                data.splice(0, data.length, 2, 3, 5, 4, 6, 4);
+            }
+            
+            // Destruir gráfico anterior se existir
+            if (dashboardAdoptionsChartInstance) {
+                dashboardAdoptionsChartInstance.destroy();
+            }
+            
+            // Criar novo gráfico
+            dashboardAdoptionsChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Adoções',
+                        data: data,
+                        backgroundColor: 'rgba(40, 167, 69, 0.8)',
+                        borderColor: '#28a745',
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Adoções por Mês'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    return Number.isInteger(value) ? value : '';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            console.log('✅ Gráfico de adoções do dashboard carregado!');
+        }
+        
+        function loadDashboardPetsChart() {
+            console.log('🐕 Carregando gráfico de pets do dashboard...');
+            
+            // Verificar se Chart.js está disponível
+            if (typeof Chart === 'undefined') {
+                console.error('❌ Chart.js não está carregado!');
+                return;
+            }
+            
+            const ctx = document.getElementById('pets-chart');
+            if (!ctx) {
+                console.error('❌ Canvas não encontrado: pets-chart');
+                return;
+            }
+            
+            console.log('✅ Canvas encontrado:', ctx);
+            
+            const pets = adminData.getPets();
+            console.log('🐾 Pets encontrados:', pets.length);
+            
+            // Agrupar pets por espécie
+            const speciesData = {};
+            pets.forEach(pet => {
+                const species = pet.species || 'Outros';
+                if (!speciesData[species]) {
+                    speciesData[species] = 0;
+                }
+                speciesData[species]++;
+            });
+            
+            let labels = Object.keys(speciesData);
+            let data = Object.values(speciesData);
+            
+            // Se não há dados, mostrar dados de exemplo
+            if (data.length === 0 || data.every(val => val === 0)) {
+                console.log('📊 Nenhum pet encontrado, exibindo dados de exemplo...');
+                labels = ['Cães', 'Gatos', 'Outros'];
+                data = [15, 8, 2];
+            }
+            
+            console.log('📊 Dados do gráfico de pets:', { labels, data });
+            
+            // Cores para as fatias
+            const backgroundColors = [
+                '#007bff', '#28a745', '#dc3545', '#ffc107', 
+                '#17a2b8', '#6f42c1', '#fd7e14', '#20c997'
+            ];
+            
+            // Destruir gráfico anterior se existir
+            if (dashboardPetsChartInstance) {
+                dashboardPetsChartInstance.destroy();
+            }
+            
+            // Criar novo gráfico
+            dashboardPetsChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors.slice(0, labels.length),
+                        borderWidth: 3,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Distribuição de Pets por Espécie'
+                        },
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+            
+            console.log('✅ Gráfico de pets do dashboard carregado!');
+        }
+        
+        function updateAdoptionChart() {
+            console.log('🔄 Atualizando gráfico de adoções...');
+            loadDashboardAdoptionsChart();
+            showAlert('Gráfico de adoções atualizado!', 'info');
+        }
+        
+        function oldInitializeCharts() {
+            // Código antigo mantido como backup
+            const adoptionsChart = document.getElementById('adoptions-chart-old');
+            const petsChart = document.getElementById('pets-chart-old');
             const financialChart = document.getElementById('financial-chart');
             
             if (adoptionsChart) {
@@ -2495,8 +2717,20 @@
         }
         
         function refreshDashboard() {
-            showAlert('Dashboard atualizado!', 'success');
+            console.log('🔄 Atualizando dashboard...');
+            
+            // Verificar se Chart.js está carregado
+            if (typeof Chart === 'undefined') {
+                console.error('❌ Chart.js não carregado!');
+                showAlert('Erro: Chart.js não está carregado. Verifique a conexão com a internet.', 'error');
+                return;
+            }
+            
+            console.log('✅ Chart.js versão:', Chart.version);
+            
             loadDashboard();
+            initializeCharts(); // Recarregar todos os gráficos
+            showAlert('Dashboard atualizado com gráficos!', 'success');
         }
         
         function exportReport() {
@@ -2510,10 +2744,7 @@
             }).format(value || 0);
         }
         
-        function updateAdoptionChart() {
-            // Função para atualizar gráfico de adoções
-            showAlert('Gráfico atualizado!', 'info');
-        }
+
 
 
         function loadPets() {
@@ -3641,37 +3872,139 @@
                 return;
             }
             
-            // Prompt para novo valor atual
-            const newCurrentValue = prompt(
-                `Atualizar progresso da meta "${goal.title}":\n\nValor atual: R$ ${goal.current.toFixed(2)}\nMeta: R$ ${goal.target.toFixed(2)}\n\nDigite o novo valor atual:`,
-                goal.current.toFixed(2)
-            );
+            // Criar modal de edição avançada
+            showEditGoalModal(goal);
+        }
+        
+        function showEditGoalModal(goal) {
+            // Criar modal de edição
+            const modalHTML = `
+                <div id="edit-goal-modal" class="modal" style="display: flex;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>✏️ Editar Meta/Campanha</h3>
+                            <button class="modal-close" onclick="closeEditGoalModal()">&times;</button>
+                        </div>
+                        
+                        <div class="modal-body">
+                            <div class="goal-edit-info">
+                                <h4>${goal.title}</h4>
+                                <p class="goal-description">${goal.description}</p>
+                            </div>
+                            
+                            <form id="edit-goal-form">
+                                <div class="form-group">
+                                    <label for="edit-goal-current">💰 Valor Atual (R$):</label>
+                                    <input type="number" id="edit-goal-current" step="0.01" value="${goal.current.toFixed(2)}" required>
+                                    <small>Meta total: R$ ${goal.target.toFixed(2)}</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="edit-goal-visibility">👁️ Visibilidade:</label>
+                                    <select id="edit-goal-visibility" required>
+                                        <option value="true" ${goal.isPublic ? 'selected' : ''}>🌐 Público - Visível no site</option>
+                                        <option value="false" ${!goal.isPublic ? 'selected' : ''}>🔒 Privado - Apenas administrativo</option>
+                                    </select>
+                                    <small>Campanhas públicas aparecem na página de transparência do site</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <div class="goal-progress-preview">
+                                        <strong>Progresso atual:</strong>
+                                        <div class="progress-bar" style="margin: 0.5rem 0;">
+                                            <div class="progress-fill" style="width: ${Math.min((goal.current / goal.target) * 100, 100)}%"></div>
+                                        </div>
+                                        <span>${Math.min((goal.current / goal.target) * 100, 100).toFixed(1)}% concluído</span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="closeEditGoalModal()">Cancelar</button>
+                            <button type="button" class="btn btn-success" onclick="saveGoalChanges(${goal.id})">💾 Salvar Alterações</button>
+                        </div>
+                    </div>
+                </div>
+            `;
             
-            if (newCurrentValue === null) return; // Cancelado
+            // Adicionar modal ao documento
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
             
-            const newCurrent = parseFloat(newCurrentValue);
+            // Atualizar preview ao alterar valor
+            document.getElementById('edit-goal-current').addEventListener('input', function() {
+                updateGoalPreview(goal.target);
+            });
+        }
+        
+        function updateGoalPreview(target) {
+            const currentValue = parseFloat(document.getElementById('edit-goal-current').value) || 0;
+            const percentage = Math.min((currentValue / target) * 100, 100);
+            
+            const progressFill = document.querySelector('#edit-goal-modal .progress-fill');
+            const progressText = document.querySelector('#edit-goal-modal .goal-progress-preview span');
+            
+            if (progressFill && progressText) {
+                progressFill.style.width = percentage + '%';
+                progressText.textContent = percentage.toFixed(1) + '% concluído';
+            }
+        }
+        
+        function closeEditGoalModal() {
+            const modal = document.getElementById('edit-goal-modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+        
+        function saveGoalChanges(goalId) {
+            const newCurrent = parseFloat(document.getElementById('edit-goal-current').value);
+            const newVisibility = document.getElementById('edit-goal-visibility').value === 'true';
+            
             if (isNaN(newCurrent) || newCurrent < 0) {
                 showAlert('Por favor, digite um valor válido!', 'error');
                 return;
             }
             
-            // Atualizar a meta
-            goal.current = newCurrent;
-            goal.updatedAt = new Date().toISOString();
+            // Carregar e atualizar meta
+            const goals = JSON.parse(localStorage.getItem('ligaDoBem_goals') || '[]');
+            const goalIndex = goals.findIndex(g => g.id === goalId);
+            
+            if (goalIndex === -1) {
+                showAlert('Meta não encontrada!', 'error');
+                return;
+            }
+            
+            const oldGoal = goals[goalIndex];
+            goals[goalIndex] = {
+                ...oldGoal,
+                current: newCurrent,
+                isPublic: newVisibility,
+                updatedAt: new Date().toISOString()
+            };
             
             // Salvar no localStorage
-            const updatedGoals = goals.map(g => g.id === id ? goal : g);
-            localStorage.setItem('ligaDoBem_goals', JSON.stringify(updatedGoals));
+            localStorage.setItem('ligaDoBem_goals', JSON.stringify(goals));
+            
+            // Fechar modal
+            closeEditGoalModal();
             
             // Recarregar lista
             loadGoals();
             
-            const percentage = Math.min((newCurrent / goal.target) * 100, 100).toFixed(1);
-            const publicMessage = goal.isPublic ? 
-                ' Mudança refletirá na página pública!' : 
-                ' (Meta privada)';
+            // Mostrar mensagem de sucesso
+            const percentage = Math.min((newCurrent / oldGoal.target) * 100, 100).toFixed(1);
+            const visibilityChange = oldGoal.isPublic !== newVisibility;
+            const visibilityMessage = newVisibility ? 
+                '🌐 Agora é pública - aparecerá no site!' : 
+                '🔒 Agora é privada - removida do site.';
             
-            showAlert(`✅ Meta atualizada! Progresso: ${percentage}%${publicMessage}`, 'success');
+            let message = `✅ Meta atualizada! Progresso: ${percentage}%`;
+            if (visibilityChange) {
+                message += `\n${visibilityMessage}`;
+            }
+            
+            showAlert(message, 'success');
         }
         
         // Função para testar integração com página pública
@@ -3709,6 +4042,360 @@
                 
                 showAlert('Meta excluída com sucesso!', 'success');
             }
+        }
+        
+        // =============================================
+        // FUNÇÕES DE CAMPANHAS PÚBLICAS
+        // =============================================
+        
+        function loadCampaigns() {
+            console.log('🎯 Carregando campanhas...');
+            
+            const campaignsList = document.getElementById('campaigns-list');
+            if (!campaignsList) return;
+            
+            // Carregar campanhas do localStorage
+            let campaigns = JSON.parse(localStorage.getItem('ligaDoBem_campaigns') || '[]');
+            
+            // Se não houver campanhas, criar dados de exemplo
+            if (campaigns.length === 0) {
+                const sampleCampaigns = [
+                    {
+                        id: 1,
+                        title: 'Adoção Responsável 2024',
+                        type: 'adoption',
+                        description: 'Campanha para promover adoções responsáveis e encontrar lares para nossos pets',
+                        startDate: '2024-01-01',
+                        endDate: '2024-12-31',
+                        isActive: true,
+                        isPublic: true,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 2,
+                        title: 'Arrecadação para Medicamentos',
+                        type: 'donation',
+                        description: 'Campanha para arrecadar fundos para medicamentos de emergência',
+                        startDate: '2024-02-01',
+                        endDate: '2024-06-30',
+                        isActive: true,
+                        isPublic: false,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 3,
+                        title: 'Mutirão de Castração',
+                        type: 'medical',
+                        description: 'Campanha para castração de animais de rua e pets da comunidade',
+                        startDate: '2024-03-01',
+                        endDate: '2024-03-31',
+                        isActive: false,
+                        isPublic: true,
+                        createdAt: new Date().toISOString()
+                    }
+                ];
+                
+                // Salvar dados de exemplo
+                localStorage.setItem('ligaDoBem_campaigns', JSON.stringify(sampleCampaigns));
+                campaigns = sampleCampaigns;
+            }
+            
+            campaignsList.innerHTML = campaigns.map(campaign => {
+                const statusText = campaign.isActive ? 'Ativa' : 'Inativa';
+                const statusClass = campaign.isActive ? 'success' : 'warning';
+                const typeEmoji = getCampaignTypeEmoji(campaign.type);
+                const visibilityIcon = campaign.isPublic ? '🌐' : '🔒';
+                const visibilityText = campaign.isPublic ? 'Público' : 'Privado';
+                
+                return `
+                    <div class="campaign-item">
+                        <div class="campaign-header">
+                            <h4>${typeEmoji} ${campaign.title}</h4>
+                            <span class="campaign-status ${statusClass}">${statusText}</span>
+                        </div>
+                        <div class="campaign-description">${campaign.description}</div>
+                        <div class="campaign-details">
+                            <div class="campaign-dates">
+                                <strong>Período:</strong> ${new Date(campaign.startDate).toLocaleDateString('pt-BR')} 
+                                até ${new Date(campaign.endDate).toLocaleDateString('pt-BR')}
+                            </div>
+                            <div class="campaign-type">
+                                <strong>Tipo:</strong> ${getCampaignTypeText(campaign.type)}
+                            </div>
+                        </div>
+                        <div class="campaign-actions">
+                            <span class="campaign-visibility">${visibilityIcon} ${visibilityText}</span>
+                            <button class="btn btn-small btn-secondary" onclick="editCampaign(${campaign.id})">Editar</button>
+                            <button class="btn btn-small btn-danger" onclick="deleteCampaign(${campaign.id})">Excluir</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function getCampaignTypeEmoji(type) {
+            const emojis = {
+                'adoption': '❤️',
+                'donation': '💰',
+                'volunteer': '🙋‍♀️',
+                'event': '🎉',
+                'medical': '🏥'
+            };
+            return emojis[type] || '🎯';
+        }
+        
+        function getCampaignTypeText(type) {
+            const types = {
+                'adoption': 'Adoção',
+                'donation': 'Doação',
+                'volunteer': 'Voluntariado',
+                'event': 'Evento',
+                'medical': 'Tratamento'
+            };
+            return types[type] || 'Outros';
+        }
+        
+        function toggleCampaignForm() {
+            const form = document.getElementById('campaign-form');
+            if (form) {
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+                if (form.style.display === 'block') {
+                    document.getElementById('campaign-title').focus();
+                }
+            }
+        }
+        
+        function cancelCampaign() {
+            const form = document.getElementById('campaign-form');
+            if (form) {
+                form.style.display = 'none';
+                form.reset();
+            }
+        }
+        
+        function editCampaign(id) {
+            // Carregar campanhas do localStorage
+            const campaigns = JSON.parse(localStorage.getItem('ligaDoBem_campaigns') || '[]');
+            const campaign = campaigns.find(c => c.id === id);
+            
+            if (!campaign) {
+                showAlert('Campanha não encontrada!', 'error');
+                return;
+            }
+            
+            // Criar modal de edição de campanha
+            showEditCampaignModal(campaign);
+        }
+        
+        function showEditCampaignModal(campaign) {
+            // Criar modal de edição
+            const modalHTML = `
+                <div id="edit-campaign-modal" class="modal" style="display: flex;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>✏️ Editar Campanha</h3>
+                            <button class="modal-close" onclick="closeEditCampaignModal()">&times;</button>
+                        </div>
+                        
+                        <div class="modal-body">
+                            <form id="edit-campaign-form">
+                                <div class="form-group">
+                                    <label for="edit-campaign-title">📝 Título:</label>
+                                    <input type="text" id="edit-campaign-title" value="${campaign.title}" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="edit-campaign-description">📄 Descrição:</label>
+                                    <textarea id="edit-campaign-description" rows="3" required>${campaign.description}</textarea>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="edit-campaign-type">🎯 Tipo:</label>
+                                        <select id="edit-campaign-type" required>
+                                            <option value="adoption" ${campaign.type === 'adoption' ? 'selected' : ''}>❤️ Adoção</option>
+                                            <option value="donation" ${campaign.type === 'donation' ? 'selected' : ''}>💰 Doação</option>
+                                            <option value="volunteer" ${campaign.type === 'volunteer' ? 'selected' : ''}>🙋‍♀️ Voluntariado</option>
+                                            <option value="event" ${campaign.type === 'event' ? 'selected' : ''}>🎉 Evento</option>
+                                            <option value="medical" ${campaign.type === 'medical' ? 'selected' : ''}>🏥 Tratamento</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="edit-campaign-status">⚡ Status:</label>
+                                        <select id="edit-campaign-status" required>
+                                            <option value="true" ${campaign.isActive ? 'selected' : ''}>✅ Ativa</option>
+                                            <option value="false" ${!campaign.isActive ? 'selected' : ''}>⏸️ Inativa</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="edit-campaign-start">📅 Data de Início:</label>
+                                        <input type="date" id="edit-campaign-start" value="${campaign.startDate}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="edit-campaign-end">📅 Data de Término:</label>
+                                        <input type="date" id="edit-campaign-end" value="${campaign.endDate}">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group" style="background: #f8f9fa; padding: 1rem; border-radius: 8px; border-left: 4px solid #007bff;">
+                                    <label for="edit-campaign-visibility">👁️ Visibilidade:</label>
+                                    <select id="edit-campaign-visibility" required>
+                                        <option value="true" ${campaign.isPublic ? 'selected' : ''}>🌐 Público - Visível no site</option>
+                                        <option value="false" ${!campaign.isPublic ? 'selected' : ''}>🔒 Privado - Apenas administrativo</option>
+                                    </select>
+                                    <small style="display: block; margin-top: 0.5rem; color: #666;">
+                                        <strong>Campanhas públicas</strong> aparecem na página inicial do site e na seção de transparência.<br>
+                                        <strong>Campanhas privadas</strong> são visíveis apenas aqui no painel administrativo.
+                                    </small>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="closeEditCampaignModal()">Cancelar</button>
+                            <button type="button" class="btn btn-success" onclick="saveCampaignChanges(${campaign.id})">💾 Salvar Alterações</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Adicionar modal ao documento
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+        
+        function closeEditCampaignModal() {
+            const modal = document.getElementById('edit-campaign-modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+        
+        function saveCampaignChanges(campaignId) {
+            const title = document.getElementById('edit-campaign-title').value;
+            const description = document.getElementById('edit-campaign-description').value;
+            const type = document.getElementById('edit-campaign-type').value;
+            const isActive = document.getElementById('edit-campaign-status').value === 'true';
+            const startDate = document.getElementById('edit-campaign-start').value;
+            const endDate = document.getElementById('edit-campaign-end').value;
+            const isPublic = document.getElementById('edit-campaign-visibility').value === 'true';
+            
+            if (!title || !description || !type || !startDate) {
+                showAlert('Por favor, preencha todos os campos obrigatórios!', 'error');
+                return;
+            }
+            
+            // Carregar e atualizar campanha
+            const campaigns = JSON.parse(localStorage.getItem('ligaDoBem_campaigns') || '[]');
+            const campaignIndex = campaigns.findIndex(c => c.id === campaignId);
+            
+            if (campaignIndex === -1) {
+                showAlert('Campanha não encontrada!', 'error');
+                return;
+            }
+            
+            const oldCampaign = campaigns[campaignIndex];
+            campaigns[campaignIndex] = {
+                ...oldCampaign,
+                title,
+                description,
+                type,
+                isActive,
+                startDate,
+                endDate,
+                isPublic,
+                updatedAt: new Date().toISOString()
+            };
+            
+            // Salvar no localStorage
+            localStorage.setItem('ligaDoBem_campaigns', JSON.stringify(campaigns));
+            
+            // Fechar modal
+            closeEditCampaignModal();
+            
+            // Recarregar lista
+            loadCampaigns();
+            
+            // Mostrar mensagem de sucesso
+            const visibilityChange = oldCampaign.isPublic !== isPublic;
+            let message = '✅ Campanha atualizada com sucesso!';
+            
+            if (visibilityChange) {
+                const visibilityMessage = isPublic ? 
+                    '\n🌐 Agora é pública - aparecerá no site!' : 
+                    '\n🔒 Agora é privada - removida do site.';
+                message += visibilityMessage;
+            }
+            
+            showAlert(message, 'success');
+        }
+        
+        function deleteCampaign(id) {
+            if (confirm('Tem certeza que deseja excluir esta campanha?')) {
+                // Carregar campanhas do localStorage
+                let campaigns = JSON.parse(localStorage.getItem('ligaDoBem_campaigns') || '[]');
+                
+                // Filtrar removendo a campanha com o ID especificado
+                campaigns = campaigns.filter(campaign => campaign.id !== id);
+                
+                // Salvar de volta no localStorage
+                localStorage.setItem('ligaDoBem_campaigns', JSON.stringify(campaigns));
+                
+                // Recarregar lista
+                loadCampaigns();
+                
+                showAlert('Campanha excluída com sucesso!', 'success');
+            }
+        }
+        
+        function handleCampaignSubmit(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('campaign-title').value;
+            const type = document.getElementById('campaign-type').value;
+            const description = document.getElementById('campaign-description').value;
+            const startDate = document.getElementById('campaign-start').value;
+            const endDate = document.getElementById('campaign-end').value;
+            const isActive = document.getElementById('campaign-active').checked;
+            const isPublic = document.getElementById('campaign-visibility').value === 'true';
+            
+            if (!title || !type || !description || !startDate) {
+                showAlert('Por favor, preencha todos os campos obrigatórios!', 'error');
+                return;
+            }
+            
+            const campaign = {
+                id: Date.now(),
+                title,
+                type,
+                description,
+                startDate,
+                endDate,
+                isActive,
+                isPublic,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Salvar campanha no localStorage
+            let campaigns = JSON.parse(localStorage.getItem('ligaDoBem_campaigns') || '[]');
+            campaigns.push(campaign);
+            localStorage.setItem('ligaDoBem_campaigns', JSON.stringify(campaigns));
+            
+            console.log('Nova campanha criada e salva:', campaign);
+            
+            // Limpar formulário
+            cancelCampaign();
+            
+            // Atualizar lista de campanhas
+            loadCampaigns();
+            
+            const publicMessage = campaign.isPublic ? 
+                ' A campanha aparecerá no site público!' : 
+                ' Campanha privada - não aparecerá no site público.';
+            
+            showAlert('✅ Campanha criada com sucesso!' + publicMessage, 'success');
         }
         
         // Função para adicionar dados de exemplo
@@ -3760,18 +4447,39 @@
         function loadFinancialCharts() {
             console.log('📈 Carregando gráficos financeiros...');
             
-            // Carregar gráfico de Receita vs Despesas
-            loadRevenueExpensesChart();
-            
-            // Carregar gráfico de Distribuição de Gastos
-            loadExpensesDistributionChart();
+            // Aguardar um pouco para garantir que o DOM está totalmente carregado
+            setTimeout(() => {
+                // Carregar gráfico de Receita vs Despesas
+                loadRevenueExpensesChart();
+                
+                // Carregar gráfico de Distribuição de Gastos
+                loadExpensesDistributionChart();
+            }, 200);
         }
         
+        // Variáveis globais para as instâncias dos gráficos
+        let adminRevenueExpensesChartInstance = null;
+        let adminExpensesDistributionChartInstance = null;
+        
         function loadRevenueExpensesChart() {
-            const chartContainer = document.getElementById('revenue-expenses-chart');
-            if (!chartContainer) return;
+            console.log('📊 Carregando gráfico de receitas vs despesas (admin)...');
+            
+            // Verificar se Chart.js está disponível
+            if (typeof Chart === 'undefined') {
+                console.error('❌ Chart.js não está carregado!');
+                return;
+            }
+            
+            const ctx = document.getElementById('revenue-expenses-chart');
+            if (!ctx) {
+                console.error('❌ Canvas não encontrado: revenue-expenses-chart');
+                return;
+            }
+            
+            console.log('✅ Canvas encontrado:', ctx);
             
             const transactions = adminData.getTransactions();
+            console.log('📊 Transações encontradas:', transactions.length);
             
             // Agrupar por mês
             const monthlyData = {};
@@ -3790,43 +4498,109 @@
                 }
             });
             
-            // Criar gráfico simulado
-            const months = Object.keys(monthlyData).sort().slice(-6); // Últimos 6 meses
-            const chartData = months.map(month => {
-                const data = monthlyData[month] || { income: 0, expenses: 0 };
-                return {
-                    month: new Date(month + '-01').toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' }),
-                    income: data.income,
-                    expenses: data.expenses
-                };
+            // Preparar dados dos últimos 6 meses
+            const months = Object.keys(monthlyData).sort().slice(-6);
+            const labels = months.map(month => 
+                new Date(month + '-01').toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' })
+            );
+            const incomeData = months.map(month => monthlyData[month]?.income || 0);
+            const expensesData = months.map(month => monthlyData[month]?.expenses || 0);
+            
+            // Se não há dados, mostrar dados de exemplo
+            if (incomeData.every(val => val === 0) && expensesData.every(val => val === 0)) {
+                console.log('📊 Nenhuma transação encontrada, exibindo dados de exemplo...');
+                labels.splice(0, labels.length, 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun');
+                incomeData.splice(0, incomeData.length, 1500, 2000, 1800, 2200, 1900, 2100);
+                expensesData.splice(0, expensesData.length, 1200, 1400, 1600, 1300, 1500, 1400);
+            }
+            
+            // Destruir gráfico anterior se existir
+            if (adminRevenueExpensesChartInstance) {
+                adminRevenueExpensesChartInstance.destroy();
+            }
+            
+            // Criar novo gráfico
+            adminRevenueExpensesChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Receitas',
+                            data: incomeData,
+                            borderColor: '#28a745',
+                            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Despesas',
+                            data: expensesData,
+                            borderColor: '#dc3545',
+                            backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Receitas vs Despesas (Últimos 6 meses)'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R$ ' + value.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                                }
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': R$ ' + context.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                                }
+                            }
+                        }
+                    }
+                }
             });
             
-            // Renderizar gráfico simulado
-            chartContainer.innerHTML = `
-                <div class="chart-placeholder">
-                    <div class="chart-placeholder-icon">📊</div>
-                    <div class="chart-placeholder-text">Receita vs Despesas</div>
-                    <div class="chart-placeholder-subtitle">
-                        ${chartData.length > 0 ? 
-                            `Últimos ${chartData.length} meses • Total: R$ ${chartData.reduce((sum, d) => sum + d.income, 0).toFixed(2)} receitas` :
-                            'Adicione transações para ver o gráfico'
-                        }
-                    </div>
-                    ${chartData.length > 0 ? `
-                        <div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
-                            ${chartData.map(d => `${d.month}: +R$ ${d.income.toFixed(2)} / -R$ ${d.expenses.toFixed(2)}`).join(' • ')}
-                        </div>
-                    ` : ''}
-                </div>
-            `;
+            console.log('✅ Gráfico de receitas vs despesas carregado com sucesso!');
         }
         
         function loadExpensesDistributionChart() {
-            const chartContainer = document.getElementById('expenses-distribution-chart');
-            if (!chartContainer) return;
+            console.log('🥧 Carregando gráfico de distribuição de gastos (admin)...');
+            
+            // Verificar se Chart.js está disponível
+            if (typeof Chart === 'undefined') {
+                console.error('❌ Chart.js não está carregado!');
+                return;
+            }
+            
+            const ctx = document.getElementById('expenses-distribution-chart');
+            if (!ctx) {
+                console.error('❌ Canvas não encontrado: expenses-distribution-chart');
+                return;
+            }
+            
+            console.log('✅ Canvas encontrado:', ctx);
             
             const transactions = adminData.getTransactions();
             const expenses = transactions.filter(t => t.type === 'expense');
+            console.log('💸 Despesas encontradas:', expenses.length);
             
             // Agrupar por categoria
             const categoryData = {};
@@ -3837,42 +4611,84 @@
                 categoryData[expense.category] += expense.amount;
             });
             
-            const categories = Object.entries(categoryData)
-                .sort(([,a], [,b]) => b - a)
-                .map(([category, amount]) => ({
-                    category: getCategoryText(category),
-                    amount: amount,
-                    percentage: expenses.length > 0 ? (amount / expenses.reduce((sum, e) => sum + e.amount, 0) * 100).toFixed(1) : 0
-                }));
+            let labels = Object.keys(categoryData).map(cat => getCategoryText(cat));
+            let data = Object.values(categoryData);
             
-            // Renderizar gráfico simulado
-            chartContainer.innerHTML = `
-                <div class="chart-placeholder">
-                    <div class="chart-placeholder-icon">🥧</div>
-                    <div class="chart-placeholder-text">Distribuição de Gastos</div>
-                    <div class="chart-placeholder-subtitle">
-                        ${categories.length > 0 ? 
-                            `${categories.length} categorias • Total: R$ ${categories.reduce((sum, c) => sum + c.amount, 0).toFixed(2)}` :
-                            'Adicione despesas para ver a distribuição'
+            // Se não há dados, mostrar dados de exemplo
+            if (data.length === 0 || data.every(val => val === 0)) {
+                console.log('📊 Nenhuma despesa encontrada, exibindo dados de exemplo...');
+                labels = ['Veterinário', 'Alimentação', 'Suprimentos', 'Manutenção'];
+                data = [1500, 800, 600, 400];
+            }
+            
+            console.log('📊 Dados do gráfico de pizza:', { labels, data });
+            
+            // Cores para as fatias
+            const backgroundColors = [
+                '#007bff', '#28a745', '#dc3545', '#ffc107', 
+                '#17a2b8', '#6f42c1', '#fd7e14', '#20c997'
+            ];
+            
+            // Destruir gráfico anterior se existir
+            if (adminExpensesDistributionChartInstance) {
+                adminExpensesDistributionChartInstance.destroy();
+            }
+            
+            // Criar novo gráfico
+            adminExpensesDistributionChartInstance = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors.slice(0, labels.length),
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Distribuição de Gastos por Categoria'
+                        },
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const total = context.dataset.data.reduce((sum, value) => sum + value, 0);
+                                    const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                    return context.label + ': R$ ' + context.parsed.toLocaleString('pt-BR', {minimumFractionDigits: 2}) + ` (${percentage}%)`;
+                                }
+                            }
                         }
-                    </div>
-                    ${categories.length > 0 ? `
-                        <div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8; text-align: left;">
-                            ${categories.slice(0, 4).map(c => `
-                                <div style="margin: 0.5rem 0;">
-                                    <strong>${c.category}:</strong> R$ ${c.amount.toFixed(2)} (${c.percentage}%)
-                                </div>
-                            `).join('')}
-                            ${categories.length > 4 ? `<div style="opacity: 0.6;">+${categories.length - 4} outras categorias</div>` : ''}
-                        </div>
-                    ` : ''}
-                </div>
-            `;
+                    }
+                }
+            });
+            
+            console.log('✅ Gráfico de distribuição de gastos carregado com sucesso!');
         }
         
         function updateRevenueChart() {
-            showAlert('Gráfico de receitas atualizado!', 'info');
+            console.log('🔄 Atualizando gráfico de receitas...');
+            
+            // Verificar se Chart.js está carregado
+            if (typeof Chart === 'undefined') {
+                console.error('❌ Chart.js não carregado!');
+                showAlert('Erro: Chart.js não está carregado. Recarregue a página.', 'error');
+                return;
+            }
+            
             loadRevenueExpensesChart();
+            showAlert('Gráfico de receitas atualizado!', 'info');
         }
         
         // Função para carregar dados de exemplo (botão)

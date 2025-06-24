@@ -1608,6 +1608,756 @@
                 font-size: 1.5rem;
             }
         }
+
+        /* ===== EVENTS PAGE STYLES ===== */
+        
+        .calendar-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+        }
+        
+        .calendar-header h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin: 0;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .btn-calendar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-calendar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .mini-calendar {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+        }
+        
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .weekday {
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+        
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            font-weight: 500;
+        }
+        
+        .calendar-day:hover {
+            background: #e9ecef;
+            transform: scale(1.05);
+        }
+        
+        .calendar-day.today {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .calendar-day.has-event {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            position: relative;
+            overflow: visible;
+        }
+        
+        .calendar-day.has-event:hover::before {
+            content: 'Clique para ver eventos';
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            z-index: 10;
+            pointer-events: none;
+        }
+        
+        .calendar-day.has-event::after {
+            content: '•';
+            position: absolute;
+            bottom: 2px;
+            right: 4px;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+        
+        .calendar-day.selected {
+            background: linear-gradient(135deg, #00b894, #00cec9) !important;
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(0, 184, 148, 0.4);
+        }
+        
+        .calendar-day.other-month {
+            color: #ccc;
+            cursor: default;
+        }
+        
+        .calendar-day.other-month:hover {
+            background: none;
+            transform: none;
+        }
+        
+        /* Calendar Container and Event Preview */
+        .calendar-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .event-preview-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+            position: sticky;
+            top: 2rem;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .event-preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f8f9fa;
+        }
+        
+        .event-preview-header h4 {
+            color: #333;
+            font-size: 1.2rem;
+            margin: 0;
+        }
+        
+        .close-preview {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s;
+            padding: 0.2rem 0.5rem;
+            border-radius: 50%;
+        }
+        
+        .close-preview:hover {
+            color: #e74c3c;
+            background: #f8f9fa;
+        }
+        
+        .event-preview-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .preview-event-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            border-left: 4px solid #667eea;
+            transition: transform 0.2s;
+        }
+        
+        .preview-event-card:hover {
+            transform: translateX(3px);
+        }
+        
+        .preview-event-card.adoption {
+            border-left-color: #e74c3c;
+        }
+        
+        .preview-event-card.fundraising {
+            border-left-color: #f39c12;
+        }
+        
+        .preview-event-card.awareness {
+            border-left-color: #3498db;
+        }
+        
+        .preview-event-card.special {
+            border-left-color: #9b59b6;
+        }
+        
+        .preview-event-time {
+            font-size: 0.8rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        
+        .preview-event-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.3rem;
+            line-height: 1.3;
+        }
+        
+        .preview-event-location {
+            font-size: 0.8rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .preview-event-description {
+            font-size: 0.85rem;
+            color: #555;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .preview-event-category {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+        
+        .preview-event-card.adoption .preview-event-category {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+        }
+        
+        .preview-event-card.fundraising .preview-event-category {
+            background: rgba(243, 156, 18, 0.1);
+            color: #f39c12;
+        }
+        
+        .preview-event-card.awareness .preview-event-category {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+        }
+        
+        .preview-event-card.special .preview-event-category {
+            background: rgba(155, 89, 182, 0.1);
+            color: #9b59b6;
+        }
+        
+        .no-events-message {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 2rem;
+        }
+        
+        .event-categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+        
+        .category-btn {
+            background: white;
+            border: 2px solid #e9ecef;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .category-btn:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .category-btn .category-icon {
+            font-size: 1.1rem;
+        }
+        
+        .events-section {
+            margin: 3rem 0;
+        }
+        
+        .events-section h3 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .events-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .event-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .event-card.adoption {
+            border-left-color: #e74c3c;
+        }
+        
+        .event-card.fundraising {
+            border-left-color: #f39c12;
+        }
+        
+        .event-card.awareness {
+            border-left-color: #3498db;
+        }
+        
+        .event-card.special {
+            border-left-color: #9b59b6;
+        }
+        
+        .event-date {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .event-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .event-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .event-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .event-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        .event-detail-icon {
+            font-size: 1rem;
+        }
+        
+        .event-category-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .events-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .events-timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+            border-radius: 3px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-left: 1rem;
+            border: 1px solid #e9ecef;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.8rem;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            background: #667eea;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px white, 0 0 0 6px #667eea;
+        }
+        
+        .timeline-date {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-description {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .events-cta {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            margin-top: 3rem;
+        }
+        
+        .events-cta h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .events-cta p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .social-link {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        /* Events preview on home page */
+        .events-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .event-preview-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .event-preview-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .event-preview-card.adoption {
+            border-left-color: #e74c3c;
+        }
+        
+        .event-preview-card.adoption::before {
+            content: "❤️";
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .event-preview-card.fundraising {
+            border-left-color: #f39c12;
+        }
+        
+        .event-preview-card.fundraising::before {
+            content: "💰";
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .event-preview-card.awareness {
+            border-left-color: #3498db;
+        }
+        
+        .event-preview-card.awareness::before {
+            content: "📢";
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .event-preview-card.special {
+            border-left-color: #9b59b6;
+        }
+        
+        .event-preview-card.special::before {
+            content: "🎉";
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .event-preview-date {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+            transition: all 0.3s ease;
+        }
+        
+        .event-preview-date.today-badge {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            animation: pulse 2s infinite;
+        }
+        
+        .event-preview-card.today {
+            border-left-color: #ff6b6b !important;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        }
+        
+        .event-preview-card.soon {
+            border-left-color: #f39c12 !important;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .event-preview-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+        
+        .event-preview-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 0.8rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .event-preview-location {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        /* Responsive styles for events */
+        @media (max-width: 768px) {
+            .events-preview {
+                grid-template-columns: 1fr;
+            }
+            
+            .event-preview-card {
+                margin-bottom: 1rem;
+            }
+            
+            .calendar-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .event-preview-panel {
+                position: static;
+                max-height: none;
+                order: -1;
+            }
+            
+            .calendar-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .calendar-header h3 {
+                min-width: auto;
+            }
+            
+            .event-categories {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .category-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .events-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .events-timeline {
+                padding-left: 1rem;
+            }
+            
+            .timeline-item {
+                margin-left: 0.5rem;
+            }
+            
+            .timeline-item::before {
+                left: -1.3rem;
+            }
+            
+            .social-links {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .social-link {
+                width: 100%;
+                max-width: 250px;
+                text-align: center;
+            }
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -1619,6 +2369,7 @@
                 <li><a href="#" onclick="showPage('home'); return false;" class="nav-link active">Início</a></li>
                 <li><a href="#" onclick="showPage('pets'); return false;" class="nav-link">Adoção</a></li>
                 <li><a href="#" onclick="showPage('volunteers'); return false;" class="nav-link">Voluntários</a></li>
+                <li><a href="#" onclick="showPage('events'); return false;" class="nav-link">Eventos</a></li>
                 <li><a href="#" onclick="showPage('transparency'); return false;" class="nav-link">Transparência</a></li>
                 <li><a href="#" onclick="showPage('donate'); return false;" class="nav-link">Doação</a></li>
                 <li><a href="#" onclick="showPage('about'); return false;" class="nav-link">Sobre</a></li>
@@ -1641,12 +2392,27 @@
                 <p id="hero-subtitle">Cada animal merece uma segunda chance. Junte-se a nós nessa missão de amor e esperança.</p>
                 <div class="cta-buttons">
                     <a href="#" onclick="showPage('pets')" class="btn btn-primary">Ver Pets para Adoção</a>
+                    <a href="#" onclick="showPage('events')" class="btn btn-secondary">Ver Eventos</a>
                     <a href="#" onclick="showPage('donate')" class="btn btn-secondary">Fazer Doação</a>
                 </div>
             </div>
 
             <div class="stats" id="stats-section">
                 <!-- Stats will be loaded here -->
+            </div>
+            
+            <!-- Featured Events Section -->
+            <div class="featured-events-section" style="margin: 3rem 0;">
+                <h3 style="text-align: center; font-size: 2rem; color: #333; margin-bottom: 1rem;">📅 Próximos Eventos</h3>
+                <p style="text-align: center; color: #666; margin-bottom: 2rem; font-size: 1.1rem;">
+                    Participe dos nossos eventos e ajude a fazer a diferença na vida dos animais!
+                </p>
+                <div class="events-preview" id="home-events-preview">
+                    <!-- Featured events will be loaded here -->
+                </div>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn btn-primary" onclick="showPage('events')">Ver Calendário Completo</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1720,6 +2486,100 @@
                     <h3>Quer fazer parte da nossa família?</h3>
                     <p>Junte-se a nós e ajude a transformar vidas!</p>
                     <button class="btn btn-primary" onclick="showPage('contact')">Seja um Voluntário</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Events Page -->
+    <div id="events" class="page">
+        <div class="container">
+            <div class="page-content animate-in">
+                <h2 class="page-title">📅 Eventos e Calendário</h2>
+                <p style="text-align: center; margin-bottom: 3rem; font-size: 1.2rem;">
+                    Fique por dentro de todos os nossos eventos e datas especiais!
+                </p>
+                
+                <!-- Calendar Navigation -->
+                <div class="calendar-header">
+                    <button class="btn-calendar prev" onclick="changeMonth(-1)">‹</button>
+                    <h3 id="current-month">Janeiro 2024</h3>
+                    <button class="btn-calendar next" onclick="changeMonth(1)">›</button>
+                </div>
+                
+                <!-- Mini Calendar -->
+                <div class="calendar-container">
+                    <div class="mini-calendar">
+                        <div class="calendar-weekdays">
+                            <div class="weekday">Dom</div>
+                            <div class="weekday">Seg</div>
+                            <div class="weekday">Ter</div>
+                            <div class="weekday">Qua</div>
+                            <div class="weekday">Qui</div>
+                            <div class="weekday">Sex</div>
+                            <div class="weekday">Sáb</div>
+                        </div>
+                        <div class="calendar-days" id="calendar-days">
+                            <!-- Days will be generated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Event Preview Panel -->
+                    <div class="event-preview-panel" id="event-preview-panel" style="display: none;">
+                        <div class="event-preview-header">
+                            <h4>📅 Eventos do Dia</h4>
+                            <button class="close-preview" onclick="closeEventPreview()">×</button>
+                        </div>
+                        <div class="event-preview-content" id="event-preview-content">
+                            <!-- Event details will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Event Categories -->
+                <div class="event-categories">
+                    <button class="category-btn active" data-category="all" onclick="filterEvents('all')">
+                        <span class="category-icon">📅</span> Todos os Eventos
+                    </button>
+                    <button class="category-btn" data-category="adoption" onclick="filterEvents('adoption')">
+                        <span class="category-icon">❤️</span> Feira de Adoção
+                    </button>
+                    <button class="category-btn" data-category="fundraising" onclick="filterEvents('fundraising')">
+                        <span class="category-icon">💰</span> Arrecadação
+                    </button>
+                    <button class="category-btn" data-category="awareness" onclick="filterEvents('awareness')">
+                        <span class="category-icon">📢</span> Conscientização
+                    </button>
+                    <button class="category-btn" data-category="special" onclick="filterEvents('special')">
+                        <span class="category-icon">🎉</span> Datas Especiais
+                    </button>
+                </div>
+                
+                <!-- Upcoming Events -->
+                <div class="events-section">
+                    <h3>🗓️ Próximos Eventos</h3>
+                    <div class="events-list" id="upcoming-events">
+                        <!-- Events will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- All Events -->
+                <div class="events-section">
+                    <h3>📋 Todos os Eventos</h3>
+                    <div class="events-timeline" id="all-events">
+                        <!-- All events will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Call to Action -->
+                <div class="events-cta">
+                    <h3>Não perca nossos eventos!</h3>
+                    <p>Siga-nos nas redes sociais para ficar sempre atualizado</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">📘 Facebook</a>
+                        <a href="#" class="social-link">📷 Instagram</a>
+                        <a href="#" class="social-link">🐦 Twitter</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1977,6 +2837,8 @@
                         loadPets();
                     } else if (pageName === 'volunteers') {
                         loadVolunteers();
+                    } else if (pageName === 'events') {
+                        loadEvents();
                     } else if (pageName === 'transparency') {
                         loadTransparency();
                     }
@@ -1992,6 +2854,7 @@
             loadContent();
             loadStats();
             loadPets();
+            loadHomeEvents(); // Carregar eventos na página inicial
             animateStats();
         });
 
@@ -2717,7 +3580,539 @@
             text.textContent = message;
         }
 
-        // showPage function updated above to handle new pages
+        // Load featured events on home page
+        function loadHomeEvents() {
+            console.log('🏠 Carregando eventos destacados na página inicial...');
+            const homeEventsContainer = document.getElementById('home-events-preview');
+            const today = new Date();
+            
+            // Get next 3 upcoming featured events
+            const featuredEvents = eventsData
+                .filter(event => {
+                    const eventDate = new Date(event.date + 'T00:00:00');
+                    return eventDate >= today && event.featured;
+                })
+                .sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00'))
+                .slice(0, 3);
+            
+            if (featuredEvents.length === 0) {
+                homeEventsContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Nenhum evento em destaque no momento.</p>';
+                return;
+            }
+            
+            homeEventsContainer.innerHTML = featuredEvents.map(event => {
+                const eventDate = new Date(event.date + 'T00:00:00');
+                const daysUntil = Math.ceil((eventDate - today) / (1000 * 60 * 60 * 24));
+                const isToday = daysUntil === 0;
+                const isSoon = daysUntil <= 3;
+                
+                let dateText = formatDate(event.date);
+                if (isToday) {
+                    dateText = "HOJE! " + dateText;
+                } else if (isSoon) {
+                    dateText = `${daysUntil} dia${daysUntil > 1 ? 's' : ''} - ${dateText}`;
+                }
+                
+                return `
+                    <div class="event-preview-card ${event.category} ${isToday ? 'today' : ''} ${isSoon ? 'soon' : ''}" onclick="showPage('events')">
+                        <div class="event-preview-date ${isToday ? 'today-badge' : ''}">${dateText}</div>
+                        <h4 class="event-preview-title">${event.title}</h4>
+                        <p class="event-preview-description">${event.description}</p>
+                        <div class="event-preview-location">
+                            <span>📍</span>
+                            <span>${event.location}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            console.log('✅ Eventos destacados carregados:', featuredEvents.length);
+        }
+
+        // ===== EVENTS SYSTEM =====
+        
+        // Current calendar state
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+        
+        // Sample events data
+        const eventsData = [
+            {
+                id: 0,
+                title: "🔥 Campanha de Emergência - Resgate",
+                description: "Campanha especial para arrecadação de fundos para resgate de emergência. Sua ajuda é urgente!",
+                date: new Date().toISOString().split('T')[0], // Hoje
+                time: "08:00-18:00",
+                location: "Online e Sede da Liga do Bem",
+                category: "fundraising",
+                featured: true
+            },
+            {
+                id: 1,
+                title: "Feira de Adoção - Shopping Center",
+                description: "Grande feira de adoção com mais de 50 pets disponíveis. Venha conhecer seu novo melhor amigo!",
+                date: "2024-01-20",
+                time: "09:00-17:00",
+                location: "Shopping Center Norte",
+                category: "adoption",
+                featured: true
+            },
+            {
+                id: 2,
+                title: "Bazar Beneficente",
+                description: "Bazar com roupas, acessórios e itens para pets. Toda renda será destinada aos cuidados veterinários.",
+                date: "2024-01-15",
+                time: "08:00-16:00",
+                location: "Praça Central",
+                category: "fundraising",
+                featured: true
+            },
+            {
+                id: 3,
+                title: "Campanha de Vacinação Gratuita",
+                description: "Dia de vacinação gratuita para pets da comunidade. Traga seu amiguinho!",
+                date: "2024-02-03",
+                time: "08:00-12:00",
+                location: "Clínica Veterinária Amigos",
+                category: "awareness",
+                featured: true
+            },
+            {
+                id: 4,
+                title: "Dia Mundial dos Animais",
+                description: "Celebração especial com atividades educativas e demonstrações de cuidados com pets.",
+                date: "2024-03-04",
+                time: "10:00-16:00",
+                location: "Parque Municipal",
+                category: "special",
+                featured: true
+            },
+            {
+                id: 5,
+                title: "Corrida Pet Friendly",
+                description: "Corrida beneficente onde você pode participar junto com seu pet. Inscrições abertas!",
+                date: "2024-03-15",
+                time: "07:00-11:00",
+                location: "Parque Vila Lobos",
+                category: "fundraising",
+                featured: true
+            },
+            {
+                id: 6,
+                title: "Workshop: Primeiros Socorros Pet",
+                description: "Aprenda técnicas básicas de primeiros socorros para ajudar seu pet em emergências.",
+                date: "2024-03-22",
+                time: "14:00-17:00",
+                location: "Sede da Liga do Bem",
+                category: "awareness",
+                featured: false
+            },
+            {
+                id: 7,
+                title: "Natal dos Animais",
+                description: "Festa natalina especial para pets e seus tutores, com presente para todos!",
+                date: "2024-12-15",
+                time: "15:00-19:00",
+                location: "Sede da Liga do Bem",
+                category: "special",
+                featured: true
+            },
+            {
+                id: 8,
+                title: "Feira de Adoção - Parque da Cidade",
+                description: "Mais uma oportunidade para encontrar seu novo melhor amigo. Pets de todas as idades disponíveis!",
+                date: "2024-02-10",
+                time: "09:00-16:00",
+                location: "Parque da Cidade",
+                category: "adoption",
+                featured: true
+            },
+            {
+                id: 9,
+                title: "Workshop: Cuidados com Filhotes",
+                description: "Aprenda tudo sobre cuidados especiais com filhotes recém-nascidos e órfãos.",
+                date: "2024-03-08",
+                time: "14:00-17:00",
+                location: "Sede da Liga do Bem",
+                category: "awareness",
+                featured: false
+            },
+            {
+                id: 10,
+                title: "Dia da Castração Solidária",
+                description: "Castrações gratuitas para pets da comunidade. Vagas limitadas, inscreva-se!",
+                date: "2024-03-12",
+                time: "08:00-16:00",
+                location: "Clínica Veterinária Parceira",
+                category: "awareness",
+                featured: true
+            },
+            {
+                id: 11,
+                title: "Rifa Beneficente",
+                description: "Grande rifa com prêmios incríveis! Toda renda será destinada aos cuidados veterinários.",
+                date: "2024-04-20",
+                time: "19:00-22:00",
+                location: "Centro Comunitário",
+                category: "fundraising",
+                featured: false
+            },
+            {
+                id: 12,
+                title: "Dia Mundial da Água para Pets",
+                description: "Ação especial de conscientização sobre a importância da água limpa para os animais.",
+                date: "2024-03-22",
+                time: "10:00-15:00",
+                location: "Praça Central",
+                category: "special",
+                featured: false
+            },
+            {
+                id: 13,
+                title: "Feira de Adoção - Shopping Sul",
+                description: "Grande evento de adoção no shopping com atividades para toda a família.",
+                date: "2024-04-14",
+                time: "10:00-18:00",
+                location: "Shopping Sul",
+                category: "adoption",
+                featured: true
+            },
+            {
+                id: 14,
+                title: "Caminhada Pet Friendly",
+                description: "Caminhada beneficente pelo centro da cidade. Traga seu pet e participe!",
+                date: "2024-05-01",
+                time: "07:00-10:00",
+                location: "Centro da Cidade",
+                category: "fundraising",
+                featured: true
+            }
+        ];
+        
+        // Load events page
+        function loadEvents() {
+            console.log('📅 Carregando página de eventos...');
+            console.log('🔍 Debug: Verificando datas dos eventos...');
+            eventsData.forEach(event => {
+                const eventDate = new Date(event.date + 'T00:00:00');
+                console.log(`📅 Evento: ${event.title} | Data original: ${event.date} | Data formatada: ${eventDate.toDateString()}`);
+            });
+            generateCalendar();
+            loadUpcomingEvents();
+            loadAllEvents();
+            
+            // Auto-show today's events if any
+            const today = new Date();
+            const todayString = today.toISOString().split('T')[0];
+            const todayEvents = eventsData.filter(event => event.date === todayString);
+            
+            if (todayEvents.length > 0) {
+                setTimeout(() => {
+                    showEventsForDate(todayString);
+                    // Highlight today in calendar
+                    const todayElement = document.querySelector('.calendar-day.today');
+                    if (todayElement) {
+                        todayElement.classList.add('selected');
+                    }
+                }, 500);
+            }
+        }
+        
+        // Generate calendar
+        function generateCalendar() {
+            const monthNames = [
+                'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+            ];
+            
+            document.getElementById('current-month').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            
+            const calendarDays = document.getElementById('calendar-days');
+            calendarDays.innerHTML = '';
+            
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const today = new Date();
+            
+            // Add empty cells for days before month starts
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day other-month';
+                calendarDays.appendChild(emptyDay);
+            }
+            
+            // Add days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                
+                const currentDate = new Date(currentYear, currentMonth, day);
+                
+                // Check if it's today
+                if (currentDate.toDateString() === today.toDateString()) {
+                    dayElement.classList.add('today');
+                }
+                
+                // Check if there are events on this day
+                const dateString = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const hasEvent = eventsData.some(event => {
+                    // Criar data local para comparação correta
+                    const eventDate = new Date(event.date + 'T00:00:00');
+                    const calendarDate = new Date(currentYear, currentMonth, day);
+                    return eventDate.toDateString() === calendarDate.toDateString();
+                });
+                
+                if (hasEvent) {
+                    dayElement.classList.add('has-event');
+                    dayElement.onclick = () => {
+                        // Remove previous selection
+                        document.querySelectorAll('.calendar-day.selected').forEach(el => {
+                            el.classList.remove('selected');
+                        });
+                        // Add selection to clicked day
+                        dayElement.classList.add('selected');
+                        showEventsForDate(dateString);
+                    };
+                } else {
+                    dayElement.onclick = () => {
+                        // Remove previous selection
+                        document.querySelectorAll('.calendar-day.selected').forEach(el => {
+                            el.classList.remove('selected');
+                        });
+                        // Add selection to clicked day
+                        dayElement.classList.add('selected');
+                        showEventsForDate(dateString);
+                    };
+                }
+                
+                calendarDays.appendChild(dayElement);
+            }
+        }
+        
+        // Change month
+        function changeMonth(direction) {
+            currentMonth += direction;
+            
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            
+            generateCalendar();
+        }
+        
+        // Load upcoming events
+        function loadUpcomingEvents() {
+            const upcomingContainer = document.getElementById('upcoming-events');
+            const today = new Date();
+            
+            // Get upcoming events (next 30 days)
+            const upcomingEvents = eventsData
+                .filter(event => {
+                    const eventDate = new Date(event.date + 'T00:00:00');
+                    const diffTime = eventDate - today;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    return diffDays >= 0 && diffDays <= 30;
+                })
+                .sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00'))
+                .slice(0, 6); // Show max 6 upcoming events
+            
+            if (upcomingEvents.length === 0) {
+                upcomingContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Nenhum evento próximo encontrado.</p>';
+                return;
+            }
+            
+            upcomingContainer.innerHTML = upcomingEvents.map(event => `
+                <div class="event-card ${event.category}" onclick="showEventDetails(${event.id})">
+                    <div class="event-category-badge">${getCategoryText(event.category)}</div>
+                    <div class="event-date">${formatDate(event.date)}</div>
+                    <h4 class="event-title">${event.title}</h4>
+                    <p class="event-description">${event.description}</p>
+                    <div class="event-details">
+                        <div class="event-detail">
+                            <span class="event-detail-icon">🕒</span>
+                            <span>${event.time}</span>
+                        </div>
+                        <div class="event-detail">
+                            <span class="event-detail-icon">📍</span>
+                            <span>${event.location}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Load all events
+        function loadAllEvents() {
+            const allEventsContainer = document.getElementById('all-events');
+            
+            // Sort events by date
+            const sortedEvents = eventsData.sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00'));
+            
+            allEventsContainer.innerHTML = sortedEvents.map(event => `
+                <div class="timeline-item">
+                    <div class="timeline-date">${formatDate(event.date)} • ${event.time}</div>
+                    <h4 class="timeline-title">${event.title}</h4>
+                    <p class="timeline-description">${event.description}</p>
+                    <div style="margin-top: 0.5rem; display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.9rem; color: #666;">
+                        <span>📍 ${event.location}</span>
+                        <span>🏷️ ${getCategoryText(event.category)}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Filter events by category
+        function filterEvents(category) {
+            console.log('🔍 Filtrando eventos por categoria:', category);
+            
+            // Update active button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-category="${category}"]`).classList.add('active');
+            
+            // Filter and display events
+            const filteredEvents = category === 'all' 
+                ? eventsData 
+                : eventsData.filter(event => event.category === category);
+            
+            const upcomingContainer = document.getElementById('upcoming-events');
+            const today = new Date();
+            
+            const upcomingFiltered = filteredEvents
+                .filter(event => {
+                    const eventDate = new Date(event.date + 'T00:00:00');
+                    return eventDate >= today;
+                })
+                .sort((a, b) => new Date(a.date + 'T00:00:00') - new Date(b.date + 'T00:00:00'));
+            
+            if (upcomingFiltered.length === 0) {
+                upcomingContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Nenhum evento encontrado nesta categoria.</p>';
+            } else {
+                upcomingContainer.innerHTML = upcomingFiltered.map(event => `
+                    <div class="event-card ${event.category}" onclick="showEventDetails(${event.id})">
+                        <div class="event-category-badge">${getCategoryText(event.category)}</div>
+                        <div class="event-date">${formatDate(event.date)}</div>
+                        <h4 class="event-title">${event.title}</h4>
+                        <p class="event-description">${event.description}</p>
+                        <div class="event-details">
+                            <div class="event-detail">
+                                <span class="event-detail-icon">🕒</span>
+                                <span>${event.time}</span>
+                            </div>
+                            <div class="event-detail">
+                                <span class="event-detail-icon">📍</span>
+                                <span>${event.location}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        // Show events for a specific date
+        function showEventsForDate(dateString) {
+            const clickedDate = new Date(dateString + 'T00:00:00');
+            const eventsForDate = eventsData.filter(event => {
+                const eventDate = new Date(event.date + 'T00:00:00');
+                return eventDate.toDateString() === clickedDate.toDateString();
+            });
+            
+            const previewPanel = document.getElementById('event-preview-panel');
+            const previewContent = document.getElementById('event-preview-content');
+            
+            if (eventsForDate.length > 0) {
+                const formattedDate = clickedDate.toLocaleDateString('pt-BR', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+                
+                // Update header with selected date
+                document.querySelector('.event-preview-header h4').innerHTML = 
+                    `📅 ${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}`;
+                
+                // Generate event cards
+                previewContent.innerHTML = eventsForDate.map(event => `
+                    <div class="preview-event-card ${event.category}">
+                        <div class="preview-event-time">🕒 ${event.time}</div>
+                        <div class="preview-event-title">${event.title}</div>
+                        <div class="preview-event-location">
+                            <span>📍</span>
+                            <span>${event.location}</span>
+                        </div>
+                        <div class="preview-event-description">${event.description}</div>
+                        <div class="preview-event-category">${getCategoryText(event.category)}</div>
+                    </div>
+                `).join('');
+                
+                // Show the preview panel
+                previewPanel.style.display = 'block';
+                
+                // Smooth scroll to preview panel on mobile
+                if (window.innerWidth <= 768) {
+                    previewPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            } else {
+                // Show no events message
+                const formattedDate = clickedDate.toLocaleDateString('pt-BR', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+                
+                document.querySelector('.event-preview-header h4').innerHTML = 
+                    `📅 ${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}`;
+                
+                previewContent.innerHTML = '<div class="no-events-message">Nenhum evento programado para este dia.</div>';
+                previewPanel.style.display = 'block';
+            }
+        }
+        
+        // Close event preview
+        function closeEventPreview() {
+            document.getElementById('event-preview-panel').style.display = 'none';
+        }
+        
+        // Show event details
+        function showEventDetails(eventId) {
+            const event = eventsData.find(e => e.id === eventId);
+            if (event) {
+                alert(`${event.title}\n\n${event.description}\n\n📅 ${formatDate(event.date)}\n🕒 ${event.time}\n📍 ${event.location}`);
+            }
+        }
+        
+        // Get category text
+        function getCategoryText(category) {
+            const categories = {
+                'adoption': 'Feira de Adoção',
+                'fundraising': 'Arrecadação',
+                'awareness': 'Conscientização',
+                'special': 'Data Especial'
+            };
+            return categories[category] || category;
+        }
+        
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString + 'T00:00:00');
+            return date.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+        
+        // Helper function to create local date
+        function createLocalDate(dateString) {
+            return new Date(dateString + 'T00:00:00');
+        }
 
         // Load public charts for transparency page
         function loadPublicCharts(transactions) {
