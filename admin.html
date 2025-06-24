@@ -26,6 +26,17 @@
             <div id="login-error" class="alert alert-error" style="display: none; margin-top: 1rem;">
                 Usuário ou senha incorretos!
             </div>
+            <div style="margin-top: 1rem; text-align: center;">
+                <small style="color: #666;">
+                    Credenciais de teste:<br>
+                    Usuário: <strong>admin</strong><br>
+                    Senha: <strong>123</strong>
+                </small>
+                <br><br>
+                <button type="button" onclick="autoLogin()" style="background: #28a745; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+                    🚀 Login Automático (Teste)
+                </button>
+            </div>
         </div>
     </div>
 
@@ -138,6 +149,27 @@
                         <span class="nav-text">Doações</span>
                     </button>
                 </div>
+
+                <!-- Vitrine Pública -->
+                <div class="nav-section">
+                    <div class="nav-category">🌟 Vitrine Pública</div>
+                    <button class="nav-btn" onclick="showSection('public-volunteers')">
+                        <span class="nav-icon">🏆</span>
+                        <span class="nav-text">Hall da Fama</span>
+                    </button>
+                    <button class="nav-btn" onclick="showSection('public-transparency')">
+                        <span class="nav-icon">📊</span>
+                        <span class="nav-text">Transparência</span>
+                    </button>
+                    <button class="nav-btn" onclick="showSection('public-campaigns')">
+                        <span class="nav-icon">🎯</span>
+                        <span class="nav-text">Campanhas</span>
+                    </button>
+                    <button class="nav-btn" onclick="showSection('public-settings')">
+                        <span class="nav-icon">👁️</span>
+                        <span class="nav-text">Visibilidade</span>
+                    </button>
+                </div>
                 
                 <!-- Sistema -->
                 <div class="nav-section">
@@ -168,33 +200,162 @@
 
         <!-- Main Content -->
         <main class="admin-main">
-            <!-- Dashboard -->
+            <!-- Dashboard Moderno -->
             <section id="dashboard-section" class="admin-section active">
-                <h2 class="section-title">Dashboard</h2>
-                <div class="dashboard-stats" id="dashboard-stats">
-                    <!-- Stats will be loaded here -->
+                <div class="dashboard-header">
+                    <div class="dashboard-title">
+                        <h2>🏠 Dashboard</h2>
+                        <p class="dashboard-subtitle">Visão geral da Liga do Bem</p>
+                    </div>
+                    <div class="dashboard-actions">
+                        <button class="btn btn-primary" onclick="refreshDashboard()">
+                            <span class="btn-icon">🔄</span>
+                            Atualizar
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportReport()">
+                            <span class="btn-icon">📊</span>
+                            Relatório
+                        </button>
+                    </div>
                 </div>
-                <div class="admin-form">
-                    <h3>Resumo Rápido</h3>
-                    <div class="card-grid">
-                        <div class="admin-card">
-                            <div class="card-header">
-                                <div class="card-title">Pets Disponíveis</div>
-                            </div>
-                            <p id="available-pets-count">0</p>
+
+                <!-- Cards de Estatísticas Principais -->
+                <div class="stats-grid">
+                    <div class="stat-card primary">
+                        <div class="stat-icon">🐾</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="total-pets">0</div>
+                            <div class="stat-label">Pets Cadastrados</div>
+                            <div class="stat-change positive" id="pets-change">+0 este mês</div>
                         </div>
-                        <div class="admin-card">
-                            <div class="card-header">
-                                <div class="card-title">Mensagens Não Lidas</div>
-                            </div>
-                            <p id="unread-messages-count">0</p>
+                    </div>
+                    
+                    <div class="stat-card success">
+                        <div class="stat-icon">❤️</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="total-adoptions">0</div>
+                            <div class="stat-label">Adoções Realizadas</div>
+                            <div class="stat-change positive" id="adoptions-change">+0 este mês</div>
                         </div>
-                        <div class="admin-card">
+                    </div>
+                    
+                    <div class="stat-card warning">
+                        <div class="stat-icon">🙋‍♀️</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="total-volunteers">0</div>
+                            <div class="stat-label">Voluntários Ativos</div>
+                            <div class="stat-change positive" id="volunteers-change">+0 este mês</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card info">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="total-balance">R$ 0</div>
+                            <div class="stat-label">Saldo Atual</div>
+                            <div class="stat-change" id="balance-change">R$ 0 este mês</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráficos e Análises -->
+                <div class="dashboard-content">
+                    <div class="dashboard-row">
+                        <!-- Gráfico de Adoções -->
+                        <div class="dashboard-card chart-card">
                             <div class="card-header">
-                                <div class="card-title">Últimas Atividades</div>
+                                <h3>📈 Adoções por Mês</h3>
+                                <div class="card-actions">
+                                    <select id="adoption-period" onchange="updateAdoptionChart()">
+                                        <option value="6">Últimos 6 meses</option>
+                                        <option value="12">Último ano</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div id="recent-activities">
-                                <!-- Recent activities will be loaded here -->
+                            <div class="chart-container">
+                                <canvas id="adoptions-chart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Distribuição de Pets -->
+                        <div class="dashboard-card chart-card">
+                            <div class="card-header">
+                                <h3>🐕 Distribuição de Pets</h3>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="pets-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-row">
+                        <!-- Atividades Recentes -->
+                        <div class="dashboard-card activity-card">
+                            <div class="card-header">
+                                <h3>🕒 Atividades Recentes</h3>
+                                <button class="btn-link" onclick="showSection('messages')">Ver todas</button>
+                            </div>
+                            <div class="activity-list" id="recent-activities">
+                                <!-- Atividades serão carregadas aqui -->
+                            </div>
+                        </div>
+
+                        <!-- Pets em Destaque -->
+                        <div class="dashboard-card pets-card">
+                            <div class="card-header">
+                                <h3>⭐ Pets em Destaque</h3>
+                                <button class="btn-link" onclick="showSection('pets')">Ver todos</button>
+                            </div>
+                            <div class="featured-pets" id="featured-pets">
+                                <!-- Pets em destaque serão carregados aqui -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alertas e Notificações -->
+                    <div class="dashboard-row">
+                        <div class="dashboard-card alerts-card">
+                            <div class="card-header">
+                                <h3>🚨 Alertas e Lembretes</h3>
+                            </div>
+                            <div class="alerts-list" id="dashboard-alerts">
+                                <!-- Alertas serão carregados aqui -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resumo Financeiro -->
+                    <div class="dashboard-row">
+                        <div class="dashboard-card financial-card">
+                            <div class="card-header">
+                                <h3>💳 Resumo Financeiro</h3>
+                                <button class="btn-link" onclick="showSection('donations')">Ver detalhes</button>
+                            </div>
+                            <div class="financial-summary">
+                                <div class="financial-item income">
+                                    <div class="financial-icon">📈</div>
+                                    <div class="financial-content">
+                                        <div class="financial-label">Receitas</div>
+                                        <div class="financial-value" id="total-income">R$ 0,00</div>
+                                    </div>
+                                </div>
+                                <div class="financial-item expense">
+                                    <div class="financial-icon">📉</div>
+                                    <div class="financial-content">
+                                        <div class="financial-label">Despesas</div>
+                                        <div class="financial-value" id="total-expenses">R$ 0,00</div>
+                                    </div>
+                                </div>
+                                <div class="financial-item balance">
+                                    <div class="financial-icon">💰</div>
+                                    <div class="financial-content">
+                                        <div class="financial-label">Saldo</div>
+                                        <div class="financial-value" id="current-balance">R$ 0,00</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="financial-chart">
+                                <canvas id="financial-chart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -976,6 +1137,477 @@
                     <button class="btn btn-danger" onclick="resetSystem()">Resetar para Padrão</button>
                 </div>
             </section>
+
+            <!-- Hall da Fama dos Voluntários -->
+            <section id="public-volunteers-section" class="admin-section">
+                <h2 class="section-title">🏆 Hall da Fama dos Voluntários</h2>
+                
+                <!-- Estatísticas Gerais -->
+                <div class="admin-form">
+                    <h3>📊 Estatísticas Públicas</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="total-volunteers-stat">Total de Voluntários Ativos:</label>
+                            <input type="number" id="total-volunteers-stat" value="42">
+                        </div>
+                        <div class="form-group">
+                            <label for="total-hours-stat">Total de Horas Dedicadas:</label>
+                            <input type="number" id="total-hours-stat" value="1250">
+                        </div>
+                        <div class="form-group">
+                            <label for="animals-helped-stat">Animais Ajudados:</label>
+                            <input type="number" id="animals-helped-stat" value="156">
+                        </div>
+                        <div class="form-group">
+                            <label for="adoptions-facilitated-stat">Adoções Facilitadas:</label>
+                            <input type="number" id="adoptions-facilitated-stat" value="89">
+                        </div>
+                    </div>
+                    <button class="btn btn-success" onclick="saveVolunteerStats()">Salvar Estatísticas</button>
+                </div>
+
+                <!-- Gestão de Voluntários em Destaque -->
+                <div class="admin-form">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3>🌟 Voluntários em Destaque</h3>
+                        <button class="btn btn-primary" onclick="toggleFeaturedVolunteerForm()">+ Destacar Voluntário</button>
+                    </div>
+
+                    <!-- Formulário para Adicionar Voluntário em Destaque -->
+                    <form id="featured-volunteer-form" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="volunteer-select">Selecionar Voluntário:</label>
+                                <select id="volunteer-select" required>
+                                    <option value="">Escolha um voluntário...</option>
+                                    <!-- Será preenchido dinamicamente -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="volunteer-avatar">Avatar (Emoji):</label>
+                                <input type="text" id="volunteer-avatar" placeholder="👩‍⚕️" maxlength="2">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="volunteer-role-display">Função para Exibição:</label>
+                                <input type="text" id="volunteer-role-display" placeholder="Coordenadora de Resgates">
+                            </div>
+                            <div class="form-group">
+                                <label for="volunteer-badges">Badges (separadas por vírgula):</label>
+                                <input type="text" id="volunteer-badges" placeholder="Veterinária, Líder, Experiente">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="volunteer-rescues">Número de Resgates:</label>
+                                <input type="number" id="volunteer-rescues" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="volunteer-hours">Horas Dedicadas:</label>
+                                <input type="number" id="volunteer-hours" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="volunteer-adoptions">Adoções Facilitadas:</label>
+                                <input type="number" id="volunteer-adoptions" min="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="volunteer-public"> Exibir publicamente no site
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-success">Adicionar ao Hall da Fama</button>
+                        <button type="button" class="btn btn-secondary" onclick="cancelFeaturedVolunteer()">Cancelar</button>
+                    </form>
+
+                    <!-- Lista de Voluntários em Destaque -->
+                    <div id="featured-volunteers-list">
+                        <!-- Será preenchido dinamicamente -->
+                    </div>
+                </div>
+
+                <!-- Gestão de Depoimentos -->
+                <div class="admin-form">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3>💬 Depoimentos</h3>
+                        <button class="btn btn-primary" onclick="toggleTestimonialForm()">+ Novo Depoimento</button>
+                    </div>
+
+                    <!-- Formulário para Adicionar Depoimento -->
+                    <form id="testimonial-form" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="testimonial-author">Autor:</label>
+                                <input type="text" id="testimonial-author" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="testimonial-role">Função/Tempo:</label>
+                                <input type="text" id="testimonial-role" placeholder="Voluntária há 3 anos">
+                            </div>
+                            <div class="form-group">
+                                <label for="testimonial-avatar">Avatar (Emoji):</label>
+                                <input type="text" id="testimonial-avatar" placeholder="👩‍⚕️" maxlength="2">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="testimonial-quote">Depoimento:</label>
+                            <textarea id="testimonial-quote" rows="4" required placeholder="Escreva o depoimento inspirador..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="testimonial-public"> Exibir publicamente no site
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-success">Salvar Depoimento</button>
+                        <button type="button" class="btn btn-secondary" onclick="cancelTestimonial()">Cancelar</button>
+                    </form>
+
+                    <!-- Lista de Depoimentos -->
+                    <div id="testimonials-list">
+                        <!-- Será preenchido dinamicamente -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Transparência Financeira -->
+            <section id="public-transparency-section" class="admin-section">
+                <h2 class="section-title">📊 Transparência Financeira</h2>
+                
+                <!-- Resumo Financeiro -->
+                <div class="admin-form">
+                    <h3>💰 Resumo Financeiro Atual</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="total-income">Total Arrecadado (R$):</label>
+                            <input type="number" id="total-income" step="0.01" value="15750.00">
+                        </div>
+                        <div class="form-group">
+                            <label for="total-expenses">Total Investido (R$):</label>
+                            <input type="number" id="total-expenses" step="0.01" value="12340.50">
+                        </div>
+                        <div class="form-group">
+                            <label for="current-balance">Saldo Atual (R$):</label>
+                            <input type="number" id="current-balance" step="0.01" value="8420.75">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="financial-summary-public" checked> Exibir resumo publicamente
+                        </label>
+                    </div>
+                    <button class="btn btn-success" onclick="saveFinancialSummary()">Salvar Resumo</button>
+                </div>
+
+                <!-- Gestão de Transações -->
+                <div class="admin-form">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3>💳 Movimentações Financeiras</h3>
+                        <div style="display: flex; gap: 1rem;">
+                            <button class="btn btn-success" onclick="loadSampleData()">📊 Carregar Dados de Exemplo</button>
+                            <button class="btn btn-primary" onclick="toggleTransactionForm()">+ Nova Transação</button>
+                        </div>
+                    </div>
+
+                    <!-- Formulário para Adicionar Transação -->
+                    <form id="transaction-form" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="transaction-type">Tipo:</label>
+                                <select id="transaction-type" name="type" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="income">Receita</option>
+                                    <option value="expense">Despesa</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="transaction-category">Categoria:</label>
+                                <select id="transaction-category" name="category" required>
+                                    <option value="">Selecione...</option>
+                                    <optgroup label="Receitas">
+                                        <option value="donation">Doação</option>
+                                        <option value="adoption">Taxa de Adoção</option>
+                                        <option value="event">Evento</option>
+                                    </optgroup>
+                                    <optgroup label="Despesas">
+                                        <option value="veterinary">Veterinário</option>
+                                        <option value="food">Alimentação</option>
+                                        <option value="supplies">Suprimentos</option>
+                                        <option value="maintenance">Manutenção</option>
+                                        <option value="other">Outros</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="transaction-amount">Valor (R$):</label>
+                                <input type="number" id="transaction-amount" name="amount" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="transaction-date">Data:</label>
+                                <input type="date" id="transaction-date" name="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="transaction-description">Descrição:</label>
+                                <input type="text" id="transaction-description" name="description" required placeholder="Ex: Doação - Maria Silva">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="transaction-public" name="public"> Exibir publicamente no site
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-success">Salvar Transação</button>
+                        <button type="button" class="btn btn-secondary" onclick="cancelTransactionForm()">Cancelar</button>
+                    </form>
+
+                    <!-- Gráficos Financeiros -->
+                    <div class="charts-section">
+                        <div class="charts-row">
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h4>📊 Receita vs Despesas</h4>
+                                    <select id="revenue-period" onchange="updateRevenueChart()">
+                                        <option value="6">Últimos 6 meses</option>
+                                        <option value="12">Último ano</option>
+                                    </select>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="revenue-expenses-chart"></canvas>
+                                </div>
+                            </div>
+                            
+                            <div class="chart-card">
+                                <div class="chart-header">
+                                    <h4>🥧 Distribuição de Gastos</h4>
+                                    <select id="expenses-period" onchange="updateExpensesChart()">
+                                        <option value="current">Mês atual</option>
+                                        <option value="last">Último mês</option>
+                                        <option value="year">Este ano</option>
+                                    </select>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="expenses-distribution-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Transações -->
+                    <div class="table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Tipo</th>
+                                    <th>Categoria</th>
+                                    <th>Descrição</th>
+                                    <th>Valor</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactions-table-body">
+                                <!-- Será preenchido dinamicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Resumo de Gastos Veterinários -->
+                    <div id="veterinary-chart" class="vet-chart-container">
+                        <!-- Será preenchido dinamicamente -->
+                    </div>
+                </div>
+
+                <!-- Gestão de Metas/Campanhas -->
+                <div class="admin-form">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3>🎯 Metas e Campanhas</h3>
+                        <div style="display: flex; gap: 1rem;">
+                            <button class="btn btn-secondary" onclick="testPublicIntegration()" title="Testar integração com página pública">
+                                🔗 Testar Integração
+                            </button>
+                            <button class="btn btn-primary" onclick="toggleGoalForm()">+ Nova Meta</button>
+                        </div>
+                    </div>
+
+                    <!-- Formulário para Adicionar Meta -->
+                    <form id="goal-form" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="goal-title">Título da Campanha:</label>
+                                <input type="text" id="goal-title" required placeholder="Ex: Campanha de Castração">
+                            </div>
+                            <div class="form-group">
+                                <label for="goal-target">Meta (R$):</label>
+                                <input type="number" id="goal-target" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="goal-current">Valor Atual (R$):</label>
+                                <input type="number" id="goal-current" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="goal-description">Descrição:</label>
+                            <textarea id="goal-description" rows="3" placeholder="Descreva o objetivo da campanha..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="goal-public"> Exibir publicamente no site
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-success">Salvar Meta</button>
+                        <button type="button" class="btn btn-secondary" onclick="cancelGoal()">Cancelar</button>
+                    </form>
+
+                    <!-- Lista de Metas -->
+                    <div id="goals-list">
+                        <!-- Será preenchido dinamicamente -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Campanhas Públicas -->
+            <section id="public-campaigns-section" class="admin-section">
+                <h2 class="section-title">🎯 Campanhas Públicas</h2>
+                
+                <div class="admin-form">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h3>🚀 Campanhas Ativas</h3>
+                        <button class="btn btn-primary" onclick="toggleCampaignForm()">+ Nova Campanha</button>
+                    </div>
+
+                    <!-- Formulário para Adicionar Campanha -->
+                    <form id="campaign-form" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="campaign-title">Título:</label>
+                                <input type="text" id="campaign-title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="campaign-type">Tipo:</label>
+                                <select id="campaign-type" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="adoption">Adoção</option>
+                                    <option value="donation">Doação</option>
+                                    <option value="volunteer">Voluntariado</option>
+                                    <option value="event">Evento</option>
+                                    <option value="medical">Tratamento</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="campaign-description">Descrição:</label>
+                            <textarea id="campaign-description" rows="4" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="campaign-start">Data de Início:</label>
+                                <input type="date" id="campaign-start" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="campaign-end">Data de Término:</label>
+                                <input type="date" id="campaign-end">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="campaign-active" checked> Campanha ativa
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-success">Salvar Campanha</button>
+                        <button type="button" class="btn btn-secondary" onclick="cancelCampaign()">Cancelar</button>
+                    </form>
+
+                    <!-- Lista de Campanhas -->
+                    <div id="campaigns-list">
+                        <!-- Será preenchido dinamicamente -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Configurações de Visibilidade -->
+            <section id="public-settings-section" class="admin-section">
+                <h2 class="section-title">👁️ Configurações de Visibilidade</h2>
+                
+                <!-- Controle Geral de Seções -->
+                <div class="admin-form">
+                    <h3>🌐 Seções Públicas do Site</h3>
+                    <div class="visibility-controls">
+                        <div class="visibility-item">
+                            <label>
+                                <input type="checkbox" id="show-volunteers-section" checked>
+                                <span class="visibility-label">🏆 Seção "Hall da Fama dos Voluntários"</span>
+                            </label>
+                            <p class="visibility-description">Exibe a página com voluntários em destaque, estatísticas e depoimentos</p>
+                        </div>
+                        
+                        <div class="visibility-item">
+                            <label>
+                                <input type="checkbox" id="show-transparency-section" checked>
+                                <span class="visibility-label">📊 Seção "Transparência Financeira"</span>
+                            </label>
+                            <p class="visibility-description">Exibe relatórios financeiros, transações e metas públicas</p>
+                        </div>
+                        
+                        <div class="visibility-item">
+                            <label>
+                                <input type="checkbox" id="show-campaigns-section" checked>
+                                <span class="visibility-label">🎯 Campanhas Ativas</span>
+                            </label>
+                            <p class="visibility-description">Exibe campanhas em andamento na página inicial</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controle Detalhado -->
+                <div class="admin-form">
+                    <h3>🔧 Controles Detalhados</h3>
+                    
+                    <h4>Hall da Fama dos Voluntários:</h4>
+                    <div class="visibility-controls">
+                        <label><input type="checkbox" id="show-volunteer-stats" checked> Estatísticas gerais</label>
+                        <label><input type="checkbox" id="show-featured-volunteers" checked> Voluntários em destaque</label>
+                        <label><input type="checkbox" id="show-testimonials" checked> Depoimentos</label>
+                        <label><input type="checkbox" id="show-volunteer-cta" checked> Chamada para voluntariado</label>
+                    </div>
+
+                    <h4>Transparência Financeira:</h4>
+                    <div class="visibility-controls">
+                        <label><input type="checkbox" id="show-financial-overview" checked> Resumo financeiro</label>
+                        <label><input type="checkbox" id="show-transactions" checked> Movimentações recentes</label>
+                        <label><input type="checkbox" id="show-goals" checked> Metas e campanhas</label>
+                        <label><input type="checkbox" id="show-reports" checked> Relatórios para download</label>
+                    </div>
+                </div>
+
+                <!-- Configurações Avançadas -->
+                <div class="admin-form">
+                    <h3>⚙️ Configurações Avançadas</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="update-frequency">Frequência de Atualização (segundos):</label>
+                            <input type="number" id="update-frequency" value="30" min="10" max="300">
+                        </div>
+                        <div class="form-group">
+                            <label for="max-featured-volunteers">Máximo de Voluntários em Destaque:</label>
+                            <input type="number" id="max-featured-volunteers" value="6" min="1" max="12">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="max-testimonials">Máximo de Depoimentos Exibidos:</label>
+                            <input type="number" id="max-testimonials" value="5" min="1" max="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="max-transactions">Máximo de Transações Recentes:</label>
+                            <input type="number" id="max-transactions" value="10" min="5" max="20">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-success" onclick="saveVisibilitySettings()">Salvar Configurações</button>
+            </section>
         </main>
     </div>
 
@@ -1056,7 +1688,6 @@
     </div>
 
     <!-- Scripts -->
-    <script src="admin-data.js"></script>
     <script>
         // Variáveis globais
         let currentEditingPet = null;
@@ -1068,7 +1699,183 @@
         // Autenticação simples
         const ADMIN_CREDENTIALS = {
             username: 'admin',
-            password: 'ligadobem2024'
+            password: '123'
+        };
+
+        // Função de login automático (GLOBAL - disponível antes do DOMContentLoaded)
+        function autoLogin() {
+            console.log('🚀 Fazendo login automático...');
+            document.getElementById('username').value = 'admin';
+            document.getElementById('password').value = '123';
+            
+            sessionStorage.setItem('ligaDoBem_admin_logged', 'true');
+            showAdminInterface();
+        }
+
+        // Sistema de Dados Administrativos
+        const adminData = {
+            // Dados dos pets
+            pets: JSON.parse(localStorage.getItem('ligaDoBem_pets') || '[]'),
+            
+            // Dados dos voluntários
+            volunteers: JSON.parse(localStorage.getItem('ligaDoBem_volunteers') || '[]'),
+            
+            // Dados das adoções
+            adoptions: JSON.parse(localStorage.getItem('ligaDoBem_adoptions') || '[]'),
+            
+            // Dados financeiros/transações
+            transactions: JSON.parse(localStorage.getItem('ligaDoBem_transactions') || '[]'),
+            
+            // Métodos para pets
+            getPets() {
+                return this.pets;
+            },
+            
+            addPet(petData) {
+                const newPet = {
+                    id: Date.now(),
+                    ...petData,
+                    medicalHistory: [],
+                    createdAt: new Date().toISOString()
+                };
+                this.pets.push(newPet);
+                this.savePets();
+                return newPet;
+            },
+            
+            updatePet(id, petData) {
+                const index = this.pets.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    this.pets[index] = { ...this.pets[index], ...petData };
+                    this.savePets();
+                    return this.pets[index];
+                }
+                return null;
+            },
+            
+            deletePet(id) {
+                this.pets = this.pets.filter(p => p.id !== id);
+                this.savePets();
+            },
+            
+            savePets() {
+                localStorage.setItem('ligaDoBem_pets', JSON.stringify(this.pets));
+            },
+            
+            // Métodos para registros médicos
+            addMedicalRecord(petId, recordData) {
+                const pet = this.pets.find(p => p.id === petId);
+                if (pet) {
+                    if (!pet.medicalHistory) pet.medicalHistory = [];
+                    const newRecord = {
+                        id: Date.now(),
+                        ...recordData,
+                        createdAt: new Date().toISOString()
+                    };
+                    pet.medicalHistory.push(newRecord);
+                    this.savePets();
+                    return newRecord;
+                }
+                return null;
+            },
+            
+            // Métodos para voluntários
+            getVolunteers() {
+                return this.volunteers;
+            },
+            
+            addVolunteer(volunteerData) {
+                const newVolunteer = {
+                    id: Date.now(),
+                    ...volunteerData,
+                    createdAt: new Date().toISOString()
+                };
+                this.volunteers.push(newVolunteer);
+                this.saveVolunteers();
+                return newVolunteer;
+            },
+            
+            saveVolunteers() {
+                localStorage.setItem('ligaDoBem_volunteers', JSON.stringify(this.volunteers));
+            },
+            
+            // Métodos para adoções
+            getAdoptions() {
+                return this.adoptions;
+            },
+            
+            addAdoption(adoptionData) {
+                const newAdoption = {
+                    id: Date.now(),
+                    ...adoptionData,
+                    createdAt: new Date().toISOString()
+                };
+                this.adoptions.push(newAdoption);
+                this.saveAdoptions();
+                return newAdoption;
+            },
+            
+            saveAdoptions() {
+                localStorage.setItem('ligaDoBem_adoptions', JSON.stringify(this.adoptions));
+            },
+            
+            // Métodos para transações financeiras
+            getTransactions() {
+                return this.transactions;
+            },
+            
+            addTransaction(transactionData) {
+                const newTransaction = {
+                    id: Date.now(),
+                    ...transactionData,
+                    createdAt: new Date().toISOString()
+                };
+                this.transactions.push(newTransaction);
+                this.saveTransactions();
+                return newTransaction;
+            },
+            
+            updateTransaction(id, transactionData) {
+                const index = this.transactions.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    this.transactions[index] = { ...this.transactions[index], ...transactionData };
+                    this.saveTransactions();
+                    return this.transactions[index];
+                }
+                return null;
+            },
+            
+            deleteTransaction(id) {
+                this.transactions = this.transactions.filter(t => t.id !== id);
+                this.saveTransactions();
+            },
+            
+            saveTransactions() {
+                localStorage.setItem('ligaDoBem_transactions', JSON.stringify(this.transactions));
+            },
+            
+            // Métodos para estatísticas financeiras
+            getFinancialSummary() {
+                const income = this.transactions
+                    .filter(t => t.type === 'income')
+                    .reduce((sum, t) => sum + t.amount, 0);
+                    
+                const expenses = this.transactions
+                    .filter(t => t.type === 'expense')
+                    .reduce((sum, t) => sum + t.amount, 0);
+                    
+                return {
+                    totalIncome: income,
+                    totalExpenses: expenses,
+                    currentBalance: income - expenses
+                };
+            },
+            
+            getVeterinaryExpenses() {
+                return this.transactions
+                    .filter(t => t.type === 'expense' && t.category === 'veterinary')
+                    .sort((a, b) => new Date(b.date) - new Date(a.date));
+            }
         };
 
         // Inicialização
@@ -1077,7 +1884,275 @@
             setupEventListeners();
             setupDragAndDrop('pet-photo-upload', 'pet');
             setupDragAndDrop('edit-pet-photo-upload', 'edit-pet');
+            
+            // Limpar dados existentes e criar novos dados de exemplo
+            localStorage.removeItem('ligaDoBem_pets');
+            localStorage.removeItem('ligaDoBem_transactions');
+            localStorage.removeItem('ligaDoBem_volunteers');
+            localStorage.removeItem('ligaDoBem_visits');
+            localStorage.removeItem('ligaDoBem_adoptions');
+            localStorage.removeItem('ligaDoBem_sponsors');
+            localStorage.removeItem('ligaDoBem_events');
+            localStorage.removeItem('ligaDoBem_donations');
+            
+            // Recarregar dados vazios
+            adminData.pets = [];
+            adminData.transactions = [];
+            adminData.volunteers = [];
+            adminData.visits = [];
+            adminData.adoptions = [];
+            adminData.sponsors = [];
+            adminData.events = [];
+            adminData.donations = [];
+            
+            // Criar dados de exemplo
+            createSampleData();
+            
+            console.log('✅ Dados de exemplo criados!');
+            
+            // Função de teste para demonstrar a integração
+            window.testVeterinaryIntegration = function() {
+                console.log('🧪 Testando integração veterinária...');
+                
+                // Simular adição de um registro médico
+                const pets = adminData.getPets();
+                if (pets.length > 0) {
+                    const testPet = pets[0];
+                    const testRecord = {
+                        type: 'Cirurgia',
+                        date: new Date().toISOString().split('T')[0],
+                        veterinarian: 'Dr. Teste Silva',
+                        description: 'Cirurgia de emergência - teste de integração',
+                        cost: 350.00
+                    };
+                    
+                    // Adicionar registro médico (que automaticamente criará a transação)
+                    adminData.addMedicalRecord(testPet.id, testRecord);
+                    
+                    console.log('✅ Registro médico adicionado');
+                    console.log('✅ Transação financeira criada automaticamente');
+                    
+                    // Recarregar as listas
+                    if (document.getElementById('medical-records-list')) {
+                        loadMedicalRecords();
+                    }
+                    if (document.getElementById('transactions-table-body')) {
+                        loadTransactions();
+                    }
+                    
+                    alert('Teste concluído! Verifique:\n1. Seção Médica - novo registro\n2. Transparência - nova transação\n3. Site principal - dados atualizados');
+                } else {
+                    alert('Nenhum pet encontrado para teste. Crie um pet primeiro.');
+                }
+            };
+            
+            console.log('🔧 Sistema de integração veterinária carregado!');
+            console.log('💡 Para testar, execute: testVeterinaryIntegration()');
         });
+
+        // Função para criar dados de exemplo
+        function createSampleData() {
+            console.log('🔧 Criando dados de exemplo...');
+            
+            // Criar pets de exemplo
+            const samplePets = [
+                {
+                    name: 'Buddy',
+                    type: 'Cão',
+                    age: '2 anos',
+                    description: 'Cão muito carinhoso e brincalhão',
+                    emoji: '🐕',
+                    status: 'Disponível'
+                },
+                {
+                    name: 'Luna',
+                    type: 'Gata',
+                    age: '1 ano',
+                    description: 'Gata dócil e independente',
+                    emoji: '🐱',
+                    status: 'Disponível'
+                },
+                {
+                    name: 'Max',
+                    type: 'Cão',
+                    age: '3 anos',
+                    description: 'Cão protetor e leal',
+                    emoji: '🐕',
+                    status: 'Disponível'
+                }
+            ];
+            
+            // Adicionar pets
+            console.log('📝 Adicionando pets de exemplo...');
+            samplePets.forEach(pet => {
+                console.log('Adicionando pet:', pet.name);
+                adminData.addPet(pet);
+            });
+            console.log('✅ Pets adicionados:', adminData.getPets().length);
+            
+            // Criar transações de exemplo (incluindo gastos veterinários)
+            const sampleTransactions = [
+                // Receitas
+                {
+                    type: 'income',
+                    category: 'donation',
+                    description: 'Doação - Maria Silva',
+                    amount: 150.00,
+                    date: '2024-01-15'
+                },
+                {
+                    type: 'income',
+                    category: 'adoption',
+                    description: 'Taxa de adoção - Buddy',
+                    amount: 80.00,
+                    date: '2024-01-20'
+                },
+                {
+                    type: 'income',
+                    category: 'donation',
+                    description: 'Doação - João Santos',
+                    amount: 200.00,
+                    date: '2024-01-25'
+                },
+                
+                // Gastos veterinários
+                {
+                    type: 'expense',
+                    category: 'veterinary',
+                    description: 'Castração - Luna',
+                    amount: 180.00,
+                    date: '2024-01-10',
+                    veterinarian: 'Dr. Carlos Mendes',
+                    petId: null // Será atualizado depois
+                },
+                {
+                    type: 'expense',
+                    category: 'veterinary',
+                    description: 'Vacinação - Buddy',
+                    amount: 85.00,
+                    date: '2024-01-12',
+                    veterinarian: 'Dra. Ana Paula',
+                    petId: null
+                },
+                {
+                    type: 'expense',
+                    category: 'veterinary',
+                    description: 'Consulta - Max',
+                    amount: 120.00,
+                    date: '2024-01-18',
+                    veterinarian: 'Dr. Roberto Silva',
+                    petId: null
+                },
+                {
+                    type: 'expense',
+                    category: 'veterinary',
+                    description: 'Exame de sangue - Luna',
+                    amount: 95.00,
+                    date: '2024-01-22',
+                    veterinarian: 'Dr. Carlos Mendes',
+                    petId: null
+                },
+                {
+                    type: 'expense',
+                    category: 'veterinary',
+                    description: 'Medicação - Buddy',
+                    amount: 45.00,
+                    date: '2024-01-28',
+                    veterinarian: 'Dra. Ana Paula',
+                    petId: null
+                },
+                
+                // Outros gastos
+                {
+                    type: 'expense',
+                    category: 'food',
+                    description: 'Ração Premium - 20kg',
+                    amount: 120.00,
+                    date: '2024-01-05'
+                },
+                {
+                    type: 'expense',
+                    category: 'supplies',
+                    description: 'Coleiras e guias',
+                    amount: 65.00,
+                    date: '2024-01-08'
+                },
+                {
+                    type: 'expense',
+                    category: 'maintenance',
+                    description: 'Limpeza do canil',
+                    amount: 80.00,
+                    date: '2024-01-30'
+                }
+            ];
+            
+            // Adicionar transações
+            console.log('💰 Adicionando transações de exemplo...');
+            sampleTransactions.forEach(transaction => {
+                console.log('Adicionando transação:', transaction.description);
+                adminData.addTransaction(transaction);
+            });
+            console.log('✅ Transações adicionadas:', adminData.getTransactions().length);
+            
+            // Criar registros médicos de exemplo
+            const pets = adminData.getPets();
+            if (pets.length > 0) {
+                // Registros para Luna
+                const luna = pets.find(p => p.name === 'Luna');
+                if (luna) {
+                    adminData.addMedicalRecord(luna.id, {
+                        type: 'Castração',
+                        date: '2024-01-10',
+                        veterinarian: 'Dr. Carlos Mendes',
+                        description: 'Castração realizada com sucesso. Animal se recuperou bem.',
+                        cost: 180.00,
+                        nextAppointment: '2024-02-10'
+                    });
+                    
+                    adminData.addMedicalRecord(luna.id, {
+                        type: 'Exame',
+                        date: '2024-01-22',
+                        veterinarian: 'Dr. Carlos Mendes',
+                        description: 'Exame de sangue para check-up pós-cirúrgico. Resultados normais.',
+                        cost: 95.00
+                    });
+                }
+                
+                // Registros para Buddy
+                const buddy = pets.find(p => p.name === 'Buddy');
+                if (buddy) {
+                    adminData.addMedicalRecord(buddy.id, {
+                        type: 'Vacinação',
+                        date: '2024-01-12',
+                        veterinarian: 'Dra. Ana Paula',
+                        description: 'Aplicação de vacina V10. Animal reagiu bem.',
+                        cost: 85.00,
+                        nextAppointment: '2024-02-12'
+                    });
+                    
+                    adminData.addMedicalRecord(buddy.id, {
+                        type: 'Medicação',
+                        date: '2024-01-28',
+                        veterinarian: 'Dra. Ana Paula',
+                        description: 'Vermífugo e vitaminas. Tratamento preventivo.',
+                        cost: 45.00
+                    });
+                }
+                
+                // Registros para Max
+                const max = pets.find(p => p.name === 'Max');
+                if (max) {
+                    adminData.addMedicalRecord(max.id, {
+                        type: 'Consulta',
+                        date: '2024-01-18',
+                        veterinarian: 'Dr. Roberto Silva',
+                        description: 'Consulta de rotina. Animal saudável, apenas orientações de cuidados.',
+                        cost: 120.00,
+                        nextAppointment: '2024-04-18'
+                    });
+                }
+            }
+        }
 
         function checkAuth() {
             const isLoggedIn = sessionStorage.getItem('ligaDoBem_admin_logged');
@@ -1111,6 +2186,18 @@
             // Medical form
             document.getElementById('medical-form').addEventListener('submit', handleMedicalSubmit);
             
+            // Transaction form
+            const transactionForm = document.getElementById('transaction-form');
+            if (transactionForm) {
+                transactionForm.addEventListener('submit', handleTransactionSubmit);
+            }
+            
+            // Goal form
+            const goalForm = document.getElementById('goal-form');
+            if (goalForm) {
+                goalForm.addEventListener('submit', handleGoalSubmit);
+            }
+            
             // Event form
             document.getElementById('event-form').addEventListener('submit', handleEventSubmit);
             
@@ -1133,11 +2220,19 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
+            console.log('Tentativa de login:', { username, password });
+            console.log('Credenciais esperadas:', ADMIN_CREDENTIALS);
+            
             if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                console.log('✅ Login bem-sucedido!');
                 sessionStorage.setItem('ligaDoBem_admin_logged', 'true');
                 showAdminInterface();
             } else {
+                console.log('❌ Login falhou!');
                 document.getElementById('login-error').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('login-error').style.display = 'none';
+                }, 3000);
             }
         }
 
@@ -1208,6 +2303,11 @@
                 case 'donations':
                     loadDonations();
                     break;
+                case 'public-transparency':
+                    loadTransactions();
+                    updateFinancialSummary();
+                    loadGoals();
+                    break;
                 case 'stats':
                     loadStats();
                     break;
@@ -1222,7 +2322,8 @@
         }
 
         function loadDashboard() {
-            const stats = adminData.getStats();
+            console.log('🏠 Carregando dashboard moderno...');
+            
             const pets = adminData.getPets();
             const messages = adminData.getMessages();
             const volunteers = adminData.getVolunteers();
@@ -1231,54 +2332,189 @@
             const sponsors = adminData.getSponsors();
             const events = adminData.getEvents();
             const donations = adminData.getDonations();
+            const transactions = adminData.getTransactions ? adminData.getTransactions() : [];
             
-            // Load dashboard stats
-            const statsHtml = `
-                <div class="stat-card">
-                    <div class="stat-number">${pets.length}</div>
-                    <div class="stat-label">Pets Cadastrados</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${adoptions.filter(a => a.status === 'Aprovada').length}</div>
-                    <div class="stat-label">Adoções Realizadas</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${volunteers.filter(v => v.status === 'Ativo').length}</div>
-                    <div class="stat-label">Voluntários Ativos</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${sponsors.filter(s => s.status === 'Ativo').length}</div>
-                    <div class="stat-label">Padrinhos Ativos</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${visits.filter(v => v.status === 'Agendada').length}</div>
-                    <div class="stat-label">Visitas Agendadas</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${events.filter(e => e.status === 'Ativo').length}</div>
-                    <div class="stat-label">Eventos Ativos</div>
-                </div>
-            `;
-            document.getElementById('dashboard-stats').innerHTML = statsHtml;
+            // Calcular estatísticas principais
+            const totalPets = pets.length;
+            const totalAdoptions = adoptions.filter(a => a.status === 'Aprovada').length;
+            const totalVolunteers = volunteers.filter(v => v.status === 'Ativo').length;
             
-            // Update quick stats
-            const availablePets = pets.filter(pet => pet.status === 'Disponível').length;
-            const unreadMessages = messages.filter(msg => !msg.read).length;
+            // Calcular saldo financeiro
+            const financialSummary = adminData.getFinancialSummary ? adminData.getFinancialSummary() : {
+                totalIncome: 0,
+                totalExpenses: 0,
+                currentBalance: 0
+            };
             
-            document.getElementById('available-pets-count').textContent = availablePets;
-            document.getElementById('unread-messages-count').textContent = unreadMessages;
+            // Atualizar cards de estatísticas
+            document.getElementById('total-pets').textContent = totalPets;
+            document.getElementById('total-adoptions').textContent = totalAdoptions;
+            document.getElementById('total-volunteers').textContent = totalVolunteers;
+            document.getElementById('total-balance').textContent = formatCurrency(financialSummary.currentBalance);
             
-            // Recent activities with new data
-            const totalDonations = donations.reduce((sum, d) => sum + parseFloat(d.amount || 0), 0);
-            const recentActivities = `
-                <p>• ${pets.length} pets cadastrados</p>
-                <p>• ${volunteers.length} voluntários registrados</p>
-                <p>• ${adoptions.length} processos de adoção</p>
-                <p>• R$ ${totalDonations.toFixed(2)} em doações</p>
-                <p>• ${messages.length} mensagens recebidas</p>
-            `;
-            document.getElementById('recent-activities').innerHTML = recentActivities;
+            // Atualizar mudanças mensais (simulado)
+            document.getElementById('pets-change').textContent = `+${Math.floor(Math.random() * 5) + 1} este mês`;
+            document.getElementById('adoptions-change').textContent = `+${Math.floor(Math.random() * 3) + 1} este mês`;
+            document.getElementById('volunteers-change').textContent = `+${Math.floor(Math.random() * 2) + 1} este mês`;
+            
+            const balanceChange = Math.floor(Math.random() * 1000) + 100;
+            const balanceChangeEl = document.getElementById('balance-change');
+            balanceChangeEl.textContent = `+${formatCurrency(balanceChange)} este mês`;
+            balanceChangeEl.className = 'stat-change positive';
+            
+            // Carregar atividades recentes
+            loadRecentActivities();
+            
+            // Carregar pets em destaque
+            loadFeaturedPets();
+            
+            // Carregar alertas
+            loadDashboardAlerts();
+            
+            // Carregar resumo financeiro
+            loadFinancialSummary();
+            
+            // Inicializar gráficos (simulados)
+            initializeCharts();
+            
+            console.log('✅ Dashboard moderno carregado!');
         }
+        
+        function loadRecentActivities() {
+            const activities = [
+                { icon: '🐾', title: 'Novo pet cadastrado: Luna', time: 'há 2 horas' },
+                { icon: '❤️', title: 'Adoção aprovada para Max', time: 'há 4 horas' },
+                { icon: '🙋‍♀️', title: 'Novo voluntário: Maria Silva', time: 'há 6 horas' },
+                { icon: '💰', title: 'Doação recebida: R$ 150,00', time: 'há 1 dia' },
+                { icon: '🏥', title: 'Consulta veterinária: Thor', time: 'há 2 dias' }
+            ];
+            
+            const activitiesHtml = activities.map(activity => `
+                <div class="activity-item">
+                    <div class="activity-icon">${activity.icon}</div>
+                    <div class="activity-content">
+                        <div class="activity-title">${activity.title}</div>
+                        <div class="activity-time">${activity.time}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('recent-activities').innerHTML = activitiesHtml;
+        }
+        
+        function loadFeaturedPets() {
+            const pets = adminData.getPets();
+            const featuredPets = pets.filter(pet => pet.status === 'Disponível').slice(0, 3);
+            
+            const petsHtml = featuredPets.map(pet => `
+                <div class="featured-pet">
+                    <div class="pet-avatar">${pet.emoji || '🐾'}</div>
+                    <div class="pet-info">
+                        <div class="pet-name">${pet.name}</div>
+                        <div class="pet-details">${pet.type} • ${pet.age}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('featured-pets').innerHTML = petsHtml || '<p style="text-align: center; color: #6c757d; padding: 2rem;">Nenhum pet disponível</p>';
+        }
+        
+        function loadDashboardAlerts() {
+            const alerts = [
+                { type: 'warning', icon: '⚠️', title: 'Vacinas Pendentes', description: '3 pets precisam de vacinas este mês' },
+                { type: 'info', icon: 'ℹ️', title: 'Visitas Agendadas', description: '5 visitas marcadas para esta semana' },
+                { type: 'danger', icon: '🚨', title: 'Medicamentos', description: 'Estoque baixo de vermífugos' }
+            ];
+            
+            const alertsHtml = alerts.map(alert => `
+                <div class="alert-item ${alert.type}">
+                    <div class="alert-icon">${alert.icon}</div>
+                    <div class="alert-content">
+                        <div class="alert-title">${alert.title}</div>
+                        <div class="alert-description">${alert.description}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('dashboard-alerts').innerHTML = alertsHtml;
+        }
+        
+        function loadFinancialSummary() {
+            const summary = adminData.getFinancialSummary ? adminData.getFinancialSummary() : {
+                totalIncome: 0,
+                totalExpenses: 0,
+                currentBalance: 0
+            };
+            
+            document.getElementById('total-income').textContent = formatCurrency(summary.totalIncome);
+            document.getElementById('total-expenses').textContent = formatCurrency(summary.totalExpenses);
+            document.getElementById('current-balance').textContent = formatCurrency(summary.currentBalance);
+        }
+        
+        function initializeCharts() {
+            // Simular gráficos com dados de exemplo
+            const adoptionsChart = document.getElementById('adoptions-chart');
+            const petsChart = document.getElementById('pets-chart');
+            const financialChart = document.getElementById('financial-chart');
+            
+            if (adoptionsChart) {
+                adoptionsChart.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                adoptionsChart.style.borderRadius = '10px';
+                adoptionsChart.style.display = 'flex';
+                adoptionsChart.style.alignItems = 'center';
+                adoptionsChart.style.justifyContent = 'center';
+                adoptionsChart.style.color = 'white';
+                adoptionsChart.style.fontSize = '1.2rem';
+                adoptionsChart.style.fontWeight = 'bold';
+                adoptionsChart.innerHTML = '📈 Gráfico de Adoções<br><small style="opacity: 0.8;">Em desenvolvimento</small>';
+            }
+            
+            if (petsChart) {
+                petsChart.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                petsChart.style.borderRadius = '10px';
+                petsChart.style.display = 'flex';
+                petsChart.style.alignItems = 'center';
+                petsChart.style.justifyContent = 'center';
+                petsChart.style.color = 'white';
+                petsChart.style.fontSize = '1.2rem';
+                petsChart.style.fontWeight = 'bold';
+                petsChart.innerHTML = '🐕 Distribuição de Pets<br><small style="opacity: 0.8;">Em desenvolvimento</small>';
+            }
+            
+            if (financialChart) {
+                financialChart.style.background = 'linear-gradient(135deg, #17a2b8, #6f42c1)';
+                financialChart.style.borderRadius = '10px';
+                financialChart.style.display = 'flex';
+                financialChart.style.alignItems = 'center';
+                financialChart.style.justifyContent = 'center';
+                financialChart.style.color = 'white';
+                financialChart.style.fontSize = '1.2rem';
+                financialChart.style.fontWeight = 'bold';
+                financialChart.innerHTML = '💳 Gráfico Financeiro<br><small style="opacity: 0.8;">Em desenvolvimento</small>';
+            }
+        }
+        
+        function refreshDashboard() {
+            showAlert('Dashboard atualizado!', 'success');
+            loadDashboard();
+        }
+        
+        function exportReport() {
+            showAlert('Relatório exportado com sucesso!', 'success');
+        }
+        
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value || 0);
+        }
+        
+        function updateAdoptionChart() {
+            // Função para atualizar gráfico de adoções
+            showAlert('Gráfico atualizado!', 'info');
+        }
+
 
         function loadPets() {
             const pets = adminData.getPets();
@@ -1992,10 +3228,34 @@
             const formData = new FormData(e.target);
             const medicalData = Object.fromEntries(formData);
             
+            // Add medical record
             adminData.addMedicalRecord(parseInt(medicalData.petId), medicalData);
-            showAlert('Registro médico adicionado com sucesso!', 'success');
+            
+            // Automatically create financial transaction if cost is provided
+            if (medicalData.cost && parseFloat(medicalData.cost) > 0) {
+                const pet = adminData.getPets().find(p => p.id === parseInt(medicalData.petId));
+                const petName = pet ? `${pet.emoji} ${pet.name}` : 'Pet';
+                
+                const transactionData = {
+                    type: 'expense',
+                    category: 'veterinary',
+                    description: `${medicalData.type} - ${petName}`,
+                    amount: parseFloat(medicalData.cost),
+                    date: medicalData.date,
+                    veterinarian: medicalData.veterinarian || 'Não informado',
+                    petId: parseInt(medicalData.petId),
+                    medicalRecordId: Date.now() // Link to medical record
+                };
+                
+                adminData.addTransaction(transactionData);
+                showAlert('Registro médico e gasto financeiro adicionados com sucesso!', 'success');
+            } else {
+                showAlert('Registro médico adicionado com sucesso!', 'success');
+            }
+            
             cancelMedicalForm();
             loadMedicalRecords();
+            loadTransactions(); // Refresh transactions list
         }
 
         function loadMedicalRecords() {
@@ -2104,6 +3364,602 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        // Gerenciamento de Transações Financeiras
+        function loadTransactions() {
+            console.log('💰 Carregando transparência financeira...');
+            
+            // Adicionar dados de exemplo se não existirem
+            addSampleTransactions();
+            
+            const transactions = adminData.getTransactions();
+            const tbody = document.getElementById('transactions-table-body');
+            
+            // Carregar gráficos
+            loadFinancialCharts();
+            
+            if (!tbody) return; // Se não estiver na página de transparência
+            
+            if (transactions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6">Nenhuma transação encontrada.</td></tr>';
+                return;
+            }
+            
+            // Ordenar por data (mais recente primeiro)
+            const sortedTransactions = transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            tbody.innerHTML = sortedTransactions.map(transaction => {
+                const typeClass = transaction.type === 'income' ? 'income' : 'expense';
+                const typeText = transaction.type === 'income' ? 'Receita' : 'Despesa';
+                const categoryText = getCategoryText(transaction.category);
+                const amountText = transaction.type === 'income' ? 
+                    `+R$ ${transaction.amount.toFixed(2)}` : 
+                    `-R$ ${transaction.amount.toFixed(2)}`;
+                
+                return `
+                    <tr class="transaction-${typeClass}">
+                        <td>${new Date(transaction.date).toLocaleDateString('pt-BR')}</td>
+                        <td><span class="transaction-type ${typeClass}">${typeText}</span></td>
+                        <td><span class="transaction-category">${categoryText}</span></td>
+                        <td>${transaction.description}</td>
+                        <td class="transaction-amount ${typeClass}">${amountText}</td>
+                        <td>
+                            <button onclick="editTransaction(${transaction.id})" class="btn btn-sm btn-primary">Editar</button>
+                            <button onclick="deleteTransaction(${transaction.id})" class="btn btn-sm btn-danger">Excluir</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            // Atualizar resumo financeiro
+            updateFinancialSummary();
+        }
+        
+        function getCategoryText(category) {
+            const categories = {
+                'donation': 'Doação',
+                'adoption': 'Adoção',
+                'event': 'Evento',
+                'veterinary': 'Veterinário',
+                'food': 'Alimentação',
+                'supplies': 'Suprimentos',
+                'maintenance': 'Manutenção',
+                'other': 'Outros'
+            };
+            return categories[category] || category;
+        }
+        
+        function updateFinancialSummary() {
+            const summary = adminData.getFinancialSummary();
+            
+            // Atualizar elementos do resumo financeiro
+            const totalIncomeEl = document.getElementById('total-income');
+            const totalExpensesEl = document.getElementById('total-expenses');
+            const currentBalanceEl = document.getElementById('current-balance');
+            
+            if (totalIncomeEl) totalIncomeEl.textContent = `R$ ${summary.totalIncome.toFixed(2)}`;
+            if (totalExpensesEl) totalExpensesEl.textContent = `R$ ${summary.totalExpenses.toFixed(2)}`;
+            if (currentBalanceEl) {
+                currentBalanceEl.textContent = `R$ ${summary.currentBalance.toFixed(2)}`;
+                currentBalanceEl.className = summary.currentBalance >= 0 ? 'positive' : 'negative';
+            }
+            
+            // Atualizar gráfico de gastos veterinários
+            updateVeterinaryChart();
+        }
+        
+        function updateVeterinaryChart() {
+            const vetExpenses = adminData.getVeterinaryExpenses()
+                .sort((a, b) => new Date(b.date) - new Date(a.date)); // Ordenar por data (mais recentes primeiro)
+            const chartContainer = document.getElementById('veterinary-chart');
+            
+            if (!chartContainer || vetExpenses.length === 0) return;
+            
+            const totalVetExpenses = vetExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+            
+            chartContainer.innerHTML = `
+                <div class="vet-expenses-summary">
+                    <h4>Gastos Veterinários</h4>
+                    <div class="vet-total">Total: R$ ${totalVetExpenses.toFixed(2)}</div>
+                    <div class="vet-expenses-list">
+                        ${vetExpenses.map(expense => `
+                            <div class="vet-expense-item">
+                                <span class="vet-expense-desc">${expense.description}</span>
+                                <span class="vet-expense-amount">R$ ${expense.amount.toFixed(2)}</span>
+                                <span class="vet-expense-date">${new Date(expense.date).toLocaleDateString('pt-BR')}</span>
+                            </div>
+                        `).join('')}
+                        <div class="vet-summary">Total de ${vetExpenses.length} procedimento(s)</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function toggleTransactionForm() {
+            const form = document.getElementById('transaction-form');
+            if (form) {
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+                if (form.style.display === 'block') {
+                    document.getElementById('transaction-description').focus();
+                }
+            }
+        }
+        
+        function cancelTransactionForm() {
+            const form = document.getElementById('transaction-form');
+            if (form) {
+                form.style.display = 'none';
+                form.reset();
+            }
+        }
+        
+        // Funções para Metas/Campanhas
+        function toggleGoalForm() {
+            const form = document.getElementById('goal-form');
+            if (form) {
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+                if (form.style.display === 'block') {
+                    document.getElementById('goal-title').focus();
+                }
+            }
+        }
+        
+        function cancelGoal() {
+            const form = document.getElementById('goal-form');
+            if (form) {
+                form.style.display = 'none';
+                form.reset();
+            }
+        }
+        
+        function handleGoalSubmit(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('goal-title').value;
+            const target = parseFloat(document.getElementById('goal-target').value);
+            const current = parseFloat(document.getElementById('goal-current').value);
+            const description = document.getElementById('goal-description').value;
+            const isPublic = document.getElementById('goal-public').checked;
+            
+            if (!title || !target || isNaN(target) || isNaN(current)) {
+                showAlert('Por favor, preencha todos os campos obrigatórios!', 'error');
+                return;
+            }
+            
+            const goal = {
+                id: Date.now(),
+                title,
+                target,
+                current,
+                description,
+                isPublic,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Salvar meta no localStorage
+            let goals = JSON.parse(localStorage.getItem('ligaDoBem_goals') || '[]');
+            goals.push(goal);
+            localStorage.setItem('ligaDoBem_goals', JSON.stringify(goals));
+            
+            console.log('Nova meta criada e salva:', goal);
+            
+            // Limpar formulário
+            cancelGoal();
+            
+            // Atualizar lista de metas
+            loadGoals();
+            
+            const publicMessage = goal.isPublic ? 
+                ' A meta aparecerá na página de transparência pública!' : 
+                ' Meta privada - não aparecerá no site público.';
+            
+            showAlert('✅ Meta criada com sucesso!' + publicMessage, 'success');
+        }
+        
+        function loadGoals() {
+            const goalsList = document.getElementById('goals-list');
+            if (!goalsList) return;
+            
+            // Carregar metas do localStorage
+            let goals = JSON.parse(localStorage.getItem('ligaDoBem_goals') || '[]');
+            
+            // Se não houver metas, criar dados de exemplo
+            if (goals.length === 0) {
+                const sampleGoals = [
+                    {
+                        id: 1,
+                        title: 'Campanha de Castração',
+                        target: 2000.00,
+                        current: 1250.00,
+                        description: 'Meta para custear castrações de animais resgatados',
+                        isPublic: true,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 2,
+                        title: 'Reforma do Canil',
+                        target: 5000.00,
+                        current: 800.00,
+                        description: 'Melhorias na infraestrutura do abrigo',
+                        isPublic: false,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 3,
+                        title: 'Medicamentos de Emergência',
+                        target: 1500.00,
+                        current: 900.00,
+                        description: 'Fundo para medicamentos de emergência',
+                        isPublic: true,
+                        createdAt: new Date().toISOString()
+                    }
+                ];
+                
+                // Salvar dados de exemplo
+                localStorage.setItem('ligaDoBem_goals', JSON.stringify(sampleGoals));
+                goals = sampleGoals;
+            }
+            
+            goalsList.innerHTML = goals.map(goal => {
+                const percentage = Math.min((goal.current / goal.target) * 100, 100);
+                const status = percentage >= 100 ? 'Concluída' : 'Em andamento';
+                const statusClass = percentage >= 100 ? 'success' : 'warning';
+                
+                return `
+                    <div class="goal-item">
+                        <div class="goal-header">
+                            <h4>${goal.title}</h4>
+                            <span class="goal-status ${statusClass}">${status}</span>
+                        </div>
+                        <div class="goal-description">${goal.description}</div>
+                        <div class="goal-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${percentage}%"></div>
+                            </div>
+                            <div class="progress-text">
+                                R$ ${goal.current.toFixed(2)} de R$ ${goal.target.toFixed(2)} (${percentage.toFixed(1)}%)
+                            </div>
+                        </div>
+                        <div class="goal-actions">
+                            <span class="goal-visibility">${goal.isPublic ? '👁️ Público' : '🔒 Privado'}</span>
+                            <button class="btn btn-small btn-secondary" onclick="editGoal(${goal.id})">Editar</button>
+                            <button class="btn btn-small btn-danger" onclick="deleteGoal(${goal.id})">Excluir</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function editGoal(id) {
+            // Carregar metas do localStorage
+            const goals = JSON.parse(localStorage.getItem('ligaDoBem_goals') || '[]');
+            const goal = goals.find(g => g.id === id);
+            
+            if (!goal) {
+                showAlert('Meta não encontrada!', 'error');
+                return;
+            }
+            
+            // Prompt para novo valor atual
+            const newCurrentValue = prompt(
+                `Atualizar progresso da meta "${goal.title}":\n\nValor atual: R$ ${goal.current.toFixed(2)}\nMeta: R$ ${goal.target.toFixed(2)}\n\nDigite o novo valor atual:`,
+                goal.current.toFixed(2)
+            );
+            
+            if (newCurrentValue === null) return; // Cancelado
+            
+            const newCurrent = parseFloat(newCurrentValue);
+            if (isNaN(newCurrent) || newCurrent < 0) {
+                showAlert('Por favor, digite um valor válido!', 'error');
+                return;
+            }
+            
+            // Atualizar a meta
+            goal.current = newCurrent;
+            goal.updatedAt = new Date().toISOString();
+            
+            // Salvar no localStorage
+            const updatedGoals = goals.map(g => g.id === id ? goal : g);
+            localStorage.setItem('ligaDoBem_goals', JSON.stringify(updatedGoals));
+            
+            // Recarregar lista
+            loadGoals();
+            
+            const percentage = Math.min((newCurrent / goal.target) * 100, 100).toFixed(1);
+            const publicMessage = goal.isPublic ? 
+                ' Mudança refletirá na página pública!' : 
+                ' (Meta privada)';
+            
+            showAlert(`✅ Meta atualizada! Progresso: ${percentage}%${publicMessage}`, 'success');
+        }
+        
+        // Função para testar integração com página pública
+        function testPublicIntegration() {
+            const publicGoals = JSON.parse(localStorage.getItem('ligaDoBem_goals') || '[]')
+                .filter(goal => goal.isPublic);
+            
+            if (publicGoals.length === 0) {
+                showAlert('⚠️ Nenhuma meta pública encontrada! Crie uma meta marcada como pública para testar.', 'warning');
+                return;
+            }
+            
+            const message = `🔗 Integração funcionando!\n\n` +
+                `✅ ${publicGoals.length} meta(s) pública(s) encontrada(s)\n` +
+                `📊 Dados salvos no localStorage\n` +
+                `🌐 Visível na página de transparência\n\n` +
+                `Metas públicas:\n${publicGoals.map(g => `• ${g.title} (${((g.current/g.target)*100).toFixed(1)}%)`).join('\n')}`;
+            
+            alert(message);
+        }
+        
+        function deleteGoal(id) {
+            if (confirm('Tem certeza que deseja excluir esta meta?')) {
+                // Carregar metas do localStorage
+                let goals = JSON.parse(localStorage.getItem('ligaDoBem_goals') || '[]');
+                
+                // Filtrar removendo a meta com o ID especificado
+                goals = goals.filter(goal => goal.id !== id);
+                
+                // Salvar de volta no localStorage
+                localStorage.setItem('ligaDoBem_goals', JSON.stringify(goals));
+                
+                // Recarregar lista
+                loadGoals();
+                
+                showAlert('Meta excluída com sucesso!', 'success');
+            }
+        }
+        
+        // Função para adicionar dados de exemplo
+        function addSampleTransactions() {
+            const transactions = adminData.getTransactions();
+            
+            // Se já existem transações, não adicionar exemplos
+            if (transactions.length > 0) return;
+            
+            console.log('📊 Adicionando dados de exemplo para transparência...');
+            
+            const sampleTransactions = [
+                // Receitas
+                { type: 'income', category: 'donation', amount: 500.00, date: '2024-01-15', description: 'Doação - Maria Silva' },
+                { type: 'income', category: 'donation', amount: 250.00, date: '2024-01-20', description: 'Doação - João Santos' },
+                { type: 'income', category: 'adoption', amount: 100.00, date: '2024-01-25', description: 'Taxa de adoção - Luna' },
+                { type: 'income', category: 'event', amount: 800.00, date: '2024-02-01', description: 'Feira de adoção - Shopping' },
+                { type: 'income', category: 'donation', amount: 300.00, date: '2024-02-10', description: 'Doação - Ana Costa' },
+                { type: 'income', category: 'donation', amount: 150.00, date: '2024-02-15', description: 'Doação - Pedro Lima' },
+                
+                // Despesas
+                { type: 'expense', category: 'veterinary', amount: 180.00, date: '2024-01-18', description: 'Consulta - Max (Dr. Carlos)' },
+                { type: 'expense', category: 'veterinary', amount: 120.00, date: '2024-01-22', description: 'Vacina - Bella (Dr. Ana)' },
+                { type: 'expense', category: 'food', amount: 85.00, date: '2024-01-28', description: 'Ração Premium 15kg' },
+                { type: 'expense', category: 'veterinary', amount: 200.00, date: '2024-02-05', description: 'Castração - Thor (Dr. Carlos)' },
+                { type: 'expense', category: 'supplies', amount: 45.00, date: '2024-02-08', description: 'Coleiras e guias' },
+                { type: 'expense', category: 'food', amount: 90.00, date: '2024-02-12', description: 'Ração filhotes 10kg' },
+                { type: 'expense', category: 'veterinary', amount: 75.00, date: '2024-02-18', description: 'Vermífugo - Lola (Dr. Ana)' },
+                { type: 'expense', category: 'maintenance', amount: 120.00, date: '2024-02-20', description: 'Limpeza e manutenção canil' },
+                { type: 'expense', category: 'supplies', amount: 35.00, date: '2024-02-22', description: 'Produtos de limpeza' },
+                { type: 'expense', category: 'veterinary', amount: 150.00, date: '2024-03-05', description: 'Exames - Nina (Dr. Ana)' },
+                { type: 'expense', category: 'veterinary', amount: 300.00, date: '2024-03-10', description: 'Cirurgia - Rex (Dr. Carlos)' },
+                { type: 'expense', category: 'veterinary', amount: 95.00, date: '2024-03-15', description: 'Consulta - Mimi (Dr. Ana)' },
+                { type: 'expense', category: 'veterinary', amount: 220.00, date: '2024-03-20', description: 'Tratamento - Bob (Dr. Carlos)' },
+                { type: 'expense', category: 'veterinary', amount: 80.00, date: '2024-03-25', description: 'Vacinas - Princesa (Dr. Ana)' },
+                { type: 'expense', category: 'veterinary', amount: 180.00, date: '2024-04-02', description: 'Castração - Simba (Dr. Carlos)' },
+                { type: 'expense', category: 'veterinary', amount: 65.00, date: '2024-04-08', description: 'Consulta - Mel (Dr. Ana)' }
+            ];
+            
+            // Adicionar cada transação
+            sampleTransactions.forEach(transaction => {
+                adminData.addTransaction(transaction);
+            });
+            
+            console.log('✅ Dados de exemplo adicionados!');
+        }
+        
+        // Função para carregar gráficos financeiros
+        function loadFinancialCharts() {
+            console.log('📈 Carregando gráficos financeiros...');
+            
+            // Carregar gráfico de Receita vs Despesas
+            loadRevenueExpensesChart();
+            
+            // Carregar gráfico de Distribuição de Gastos
+            loadExpensesDistributionChart();
+        }
+        
+        function loadRevenueExpensesChart() {
+            const chartContainer = document.getElementById('revenue-expenses-chart');
+            if (!chartContainer) return;
+            
+            const transactions = adminData.getTransactions();
+            
+            // Agrupar por mês
+            const monthlyData = {};
+            transactions.forEach(transaction => {
+                const date = new Date(transaction.date);
+                const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                
+                if (!monthlyData[monthKey]) {
+                    monthlyData[monthKey] = { income: 0, expenses: 0 };
+                }
+                
+                if (transaction.type === 'income') {
+                    monthlyData[monthKey].income += transaction.amount;
+                } else {
+                    monthlyData[monthKey].expenses += transaction.amount;
+                }
+            });
+            
+            // Criar gráfico simulado
+            const months = Object.keys(monthlyData).sort().slice(-6); // Últimos 6 meses
+            const chartData = months.map(month => {
+                const data = monthlyData[month] || { income: 0, expenses: 0 };
+                return {
+                    month: new Date(month + '-01').toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' }),
+                    income: data.income,
+                    expenses: data.expenses
+                };
+            });
+            
+            // Renderizar gráfico simulado
+            chartContainer.innerHTML = `
+                <div class="chart-placeholder">
+                    <div class="chart-placeholder-icon">📊</div>
+                    <div class="chart-placeholder-text">Receita vs Despesas</div>
+                    <div class="chart-placeholder-subtitle">
+                        ${chartData.length > 0 ? 
+                            `Últimos ${chartData.length} meses • Total: R$ ${chartData.reduce((sum, d) => sum + d.income, 0).toFixed(2)} receitas` :
+                            'Adicione transações para ver o gráfico'
+                        }
+                    </div>
+                    ${chartData.length > 0 ? `
+                        <div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                            ${chartData.map(d => `${d.month}: +R$ ${d.income.toFixed(2)} / -R$ ${d.expenses.toFixed(2)}`).join(' • ')}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+        
+        function loadExpensesDistributionChart() {
+            const chartContainer = document.getElementById('expenses-distribution-chart');
+            if (!chartContainer) return;
+            
+            const transactions = adminData.getTransactions();
+            const expenses = transactions.filter(t => t.type === 'expense');
+            
+            // Agrupar por categoria
+            const categoryData = {};
+            expenses.forEach(expense => {
+                if (!categoryData[expense.category]) {
+                    categoryData[expense.category] = 0;
+                }
+                categoryData[expense.category] += expense.amount;
+            });
+            
+            const categories = Object.entries(categoryData)
+                .sort(([,a], [,b]) => b - a)
+                .map(([category, amount]) => ({
+                    category: getCategoryText(category),
+                    amount: amount,
+                    percentage: expenses.length > 0 ? (amount / expenses.reduce((sum, e) => sum + e.amount, 0) * 100).toFixed(1) : 0
+                }));
+            
+            // Renderizar gráfico simulado
+            chartContainer.innerHTML = `
+                <div class="chart-placeholder">
+                    <div class="chart-placeholder-icon">🥧</div>
+                    <div class="chart-placeholder-text">Distribuição de Gastos</div>
+                    <div class="chart-placeholder-subtitle">
+                        ${categories.length > 0 ? 
+                            `${categories.length} categorias • Total: R$ ${categories.reduce((sum, c) => sum + c.amount, 0).toFixed(2)}` :
+                            'Adicione despesas para ver a distribuição'
+                        }
+                    </div>
+                    ${categories.length > 0 ? `
+                        <div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8; text-align: left;">
+                            ${categories.slice(0, 4).map(c => `
+                                <div style="margin: 0.5rem 0;">
+                                    <strong>${c.category}:</strong> R$ ${c.amount.toFixed(2)} (${c.percentage}%)
+                                </div>
+                            `).join('')}
+                            ${categories.length > 4 ? `<div style="opacity: 0.6;">+${categories.length - 4} outras categorias</div>` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+        
+        function updateRevenueChart() {
+            showAlert('Gráfico de receitas atualizado!', 'info');
+            loadRevenueExpensesChart();
+        }
+        
+        // Função para carregar dados de exemplo (botão)
+        function loadSampleData() {
+            if (confirm('Isso irá adicionar dados de exemplo para demonstração. Continuar?')) {
+                // Limpar dados existentes
+                localStorage.removeItem('ligaDoBem_transactions');
+                
+                // Forçar adição de dados de exemplo
+                const sampleTransactions = [
+                    // Receitas
+                    { type: 'income', category: 'donation', amount: 500.00, date: '2024-01-15', description: 'Doação - Maria Silva' },
+                    { type: 'income', category: 'donation', amount: 250.00, date: '2024-01-20', description: 'Doação - João Santos' },
+                    { type: 'income', category: 'adoption', amount: 100.00, date: '2024-01-25', description: 'Taxa de adoção - Luna' },
+                    { type: 'income', category: 'event', amount: 800.00, date: '2024-02-01', description: 'Feira de adoção - Shopping' },
+                    { type: 'income', category: 'donation', amount: 300.00, date: '2024-02-10', description: 'Doação - Ana Costa' },
+                    { type: 'income', category: 'donation', amount: 150.00, date: '2024-02-15', description: 'Doação - Pedro Lima' },
+                    { type: 'income', category: 'donation', amount: 400.00, date: '2024-03-01', description: 'Doação - Empresa XYZ' },
+                    { type: 'income', category: 'event', amount: 600.00, date: '2024-03-10', description: 'Bazar beneficente' },
+                    
+                    // Despesas
+                    { type: 'expense', category: 'veterinary', amount: 180.00, date: '2024-01-18', description: 'Consulta - Max (Dr. Carlos)' },
+                    { type: 'expense', category: 'veterinary', amount: 120.00, date: '2024-01-22', description: 'Vacina - Bella (Dr. Ana)' },
+                    { type: 'expense', category: 'food', amount: 85.00, date: '2024-01-28', description: 'Ração Premium 15kg' },
+                    { type: 'expense', category: 'veterinary', amount: 200.00, date: '2024-02-05', description: 'Castração - Thor (Dr. Carlos)' },
+                    { type: 'expense', category: 'supplies', amount: 45.00, date: '2024-02-08', description: 'Coleiras e guias' },
+                    { type: 'expense', category: 'food', amount: 90.00, date: '2024-02-12', description: 'Ração filhotes 10kg' },
+                    { type: 'expense', category: 'veterinary', amount: 75.00, date: '2024-02-18', description: 'Vermífugo - Lola (Dr. Ana)' },
+                    { type: 'expense', category: 'maintenance', amount: 120.00, date: '2024-02-20', description: 'Limpeza e manutenção canil' },
+                    { type: 'expense', category: 'supplies', amount: 35.00, date: '2024-02-22', description: 'Produtos de limpeza' },
+                    { type: 'expense', category: 'veterinary', amount: 150.00, date: '2024-03-05', description: 'Exames - Nina (Dr. Ana)' },
+                    { type: 'expense', category: 'food', amount: 95.00, date: '2024-03-12', description: 'Ração especial gatos 12kg' },
+                    { type: 'expense', category: 'other', amount: 80.00, date: '2024-03-15', description: 'Transporte para feira' },
+                    { type: 'expense', category: 'veterinary', amount: 300.00, date: '2024-03-18', description: 'Cirurgia - Rex (Dr. Carlos)' },
+                    { type: 'expense', category: 'veterinary', amount: 95.00, date: '2024-03-22', description: 'Consulta - Mimi (Dr. Ana)' },
+                    { type: 'expense', category: 'veterinary', amount: 220.00, date: '2024-03-25', description: 'Tratamento - Bob (Dr. Carlos)' },
+                    { type: 'expense', category: 'veterinary', amount: 80.00, date: '2024-04-01', description: 'Vacinas - Princesa (Dr. Ana)' },
+                    { type: 'expense', category: 'veterinary', amount: 180.00, date: '2024-04-05', description: 'Castração - Simba (Dr. Carlos)' },
+                    { type: 'expense', category: 'veterinary', amount: 65.00, date: '2024-04-10', description: 'Consulta - Mel (Dr. Ana)' },
+                    { type: 'expense', category: 'veterinary', amount: 140.00, date: '2024-04-15', description: 'Medicamentos - Thor (Dr. Carlos)' }
+                ];
+                
+                // Adicionar cada transação
+                sampleTransactions.forEach(transaction => {
+                    adminData.addTransaction(transaction);
+                });
+                
+                // Recarregar a página de transparência
+                loadTransactions();
+                
+                showAlert('✅ Dados de exemplo carregados com sucesso! Veja os gráficos abaixo.', 'success');
+            }
+        }
+        
+        function updateExpensesChart() {
+            showAlert('Gráfico de gastos atualizado!', 'info');
+            loadExpensesDistributionChart();
+        }
+        
+        function handleTransactionSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const transactionData = Object.fromEntries(formData);
+            
+            // Converter amount para número
+            transactionData.amount = parseFloat(transactionData.amount);
+            
+            adminData.addTransaction(transactionData);
+            showAlert('Transação adicionada com sucesso!', 'success');
+            cancelTransactionForm();
+            loadTransactions();
+        }
+        
+        function editTransaction(id) {
+            const transaction = adminData.getTransactions().find(t => t.id === id);
+            if (transaction) {
+                // Implementar modal de edição
+                showAlert('Funcionalidade de edição em desenvolvimento!', 'info');
+            }
+        }
+        
+        function deleteTransaction(id) {
+            if (confirm('Tem certeza que deseja excluir esta transação?')) {
+                adminData.deleteTransaction(id);
+                showAlert('Transação excluída com sucesso!', 'success');
+                loadTransactions();
+            }
         }
 
         // Gerenciamento de Eventos

@@ -1,0 +1,173 @@
+// Group by month
+            const monthlyData = {};
+            transactions.forEach(transaction => {
+                const date = new Date(transaction.date);
+                const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                
+                if (!monthlyData[monthKey]) {
+                    monthlyData[monthKey] = { income: 0, expenses: 0 };
+                }
+                
+                if (transaction.type === 'income') {
+                    monthlyData[monthKey].income += transaction.amount;
+                } else {
+                    monthlyData[monthKey].expenses += transaction.amount;
+                }
+            });
+            
+            // Get last 6 months
+            const months = Object.keys(monthlyData).sort().slice(-6);
+            const chartData = months.map(month => {
+                const data = monthlyData[month] || { income: 0, expenses: 0 };
+                return {
+                    month: new Date(month + '-01').toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' }),
+                    income: data.income,
+                    expenses: data.expenses
+                };
+            });
+            
+            // Create visual chart representation
+            const maxValue = Math.max(...chartData.map(d => Math.max(d.income, d.expenses)));
+            console.log('📊 Dados do gráfico:', chartData);
+            console.log('📊 Valor máximo:', maxValue);
+            
+            chartContainer.innerHTML = `
+                <div class="public-chart">
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color income"></div>
+                            <span>Receitas</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color expenses"></div>
+                            <span>Despesas</span>
+                        </div>
+                    </div>
+                    <div class="chart-bars">
+                        ${chartData.length > 0 ? chartData.map(d => `
+                            <div class="chart-month">
+                                <div class="chart-bars-container">
+                                    <div class="chart-bar income" style="height: ${maxValue > 0 ? (d.income / maxValue * 100) : 0}%">
+                                        <div class="bar-value">R$ ${d.income.toFixed(0)}</div>
+                                    </div>
+                                    <div class="chart-bar expenses" style="height: ${maxValue > 0 ? (d.expenses / maxValue * 100) : 0}%">
+                                        <div class="bar-value">R$ ${d.expenses.toFixed(0)}</div>
+                                    </div>
+                                </div>
+                                <div class="chart-month-label">${d.month}</div>
+                            </div>
+                        `).join('') : '<div class="no-data">Nenhum dado disponível</div>'}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function loadPublicExpensesDistributionChart(transactions) {
+            console.log('🥧 Iniciando gráfico de distribuição de gastos...');
+            const chartContainer = document.getElementById('expenses-distribution-chart');
+            if (!chartContainer) {
+                console.error('❌ Container do gráfico não encontrado: expenses-distribution-chart');
+                return;
+            }
+            console.log('✅ Container encontrado:', chartContainer);
+            
+            // Teste simples primeiro
+            const expenses = transactions.filter(t => t.type === 'expense');
+            const categoryData = {};
+            expenses.forEach(expense => {
+                if (!categoryData[expense.category]) {
+                    categoryData[expense.category] = 0;
+                }
+                categoryData[expense.category] += expense.amount;
+            });
+            
+            const categoriesText = Object.entries(categoryData)
+                .sort(([,a], [,b]) => b - a)
+                .map(([cat, amount]) => `${getCategoryText(cat)}: R$ ${amount.toFixed(2)}`)
+                .join('<br>');
+            
+            chartContainer.innerHTML = `
+                <div style="background: linear-gradient(45deg, #17a2b8, #6f42c1); height: 200px; color: white; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-size: 1rem; font-weight: bold; text-align: center;">
+                    🥧 DISTRIBUIÇÃO DE GASTOS<br><br>
+                    ${categoriesText}
+                </div>
+            `;
+            return; // Parar aqui por enquanto
+        }
+        
+        function getCategoryText(category) {
+            const categories = {
+                'donation': 'Doação',
+                'adoption': 'Adoção',
+                'event': 'Evento',
+                'veterinary': 'Veterinário',
+                'food': 'Alimentação',
+                'supplies': 'Suprimentos',
+                'maintenance': 'Manutenção',
+                'other': 'Outros'
+            };
+            return categories[category] || category;
+        }
+        
+        // Função para carregar dados de teste diretamente no site público
+        function loadTestData() {
+            console.log('🧪 Carregando dados de teste...');
+            
+            const sampleTransactions = [
+                // Receitas
+                { id: 1, type: 'income', category: 'donation', amount: 500.00, date: '2024-01-15', description: 'Doação - Maria Silva' },
+                { id: 2, type: 'income', category: 'donation', amount: 250.00, date: '2024-01-20', description: 'Doação - João Santos' },
+                { id: 3, type: 'income', category: 'adoption', amount: 100.00, date: '2024-01-25', description: 'Taxa de adoção - Luna' },
+                { id: 4, type: 'income', category: 'event', amount: 800.00, date: '2024-02-01', description: 'Feira de adoção - Shopping' },
+                { id: 5, type: 'income', category: 'donation', amount: 300.00, date: '2024-02-10', description: 'Doação - Ana Costa' },
+                { id: 6, type: 'income', category: 'donation', amount: 150.00, date: '2024-02-15', description: 'Doação - Pedro Lima' },
+                { id: 7, type: 'income', category: 'donation', amount: 400.00, date: '2024-03-01', description: 'Doação - Empresa XYZ' },
+                { id: 8, type: 'income', category: 'event', amount: 600.00, date: '2024-03-10', description: 'Bazar beneficente' },
+                
+                // Despesas
+                { id: 9, type: 'expense', category: 'veterinary', amount: 180.00, date: '2024-01-18', description: 'Consulta - Max (Dr. Carlos)' },
+                { id: 10, type: 'expense', category: 'veterinary', amount: 120.00, date: '2024-01-22', description: 'Vacina - Bella (Dr. Ana)' },
+                { id: 11, type: 'expense', category: 'food', amount: 85.00, date: '2024-01-28', description: 'Ração Premium 15kg' },
+                { id: 12, type: 'expense', category: 'veterinary', amount: 200.00, date: '2024-02-05', description: 'Castração - Thor (Dr. Carlos)' },
+                { id: 13, type: 'expense', category: 'supplies', amount: 45.00, date: '2024-02-08', description: 'Coleiras e guias' },
+                { id: 14, type: 'expense', category: 'food', amount: 90.00, date: '2024-02-12', description: 'Ração filhotes 10kg' },
+                { id: 15, type: 'expense', category: 'veterinary', amount: 75.00, date: '2024-02-18', description: 'Vermífugo - Lola (Dr. Ana)' },
+                { id: 16, type: 'expense', category: 'maintenance', amount: 120.00, date: '2024-02-20', description: 'Limpeza e manutenção canil' },
+                { id: 17, type: 'expense', category: 'supplies', amount: 35.00, date: '2024-02-22', description: 'Produtos de limpeza' },
+                { id: 18, type: 'expense', category: 'veterinary', amount: 150.00, date: '2024-03-05', description: 'Exames - Nina (Dr. Ana)' },
+                { id: 19, type: 'expense', category: 'food', amount: 95.00, date: '2024-03-12', description: 'Ração especial gatos 12kg' },
+                { id: 20, type: 'expense', category: 'other', amount: 80.00, date: '2024-03-15', description: 'Transporte para feira' }
+            ];
+            
+            // Salvar no localStorage
+            localStorage.setItem('ligaDoBem_transactions', JSON.stringify(sampleTransactions));
+            console.log('✅ Dados salvos no localStorage');
+            
+            // Recarregar a página de transparência
+            loadTransparency();
+            
+            // Teste direto dos containers
+            setTimeout(() => {
+                const incomeChart = document.getElementById('income-expenses-chart');
+                const expensesChart = document.getElementById('expenses-distribution-chart');
+                
+                console.log('🔍 Container receitas vs despesas:', incomeChart);
+                console.log('🔍 Container distribuição gastos:', expensesChart);
+                
+                if (incomeChart) {
+                    console.log('✅ Container receitas encontrado');
+                    console.log('📄 Conteúdo atual:', incomeChart.innerHTML);
+                } else {
+                    console.error('❌ Container receitas NÃO encontrado');
+                }
+                
+                if (expensesChart) {
+                    console.log('✅ Container gastos encontrado');
+                    console.log('📄 Conteúdo atual:', expensesChart.innerHTML);
+                } else {
+                    console.error('❌ Container gastos NÃO encontrado');
+                }
+            }, 1000);
+            
+            alert('✅ Dados de teste carregados! Veja os gráficos abaixo.');
+        }

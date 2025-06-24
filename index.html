@@ -555,18 +555,1074 @@
                 opacity: 1;
             }
         }
+
+        /* Volunteers Page Styles */
+        .volunteer-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .featured-volunteers {
+            margin-bottom: 4rem;
+        }
+
+        .featured-volunteers h3 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .volunteers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .volunteer-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .volunteer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .volunteer-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .volunteer-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .volunteer-role {
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .volunteer-badges {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .badge.gold {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+        }
+
+        .badge.silver {
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+        }
+
+        .volunteer-stats-mini {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .mini-stat {
+            text-align: center;
+        }
+
+        .mini-stat-number {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        .mini-stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            margin-bottom: 4rem;
+        }
+
+        .testimonials-section h3 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .testimonials-carousel {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scroll-behavior: smooth;
+        }
+
+        .testimonial-card {
+            min-width: 350px;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .testimonial-quote {
+            font-style: italic;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .testimonial-info h4 {
+            margin: 0;
+            color: #333;
+        }
+
+        .testimonial-info p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Volunteer CTA */
+        .volunteer-cta {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .volunteer-cta h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .volunteer-cta p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Transparency Page Styles */
+        .financial-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .finance-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .finance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .finance-card.income {
+            border-left: 5px solid #00b894;
+        }
+
+        .finance-card.expenses {
+            border-left: 5px solid #e17055;
+        }
+
+        .finance-card.balance {
+            border-left: 5px solid #667eea;
+        }
+
+        .finance-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .finance-amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .finance-label {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .finance-period {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        /* Charts */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .chart-container h3 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .chart-container canvas {
+            max-width: 100%;
+            height: 280px !important;
+            background: #fff;
+            border-radius: 10px;
+        }
+
+        /* Public Charts Styles */
+        .public-chart {
+            width: 100%;
+            height: 300px;
+            border: 2px solid #007bff;
+            background: #f8f9fa;
+            padding: 1rem;
+        }
+
+        /* Bar Chart Styles */
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .legend-color.income {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .legend-color.expenses {
+            background: linear-gradient(135deg, #dc3545, #fd7e14);
+        }
+
+        .chart-bars {
+            display: flex;
+            justify-content: space-around;
+            align-items: end;
+            height: 200px;
+            padding: 1rem 0;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .chart-month {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            max-width: 80px;
+        }
+
+        .chart-bars-container {
+            display: flex;
+            gap: 4px;
+            align-items: end;
+            height: 160px;
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-bar {
+            width: 20px;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            min-height: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .chart-bar.income {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .chart-bar.expenses {
+            background: linear-gradient(135deg, #dc3545, #fd7e14);
+        }
+
+        .chart-bar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #333;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .chart-bar:hover .bar-value {
+            opacity: 1;
+        }
+
+        .chart-month-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #666;
+            text-align: center;
+        }
+
+        /* Pie Chart Styles */
+        .pie-chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .pie-chart {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .pie-slice {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+            background: var(--color);
+            transform: rotate(var(--rotation)) skewY(calc(90deg - var(--percentage) * 3.6deg));
+        }
+
+        .pie-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .pie-total {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .pie-label {
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        .pie-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .pie-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .pie-legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .pie-legend-text {
+            flex: 1;
+        }
+
+        .pie-legend-category {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .pie-legend-amount {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .no-data {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: #6c757d;
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+
+        /* Transactions */
+        .transactions-section {
+            margin-bottom: 4rem;
+        }
+
+        .transactions-section h3 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .transactions-list {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-height: 400px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Scroll indicator shadow */
+        .transactions-list::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.1));
+            pointer-events: none;
+            border-radius: 0 0 20px 20px;
+        }
+
+        /* Custom scrollbar for transactions list */
+        .transactions-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .transactions-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .transactions-list::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        .transactions-list::-webkit-scrollbar-thumb:hover {
+            background: #5a6fd8;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .transaction-icon.income {
+            background: rgba(0, 184, 148, 0.1);
+            color: #00b894;
+        }
+
+        .transaction-icon.expense {
+            background: rgba(225, 112, 85, 0.1);
+            color: #e17055;
+        }
+
+        .transaction-details h4 {
+            margin: 0;
+            color: #333;
+        }
+
+        .transaction-details p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .transaction-amount {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .transaction-amount.income {
+            color: #00b894;
+        }
+
+        .transaction-amount.expense {
+            color: #e17055;
+        }
+
+        /* Goals */
+        .goals-section {
+            margin-bottom: 4rem;
+        }
+
+        .goals-section h3 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .goal-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .goal-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .goal-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .goal-percentage {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+
+        .goal-progress {
+            width: 100%;
+            height: 10px;
+            background: #eee;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .goal-progress-bar {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            transition: width 0.3s;
+        }
+
+        .goal-amounts {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .goals-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: #6c757d;
+            background: #f8f9fa;
+            padding: 0.4rem 0.8rem;
+            border-radius: 15px;
+            border: 1px solid #dee2e6;
+        }
+
+        .sync-indicator {
+            animation: spin 2s linear infinite;
+        }
+
+        .sync-status.success {
+            background: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .sync-status.success .sync-indicator {
+            animation: none;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .refresh-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            background: linear-gradient(45deg, #5a6fd8, #6a4c93);
+        }
+
+        .refresh-btn:active {
+            transform: translateY(0);
+        }
+
+        /* No goals message */
+        .no-goals-message {
+            text-align: center;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            color: #6c757d;
+            border: 2px dashed #dee2e6;
+        }
+
+        .no-goals-message p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Goal description */
+        .goal-description {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #6c757d;
+            font-style: italic;
+            line-height: 1.3;
+        }
+
+        /* Goal metadata */
+        .goal-meta {
+            margin-top: 0.8rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #999;
+        }
+
+        .goal-meta small {
+            display: block;
+        }
+
+        /* Reports */
+        .reports-section h3 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .report-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .report-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .report-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .report-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .report-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .report-download {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .report-download:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Veterinary Expenses Styles */
+        .veterinary-section {
+            margin: 3rem 0;
+        }
+
+        .vet-expenses-summary {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-left: 5px solid #e74c3c;
+        }
+
+        .vet-expenses-summary h3 {
+            color: #e74c3c;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .vet-total {
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #721c24;
+        }
+
+        .vet-total strong {
+            color: #e74c3c;
+            font-size: 1.4rem;
+        }
+
+        .vet-recent {
+            max-height: 300px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Scroll indicator shadow for veterinary expenses */
+        .vet-recent::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background: linear-gradient(transparent, rgba(231, 76, 60, 0.1));
+            pointer-events: none;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .vet-recent h4 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 0.5rem 0;
+            z-index: 1;
+        }
+
+        /* Custom scrollbar for veterinary expenses */
+        .vet-recent::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .vet-recent::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .vet-recent::-webkit-scrollbar-thumb {
+            background: #e74c3c;
+            border-radius: 10px;
+        }
+
+        .vet-recent::-webkit-scrollbar-thumb:hover {
+            background: #c0392b;
+        }
+
+        .vet-expense-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 0.8rem;
+            border-left: 4px solid #e74c3c;
+            transition: transform 0.2s;
+        }
+
+        .vet-expense-item:hover {
+            transform: translateX(5px);
+        }
+
+        .vet-expense-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .vet-expense-info strong {
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .vet-expense-info small {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .vet-expense-amount {
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 1.1rem;
+        }
+
+        /* Responsive adjustments for new sections */
+        @media (max-width: 768px) {
+            .volunteer-stats,
+            .financial-overview {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+
+            .volunteers-grid,
+            .goals-grid,
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonials-carousel {
+                flex-direction: column;
+            }
+
+            .testimonial-card {
+                min-width: auto;
+            }
+
+            .stat-card,
+            .finance-card {
+                padding: 1.5rem;
+            }
+
+            .stat-number,
+            .finance-amount {
+                font-size: 2rem;
+            }
+
+            .volunteer-cta {
+                padding: 2rem;
+            }
+
+            .volunteer-cta h3 {
+                font-size: 1.5rem;
+            }
+        }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
         <nav>
             <div class="logo" onclick="showPage('home')">Liga do Bem</div>
             <ul class="nav-links" id="nav-links">
-                <li><a onclick="showPage('home')" class="nav-link active">Início</a></li>
-                <li><a onclick="showPage('pets')" class="nav-link">Adoção</a></li>
-                <li><a onclick="showPage('donate')" class="nav-link">Doação</a></li>
-                <li><a onclick="showPage('about')" class="nav-link">Sobre</a></li>
-                <li><a onclick="showPage('contact')" class="nav-link">Contato</a></li>
+                <li><a href="#" onclick="showPage('home'); return false;" class="nav-link active">Início</a></li>
+                <li><a href="#" onclick="showPage('pets'); return false;" class="nav-link">Adoção</a></li>
+                <li><a href="#" onclick="showPage('volunteers'); return false;" class="nav-link">Voluntários</a></li>
+                <li><a href="#" onclick="showPage('transparency'); return false;" class="nav-link">Transparência</a></li>
+                <li><a href="#" onclick="showPage('donate'); return false;" class="nav-link">Doação</a></li>
+                <li><a href="#" onclick="showPage('about'); return false;" class="nav-link">Sobre</a></li>
+                <li><a href="#" onclick="showPage('contact'); return false;" class="nav-link">Contato</a></li>
                 <li><a href="admin.html" class="admin-link">Admin</a></li>
             </ul>
             <div class="mobile-menu-btn" onclick="toggleMobileMenu()">
@@ -605,6 +1661,170 @@
                 </p>
                 <div class="pets-grid" id="pets-grid">
                     <!-- Pets will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Volunteers Page -->
+    <div id="volunteers" class="page">
+        <div class="container">
+            <div class="page-content animate-in">
+                <h2 class="page-title">🌟 Hall da Fama dos Voluntários</h2>
+                <p style="text-align: center; margin-bottom: 3rem; font-size: 1.2rem;">
+                    Conheça os heróis que fazem a diferença na vida dos nossos amiguinhos!
+                </p>
+                
+                <!-- Volunteer Stats -->
+                <div class="volunteer-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-number" id="total-volunteers">0</div>
+                        <div class="stat-label">Voluntários Ativos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏰</div>
+                        <div class="stat-number" id="total-hours">0</div>
+                        <div class="stat-label">Horas Dedicadas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🐾</div>
+                        <div class="stat-number" id="animals-helped">0</div>
+                        <div class="stat-label">Animais Ajudados</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">❤️</div>
+                        <div class="stat-number" id="adoptions-facilitated">0</div>
+                        <div class="stat-label">Adoções Realizadas</div>
+                    </div>
+                </div>
+
+                <!-- Featured Volunteers -->
+                <div class="featured-volunteers">
+                    <h3>🏆 Voluntários em Destaque</h3>
+                    <div class="volunteers-grid" id="volunteers-grid">
+                        <!-- Volunteers will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Volunteer Testimonials -->
+                <div class="testimonials-section">
+                    <h3>💬 Depoimentos</h3>
+                    <div class="testimonials-carousel" id="testimonials-carousel">
+                        <!-- Testimonials will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Call to Action -->
+                <div class="volunteer-cta">
+                    <h3>Quer fazer parte da nossa família?</h3>
+                    <p>Junte-se a nós e ajude a transformar vidas!</p>
+                    <button class="btn btn-primary" onclick="showPage('contact')">Seja um Voluntário</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transparency Page -->
+    <div id="transparency" class="page">
+        <div class="container">
+            <div class="page-content animate-in">
+                <h2 class="page-title">📊 Transparência Financeira</h2>
+                <p style="text-align: center; margin-bottom: 2rem; font-size: 1.2rem;">
+                    Prestação de contas completa de todas as nossas atividades financeiras
+                </p>
+                
+                <!-- Botão de teste -->
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <button onclick="loadTestData()" style="
+                        background: linear-gradient(45deg, #28a745, #20c997);
+                        color: white;
+                        border: none;
+                        padding: 1rem 2rem;
+                        border-radius: 25px;
+                        font-weight: bold;
+                        cursor: pointer;
+                        font-size: 1rem;
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                        🧪 Carregar Dados de Teste
+                    </button>
+                </div>
+
+                <!-- Financial Overview -->
+                <div class="financial-overview">
+                    <div class="finance-card income">
+                        <div class="finance-icon">💰</div>
+                        <div class="finance-amount" id="total-income">R$ 0,00</div>
+                        <div class="finance-label">Total Arrecadado</div>
+                        <div class="finance-period" id="income-period">Este mês</div>
+                    </div>
+                    <div class="finance-card expenses">
+                        <div class="finance-icon">📋</div>
+                        <div class="finance-amount" id="total-expenses">R$ 0,00</div>
+                        <div class="finance-label">Total Investido</div>
+                        <div class="finance-period" id="expenses-period">Este mês</div>
+                    </div>
+                    <div class="finance-card balance">
+                        <div class="finance-icon">⚖️</div>
+                        <div class="finance-amount" id="current-balance">R$ 0,00</div>
+                        <div class="finance-label">Saldo Atual</div>
+                        <div class="finance-period">Disponível</div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-container">
+                        <h3>📈 Receitas vs Despesas</h3>
+                        <canvas id="income-expenses-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>🥧 Distribuição de Gastos</h3>
+                        <canvas id="expenses-distribution-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="transactions-section">
+                    <h3>💳 Movimentações Recentes</h3>
+                    <div class="transactions-list" id="transactions-list">
+                        <!-- Transactions will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Veterinary Expenses -->
+                <div class="veterinary-section">
+                    <div id="veterinary-expenses">
+                        <!-- Veterinary expenses will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Goals Progress -->
+                <div class="goals-section">
+                    <div class="section-header">
+                        <h3>🎯 Metas e Campanhas</h3>
+                        <div class="goals-controls">
+                            <div class="sync-status" id="goals-sync-status">
+                                <span class="sync-indicator">🔄</span>
+                                <span class="sync-text">Carregando...</span>
+                            </div>
+                            <button class="refresh-btn" onclick="refreshGoals()" title="Atualizar metas">
+                                🔄 Atualizar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="goals-grid" id="goals-grid">
+                        <!-- Goals will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Reports Download -->
+                <div class="reports-section">
+                    <h3>📄 Relatórios Detalhados</h3>
+                    <div class="reports-grid" id="reports-grid">
+                        <!-- Reports will be loaded here -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -735,24 +1955,35 @@
         // Navigation
         function showPage(pageName) {
             // Hide all pages
-            document.querySelectorAll('.page').forEach(page => {
+            const allPages = document.querySelectorAll('.page');
+            allPages.forEach(page => {
                 page.classList.remove('active');
             });
             
             // Remove active class from all nav links
-            document.querySelectorAll('.nav-link').forEach(link => {
+            const allLinks = document.querySelectorAll('.nav-link');
+            allLinks.forEach(link => {
                 link.classList.remove('active');
             });
             
             // Show selected page
-            document.getElementById(pageName).classList.add('active');
-            
-            // Add active class to clicked link
-            event.target.classList.add('active');
-            
-            // Load page content
-            if (pageName === 'pets') {
-                loadPets();
+            const targetPage = document.getElementById(pageName);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                
+                // Load page-specific content
+                setTimeout(() => {
+                    if (pageName === 'pets') {
+                        loadPets();
+                    } else if (pageName === 'volunteers') {
+                        loadVolunteers();
+                    } else if (pageName === 'transparency') {
+                        loadTransparency();
+                    }
+                }, 100);
+                
+            } else {
+                console.error('Page not found:', pageName);
             }
         }
 
@@ -843,7 +2074,7 @@
                     <div class="pet-name">${pet.name}</div>
                     <div class="pet-description">${pet.description}</div>
                     <div class="pet-tags">
-                        ${pet.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        ${(pet.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('')}
                     </div>
                     <button class="adopt-btn" onclick="event.stopPropagation(); showAdoptionForm('${pet.name}')">
                         Quero Adotar ${pet.name}!
@@ -868,7 +2099,7 @@
                 <h2>${pet.name}</h2>
                 <p style="margin-bottom: 1rem; line-height: 1.6;">${pet.description}</p>
                 <div class="pet-tags" style="margin-bottom: 2rem;">
-                    ${pet.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    ${(pet.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('')}
                 </div>
                 <button class="adopt-btn" onclick="showAdoptionForm('${pet.name}')">
                     Quero Adotar ${pet.name}!
@@ -970,18 +2201,743 @@
             }
         }
 
-        // Refresh data periodically (optional)
-        setInterval(() => {
-            siteData = getPublicData();
-            pets = siteData.pets;
-            stats = siteData.stats;
-            content = siteData.content;
-            
-            // Only reload if we're on the pets page
-            if (document.getElementById('pets').classList.contains('active')) {
-                loadPets();
+        // Volunteers Page Functions
+        function loadVolunteers() {
+            try {
+                // Load volunteer statistics
+                const totalVolunteersEl = document.getElementById('total-volunteers');
+                const totalHoursEl = document.getElementById('total-hours');
+                const animalsHelpedEl = document.getElementById('animals-helped');
+                const adoptionsFacilitatedEl = document.getElementById('adoptions-facilitated');
+                
+                if (totalVolunteersEl) totalVolunteersEl.textContent = siteData.volunteerStats?.totalVolunteers || '42';
+                if (totalHoursEl) totalHoursEl.textContent = siteData.volunteerStats?.totalHours || '1,250';
+                if (animalsHelpedEl) animalsHelpedEl.textContent = siteData.volunteerStats?.animalsHelped || '156';
+                if (adoptionsFacilitatedEl) adoptionsFacilitatedEl.textContent = siteData.volunteerStats?.adoptionsFacilitated || '89';
+                
+            } catch (error) {
+                console.error('Error loading volunteer stats:', error);
             }
-        }, 30000); // Refresh every 30 seconds
+
+            // Load featured volunteers
+            try {
+                const volunteersGrid = document.getElementById('volunteers-grid');
+                if (!volunteersGrid) {
+                    console.error('volunteers-grid element not found');
+                    return;
+                }
+                
+                const volunteers = siteData.volunteers || [
+                {
+                    name: 'Maria Silva',
+                    role: 'Coordenadora de Resgates',
+                    avatar: '👩‍⚕️',
+                    badges: ['Veterinária', 'Líder'],
+                    stats: { rescues: 45, hours: 320, adoptions: 23 }
+                },
+                {
+                    name: 'João Santos',
+                    role: 'Especialista em Adoção',
+                    avatar: '👨‍🏫',
+                    badges: ['Psicólogo', 'Mentor'],
+                    stats: { rescues: 12, hours: 180, adoptions: 34 }
+                },
+                {
+                    name: 'Ana Costa',
+                    role: 'Fotógrafa Voluntária',
+                    avatar: '📸',
+                    badges: ['Artista', 'Criativa'],
+                    stats: { rescues: 8, hours: 95, adoptions: 15 }
+                }
+            ];
+
+            volunteersGrid.innerHTML = volunteers.map(volunteer => `
+                <div class="volunteer-card">
+                    <div class="volunteer-avatar">${volunteer.avatar}</div>
+                    <div class="volunteer-name">${volunteer.name}</div>
+                    <div class="volunteer-role">${volunteer.role}</div>
+                    <div class="volunteer-badges">
+                        ${(volunteer.badges || []).map(badge => `<span class="badge">${badge}</span>`).join('')}
+                    </div>
+                    <div class="volunteer-stats-mini">
+                        <div class="mini-stat">
+                            <div class="mini-stat-number">${volunteer.stats.rescues}</div>
+                            <div class="mini-stat-label">Resgates</div>
+                        </div>
+                        <div class="mini-stat">
+                            <div class="mini-stat-number">${volunteer.stats.hours}</div>
+                            <div class="mini-stat-label">Horas</div>
+                        </div>
+                        <div class="mini-stat">
+                            <div class="mini-stat-number">${volunteer.stats.adoptions}</div>
+                            <div class="mini-stat-label">Adoções</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            } catch (error) {
+                console.error('Error loading volunteers grid:', error);
+            }
+
+            // Load testimonials
+            try {
+                const testimonialsCarousel = document.getElementById('testimonials-carousel');
+                if (!testimonialsCarousel) {
+                    console.error('testimonials-carousel element not found');
+                    return;
+                }
+            const testimonials = siteData.testimonials || [
+                {
+                    quote: "Trabalhar com a Liga do Bem mudou minha vida. Ver o sorriso de uma família ao adotar um pet não tem preço!",
+                    author: "Maria Silva",
+                    role: "Voluntária há 3 anos",
+                    avatar: "👩‍⚕️"
+                },
+                {
+                    quote: "Cada animal resgatado é uma vitória. Aqui encontrei minha verdadeira vocação e uma família incrível!",
+                    author: "João Santos",
+                    role: "Coordenador de Adoções",
+                    avatar: "👨‍🏫"
+                },
+                {
+                    quote: "Fotografar os pets para adoção é minha paixão. Cada foto conta uma história de esperança!",
+                    author: "Ana Costa",
+                    role: "Fotógrafa Voluntária",
+                    avatar: "📸"
+                }
+            ];
+
+            testimonialsCarousel.innerHTML = testimonials.map(testimonial => `
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"${testimonial.quote}"</div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">${testimonial.avatar}</div>
+                        <div class="testimonial-info">
+                            <h4>${testimonial.author}</h4>
+                            <p>${testimonial.role}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            } catch (error) {
+                console.error('Error loading testimonials:', error);
+            }
+        }
+
+        // Helper function to get category icons
+        function getCategoryIcon(category) {
+            const icons = {
+                'donation': '💰',
+                'adoption': '🏠',
+                'event': '🎉',
+                'veterinary': '🏥',
+                'food': '🥘',
+                'supplies': '📦',
+                'maintenance': '🔧',
+                'other': '📋'
+            };
+            return icons[category] || '💰';
+        }
+
+        // Helper function to get category text labels
+        function getCategoryText(category) {
+            const labels = {
+                'donation': 'Doações',
+                'adoption': 'Adoções',
+                'event': 'Eventos',
+                'veterinary': 'Veterinário',
+                'food': 'Alimentação',
+                'supplies': 'Suprimentos',
+                'maintenance': 'Manutenção',
+                'other': 'Outros'
+            };
+            return labels[category] || 'Outros';
+        }
+
+        // Load test data function
+        function loadTestData() {
+            console.log('🧪 Carregando dados de teste...');
+            
+            const testTransactions = [
+                // Income transactions
+                { id: 1, date: '2024-01-15', type: 'income', category: 'donation', description: 'Doação PIX', amount: 500 },
+                { id: 2, date: '2024-01-20', type: 'income', category: 'adoption', description: 'Taxa de adoção - Rex', amount: 150 },
+                { id: 3, date: '2024-02-10', type: 'income', category: 'event', description: 'Bazar beneficente', amount: 800 },
+                { id: 4, date: '2024-02-25', type: 'income', category: 'donation', description: 'Doação mensal', amount: 300 },
+                { id: 5, date: '2024-03-05', type: 'income', category: 'donation', description: 'Doação empresa', amount: 1000 },
+                
+                // Expense transactions
+                { id: 6, date: '2024-01-18', type: 'expense', category: 'veterinary', description: 'Consulta veterinária - Luna', amount: 200 },
+                { id: 7, date: '2024-01-22', type: 'expense', category: 'food', description: 'Ração para cães', amount: 150 },
+                { id: 8, date: '2024-02-05', type: 'expense', category: 'supplies', description: 'Coleiras e guias', amount: 80 },
+                { id: 9, date: '2024-02-12', type: 'expense', category: 'veterinary', description: 'Vacinas', amount: 300 },
+                { id: 10, date: '2024-02-20', type: 'expense', category: 'food', description: 'Ração para gatos', amount: 120 },
+                { id: 11, date: '2024-03-01', type: 'expense', category: 'maintenance', description: 'Limpeza do abrigo', amount: 100 },
+                { id: 12, date: '2024-03-08', type: 'expense', category: 'veterinary', description: 'Cirurgia - Bolt', amount: 500 },
+                { id: 13, date: '2024-03-15', type: 'expense', category: 'supplies', description: 'Medicamentos', amount: 180 }
+            ];
+            
+            // Save to localStorage
+            localStorage.setItem('ligaDoBem_transactions', JSON.stringify(testTransactions));
+            
+            // Reload transparency page
+            loadTransparency();
+            
+            // Show success message
+            alert('✅ Dados de teste carregados com sucesso! Os gráficos agora mostram informações de exemplo.');
+        }
+
+        // Transparency Page Functions
+        function loadTransparency() {
+            console.log('🔍 Carregando página de transparência...');
+            
+            // Destroy existing chart instances to prevent infinite rendering
+            if (incomeExpensesChartInstance) {
+                incomeExpensesChartInstance.destroy();
+                incomeExpensesChartInstance = null;
+            }
+            if (expensesDistributionChartInstance) {
+                expensesDistributionChartInstance.destroy();
+                expensesDistributionChartInstance = null;
+            }
+            
+            // Load real financial data from localStorage
+            const transactions = JSON.parse(localStorage.getItem('ligaDoBem_transactions') || '[]');
+            console.log('💾 Transações encontradas:', transactions.length);
+            
+            // Calculate financial summary
+            const income = transactions
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+                
+            const expenses = transactions
+                .filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+                
+            const currentBalance = income - expenses;
+
+            console.log('💰 Resumo financeiro:', { income, expenses, currentBalance });
+
+            // Update financial overview
+            document.getElementById('total-income').textContent = `R$ ${income.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.getElementById('total-expenses').textContent = `R$ ${expenses.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.getElementById('current-balance').textContent = `R$ ${currentBalance.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+
+            // Load charts
+            console.log('📊 Iniciando carregamento dos gráficos...');
+            loadPublicCharts(transactions);
+
+            // Load recent transactions (last 10)
+            const transactionsList = document.getElementById('transactions-list');
+            const recentTransactions = transactions
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 10);
+
+            // Update transactions section title
+            const transactionsTitle = document.querySelector('.transactions-section h3');
+            if (transactionsTitle) {
+                transactionsTitle.textContent = `💳 Movimentações Recentes (${Math.min(10, transactions.length)} de ${transactions.length})`;
+            }
+
+            if (recentTransactions.length === 0) {
+                transactionsList.innerHTML = '<p>Nenhuma transação encontrada.</p>';
+            } else {
+                transactionsList.innerHTML = recentTransactions.map(transaction => {
+                    const icon = getCategoryIcon(transaction.category);
+                    const displayAmount = transaction.type === 'income' ? transaction.amount : -transaction.amount;
+                    
+                    return `
+                        <div class="transaction-item">
+                            <div class="transaction-info">
+                                <div class="transaction-icon ${transaction.type}">
+                                    ${icon}
+                                </div>
+                                <div class="transaction-details">
+                                    <h4>${transaction.description}</h4>
+                                    <p>${new Date(transaction.date).toLocaleDateString('pt-BR')}</p>
+                                    ${transaction.veterinarian ? `<small>Dr(a). ${transaction.veterinarian}</small>` : ''}
+                                </div>
+                            </div>
+                            <div class="transaction-amount ${transaction.type}">
+                                ${displayAmount > 0 ? '+' : ''}R$ ${Math.abs(displayAmount).toLocaleString('pt-BR', {minimumFractionDigits: 2})}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Load veterinary expenses summary
+            const vetExpenses = transactions.filter(t => t.type === 'expense' && t.category === 'veterinary');
+            const vetExpensesContainer = document.getElementById('veterinary-expenses');
+            
+            if (vetExpensesContainer && vetExpenses.length > 0) {
+                const totalVetExpenses = vetExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+                const recentVetExpenses = vetExpenses
+                    .sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                vetExpensesContainer.innerHTML = `
+                    <div class="vet-expenses-summary">
+                        <h3>🏥 Gastos Veterinários</h3>
+                        <div class="vet-total">
+                            Total Investido: <strong>R$ ${totalVetExpenses.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong>
+                        </div>
+                        <div class="vet-recent">
+                            <h4>Todos os Procedimentos (${vetExpenses.length}):</h4>
+                            ${recentVetExpenses.map(expense => `
+                                <div class="vet-expense-item">
+                                    <div class="vet-expense-info">
+                                        <strong>${expense.description}</strong>
+                                        <small>${new Date(expense.date).toLocaleDateString('pt-BR')}</small>
+                                        ${expense.veterinarian ? `<small>Dr(a). ${expense.veterinarian}</small>` : ''}
+                                    </div>
+                                    <div class="vet-expense-amount">R$ ${expense.amount.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Load goals from localStorage (only public ones) - UPDATED FOR ADMIN INTEGRATION
+            const goalsGrid = document.getElementById('goals-grid');
+            const allGoals = JSON.parse(localStorage.getItem('ligaDoBem_goals') || '[]');
+            
+            console.log('🎯 Carregando metas da área administrativa:', allGoals.length, 'total');
+            
+            // Filter only public goals and calculate percentage
+            const goals = allGoals
+                .filter(goal => goal.isPublic)
+                .map(goal => ({
+                    ...goal,
+                    percentage: Math.min((goal.current / goal.target) * 100, 100).toFixed(1)
+                }));
+            
+            console.log('👁️ Metas públicas encontradas:', goals.length);
+            
+            // If no public goals, show default examples
+            if (goals.length === 0) {
+                goals.push(
+                    {
+                        title: 'Campanha de Castração',
+                        current: 3500,
+                        target: 5000,
+                        percentage: 70,
+                        description: 'Meta para custear castrações de animais resgatados'
+                    },
+                    {
+                        title: 'Reforma do Abrigo',
+                        current: 8200,
+                        target: 15000,
+                        percentage: 55,
+                        description: 'Melhorias na infraestrutura do abrigo'
+                    },
+                    {
+                        title: 'Medicamentos de Emergência',
+                        current: 1200,
+                        target: 2000,
+                        percentage: 60,
+                        description: 'Fundo para medicamentos de emergência'
+                    }
+                );
+            }
+
+            goalsGrid.innerHTML = goals.map(goal => `
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <div class="goal-title">${goal.title}</div>
+                        <div class="goal-percentage">${goal.percentage}%</div>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="goal-progress-bar" style="width: ${goal.percentage}%"></div>
+                    </div>
+                    <div class="goal-amounts">
+                        <span>R$ ${goal.current.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                        <span>R$ ${goal.target.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                    </div>
+                    ${goal.description ? `<div class="goal-description">${goal.description}</div>` : ''}
+                    ${goal.createdAt ? `
+                        <div class="goal-meta">
+                            <small>Criada: ${new Date(goal.createdAt).toLocaleDateString('pt-BR')}</small>
+                            ${goal.updatedAt && goal.updatedAt !== goal.createdAt ? 
+                                `<small>Atualizada: ${new Date(goal.updatedAt).toLocaleDateString('pt-BR')}</small>` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+            
+            // Update sync status on initial load
+            if (goals.length > 0 && goals[0].createdAt) {
+                const now = new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
+                updateSyncStatus('success', `${goals.length} meta(s) - ${now}`);
+            } else {
+                updateSyncStatus('info', 'Dados de exemplo');
+            }
+
+            // Load reports
+            const reportsGrid = document.getElementById('reports-grid');
+            const reports = siteData.reports || [
+                {
+                    title: 'Relatório Mensal',
+                    description: 'Dezembro 2024',
+                    icon: '📊',
+                    filename: 'relatorio-dezembro-2024.pdf'
+                },
+                {
+                    title: 'Prestação de Contas',
+                    description: 'Trimestre 4/2024',
+                    icon: '📋',
+                    filename: 'prestacao-contas-q4-2024.pdf'
+                },
+                {
+                    title: 'Relatório de Impacto',
+                    description: 'Ano 2024',
+                    icon: '📈',
+                    filename: 'impacto-anual-2024.pdf'
+                }
+            ];
+
+            reportsGrid.innerHTML = reports.map(report => `
+                <div class="report-card">
+                    <div class="report-icon">${report.icon}</div>
+                    <div class="report-title">${report.title}</div>
+                    <div class="report-description">${report.description}</div>
+                    <button class="report-download" onclick="downloadReport('${report.filename}')">
+                        Baixar PDF
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function downloadReport(filename) {
+            showAlert(`Download do arquivo ${filename} iniciado!`, 'success');
+            // Aqui seria implementado o download real do arquivo
+        }
+
+        // Function to refresh goals from admin panel
+        function refreshGoals() {
+            console.log('🔄 Atualizando metas da área administrativa...');
+            
+            // Update sync status
+            updateSyncStatus('loading', 'Sincronizando...');
+            
+            // Load goals from localStorage (only public ones)
+            const goalsGrid = document.getElementById('goals-grid');
+            const allGoals = JSON.parse(localStorage.getItem('ligaDoBem_goals') || '[]');
+            
+            // Filter only public goals and calculate percentage
+            const goals = allGoals
+                .filter(goal => goal.isPublic)
+                .map(goal => ({
+                    ...goal,
+                    percentage: Math.min((goal.current / goal.target) * 100, 100).toFixed(1)
+                }));
+            
+            if (goals.length === 0) {
+                goalsGrid.innerHTML = `
+                    <div class="no-goals-message">
+                        <p>📝 Nenhuma meta pública encontrada.</p>
+                        <p>As metas criadas na área administrativa aparecerão aqui quando marcadas como públicas.</p>
+                        <p><strong>Como criar metas:</strong></p>
+                        <ol style="text-align: left; display: inline-block; margin-top: 1rem;">
+                            <li>Acesse a área administrativa</li>
+                            <li>Vá para "Transparência"</li>
+                            <li>Clique em "+ Nova Meta"</li>
+                            <li>Marque como "Pública"</li>
+                            <li>Salve e volte aqui</li>
+                        </ol>
+                    </div>
+                `;
+                updateSyncStatus('info', 'Nenhuma meta pública');
+                showAlert('ℹ️ Nenhuma meta pública encontrada. Crie metas na área administrativa!', 'info');
+                return;
+            }
+            
+            // Update goals display
+            goalsGrid.innerHTML = goals.map(goal => `
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <div class="goal-title">${goal.title}</div>
+                        <div class="goal-percentage">${goal.percentage}%</div>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="goal-progress-bar" style="width: ${goal.percentage}%"></div>
+                    </div>
+                    <div class="goal-amounts">
+                        <span>R$ ${goal.current.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                        <span>R$ ${goal.target.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                    </div>
+                    ${goal.description ? `<div class="goal-description">${goal.description}</div>` : ''}
+                    <div class="goal-meta">
+                        <small>Criada em: ${new Date(goal.createdAt).toLocaleDateString('pt-BR')}</small>
+                        ${goal.updatedAt && goal.updatedAt !== goal.createdAt ? 
+                            `<small>Atualizada: ${new Date(goal.updatedAt).toLocaleDateString('pt-BR')}</small>` : ''}
+                    </div>
+                </div>
+            `).join('');
+            
+            // Update sync status
+            const now = new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
+            updateSyncStatus('success', `${goals.length} meta(s) - ${now}`);
+            
+            showAlert(`✅ ${goals.length} meta(s) pública(s) atualizada(s)!`, 'success');
+        }
+
+        // Function to update sync status indicator
+        function updateSyncStatus(type, message) {
+            const syncStatus = document.getElementById('goals-sync-status');
+            if (!syncStatus) return;
+            
+            const indicator = syncStatus.querySelector('.sync-indicator');
+            const text = syncStatus.querySelector('.sync-text');
+            
+            // Reset classes
+            syncStatus.className = 'sync-status';
+            
+            switch(type) {
+                case 'loading':
+                    indicator.textContent = '🔄';
+                    syncStatus.classList.add('loading');
+                    break;
+                case 'success':
+                    indicator.textContent = '✅';
+                    syncStatus.classList.add('success');
+                    break;
+                case 'info':
+                    indicator.textContent = 'ℹ️';
+                    syncStatus.classList.add('info');
+                    break;
+                case 'error':
+                    indicator.textContent = '❌';
+                    syncStatus.classList.add('error');
+                    break;
+            }
+            
+            text.textContent = message;
+        }
+
+        // showPage function updated above to handle new pages
+
+        // Load public charts for transparency page
+        function loadPublicCharts(transactions) {
+            console.log('📊 Carregando gráficos públicos de transparência...');
+            console.log('📊 Dados recebidos:', transactions);
+            
+            // Load income vs expenses chart
+            console.log('📈 Carregando gráfico de receitas vs despesas...');
+            loadPublicIncomeExpensesChart(transactions);
+            
+            // Load expenses distribution chart
+            console.log('🥧 Carregando gráfico de distribuição de gastos...');
+            loadPublicExpensesDistributionChart(transactions);
+        }
+        
+        let incomeExpensesChartInstance = null;
+        let expensesDistributionChartInstance = null;
+
+        function loadPublicIncomeExpensesChart(transactions) {
+            console.log('📈 Iniciando gráfico de receitas vs despesas...');
+            const ctx = document.getElementById('income-expenses-chart').getContext('2d');
+            if (!ctx) {
+                console.error('❌ Canvas não encontrado: income-expenses-chart');
+                return;
+            }
+
+            // Group by month
+            const monthlyData = {};
+            transactions.forEach(transaction => {
+                const date = new Date(transaction.date);
+                const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                
+                if (!monthlyData[monthKey]) {
+                    monthlyData[monthKey] = { income: 0, expenses: 0 };
+                }
+                
+                if (transaction.type === 'income') {
+                    monthlyData[monthKey].income += transaction.amount;
+                } else {
+                    monthlyData[monthKey].expenses += transaction.amount;
+                }
+            });
+            
+            // Get last 6 months sorted
+            const months = Object.keys(monthlyData).sort().slice(-6);
+            const labels = months.map(month => new Date(month + '-01').toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' }));
+            const incomeData = months.map(month => monthlyData[month].income);
+            const expensesData = months.map(month => monthlyData[month].expenses);
+
+            // Destroy previous chart instance if exists
+            if (incomeExpensesChartInstance) {
+                incomeExpensesChartInstance.destroy();
+            }
+
+            incomeExpensesChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Receitas',
+                            data: incomeData,
+                            backgroundColor: '#28a745',
+                            borderColor: '#1e7e34',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Despesas',
+                            data: expensesData,
+                            backgroundColor: '#dc3545',
+                            borderColor: '#c82333',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R$ ' + value.toLocaleString('pt-BR');
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': R$ ' + context.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function loadPublicExpensesDistributionChart(transactions) {
+            console.log('🥧 Iniciando gráfico de distribuição de gastos...');
+            const ctx = document.getElementById('expenses-distribution-chart').getContext('2d');
+            if (!ctx) {
+                console.error('❌ Canvas não encontrado: expenses-distribution-chart');
+                return;
+            }
+
+            // Aggregate expenses by category
+            const expenses = transactions.filter(t => t.type === 'expense');
+            const categoryData = {};
+            expenses.forEach(expense => {
+                if (!categoryData[expense.category]) {
+                    categoryData[expense.category] = 0;
+                }
+                categoryData[expense.category] += expense.amount;
+            });
+
+            let labels = Object.keys(categoryData).map(cat => getCategoryText(cat));
+            let data = Object.values(categoryData);
+
+            // If no expense data, show sample data
+            if (data.length === 0 || data.every(val => val === 0)) {
+                console.log('📊 Nenhuma despesa encontrada, exibindo dados de exemplo...');
+                labels = ['Veterinário', 'Alimentação', 'Suprimentos', 'Manutenção'];
+                data = [1500, 800, 600, 400];
+            }
+
+            console.log('📊 Dados do gráfico de pizza:', { labels, data });
+
+            // Colors for pie slices
+            const backgroundColors = [
+                '#007bff', '#28a745', '#dc3545', '#ffc107', '#17a2b8', '#6f42c1', '#fd7e14', '#20c997'
+            ];
+
+            // Destroy previous chart instance if exists
+            if (expensesDistributionChartInstance) {
+                expensesDistributionChartInstance.destroy();
+            }
+
+            expensesDistributionChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors.slice(0, labels.length),
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 15,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return label + ': R$ ' + value.toLocaleString('pt-BR', {minimumFractionDigits: 2}) + ' (' + percentage + '%)';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+            
+
+        // Refresh data periodically (optional) - Disabled for charts to prevent infinite rendering
+        // setInterval(() => {
+        //     siteData = getPublicData();
+        //     pets = siteData.pets;
+        //     stats = siteData.stats;
+        //     content = siteData.content;
+        //     
+        //     // Only reload if we're on the pets page
+        //     if (document.getElementById('pets').classList.contains('active')) {
+        //         loadPets();
+        //     } else if (document.getElementById('volunteers').classList.contains('active')) {
+        //         loadVolunteers();
+        //     } else if (document.getElementById('transparency').classList.contains('active')) {
+        //         loadTransparency();
+        //     }
+        // }, 30000); // Refresh every 30 seconds
     </script>
 </body>
 </html>
