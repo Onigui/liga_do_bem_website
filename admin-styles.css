@@ -1257,10 +1257,13 @@ body {
     .admin-header {
         padding: 1rem;
         gap: 0.5rem;
+        justify-content: space-between;
     }
     
     .admin-logo {
-        margin-left: -40px; /* Ajuste menor para mobile */
+        margin-left: 0; /* Remove margem negativa no mobile */
+        flex: 1;
+        justify-content: center;
     }
     
     .logo-text {
@@ -1291,6 +1294,11 @@ body {
     
     .menu-toggle {
         padding: 0.5rem;
+        order: 1; /* Botão menu à esquerda */
+    }
+    
+    .admin-user {
+        order: 3; /* Botão usuário à direita */
     }
     
     .menu-toggle span {
@@ -1502,10 +1510,13 @@ body {
     .admin-header {
         padding: 0.8rem;
         gap: 0.3rem;
+        justify-content: space-between;
     }
     
     .admin-logo {
-        margin-left: -30px; /* Ajuste ainda menor */
+        margin-left: 0; /* Remove margem negativa no mobile pequeno */
+        flex: 1;
+        justify-content: center;
     }
     
     .admin-sidebar {
